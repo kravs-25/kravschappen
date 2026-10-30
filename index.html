@@ -281,14 +281,17 @@ h3.cat{font-size:15px;font-weight:700;color:var(--muted);margin:20px 4px 6px;dis
 /* Winkels */
 .note{color:var(--muted);font-size:15px;margin:12px 0 10px}
 .order{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
-.order li{display:grid;grid-template-columns:36px 1fr 44px 44px;align-items:center;gap:6px;padding:4px 8px 4px 14px;border-top:1px solid var(--line);min-height:52px}
+.order li{display:grid;grid-template-columns:36px 1fr 48px;align-items:center;gap:6px;padding:4px 8px 4px 14px;border-top:1px solid var(--line);min-height:52px}
 .order li:first-child{border-top:0}
+.greep{display:grid;place-items:center;width:48px;height:48px;margin-right:-6px;color:var(--muted);touch-action:none;cursor:grab}
+.greep svg{width:22px;height:22px}
+.order li.sleept{position:fixed;z-index:30;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px var(--schaduw);transform:scale(1.02);pointer-events:none}
+.order li.plek{background:var(--primary-soft);border-top:1px solid var(--line);min-height:52px}
+.order li.plek + li{border-top:0}
 .pos{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);font-variant-numeric:tabular-nums}
 .lead{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
 .lead.vol{background:var(--c);color:var(--op-kleur)}
 .chevr{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);opacity:.6;margin-right:4px}
-.arrow{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;color:var(--muted)}
-.arrow:not(:disabled):active{background:var(--primary-soft)}
 /* Instellingen */
 .back{display:inline-flex;align-items:center;gap:2px;color:var(--primary);font-weight:700;font-size:16px;padding:4px 0 6px;margin-left:-4px}
 .back svg{width:22px;height:22px}
@@ -584,8 +587,6 @@ const DAGEN = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','za
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 /** Winkelkleuren voor nieuwe winkels komen uit de tokens --winkel-1 t/m --winkel-7. */
 const PALET = () => [1, 2, 3, 4, 5, 6, 7].map(i => getComputedStyle(document.documentElement).getPropertyValue('--winkel-' + i).trim());
-const PIJL_OP = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>';
-const PIJL_NEER = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
 
 const S = { data:null, tab:'lijst', winkel:null, routeWinkel:null, instSub:null, week:0, open:new Set(), zoekR:'', zoekP:'' };
 let bezig = 0, teller = 0;
@@ -1282,6 +1283,59 @@ function tekenRecepten() {
             <span><span class="pname">${esc(r.naam)}</span></span><span class="chevr"></span></button>`,
           [{ act: 'recept-weg', id: r.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: r.naam + ' verwijderen' }])).join('')}</div>`).join('');
 }
+/* ---------- Winkelroute: afdelingen verslepen ---------- */
+let sleep = null;
+document.addEventListener('pointerdown', e => {
+  const g = e.target.closest('.greep'); if (!g) return;
+  const li = g.closest('li'), ol = li.parentElement;
+  e.preventDefault();
+  const r = li.getBoundingClientRect();
+  const plek = document.createElement('li'); plek.className = 'plek'; plek.style.height = r.height + 'px';
+  ol.insertBefore(plek, li.nextSibling);
+  Object.assign(li.style, { top: r.top + 'px', left: r.left + 'px', width: r.width + 'px' });
+  li.classList.add('sleept');
+  sleep = { li, ol, plek, dy: e.clientY - r.top, id: e.pointerId, y: e.clientY };
+  S.slepen = true;
+  try { g.setPointerCapture(e.pointerId); } catch (err) {}
+  sleepScroll();
+});
+function sleepVolg(y) {
+  const { li, ol, plek } = sleep;
+  li.style.top = (y - sleep.dy) + 'px';
+  const rest = [...ol.children].filter(x => x !== li && x !== plek);
+  const voor = rest.find(x => { const r = x.getBoundingClientRect(); return y < r.top + r.height / 2; });
+  ol.insertBefore(plek, voor || null);
+  let k = 0;
+  [...ol.children].forEach(x => { if (x === li) return; const pos = x === plek ? li.querySelector('.pos') : x.querySelector('.pos'); if (pos) pos.textContent = ++k; });
+}
+document.addEventListener('pointermove', e => {
+  if (!sleep || e.pointerId !== sleep.id) return;
+  e.preventDefault();
+  sleep.y = e.clientY;
+  sleepVolg(e.clientY);
+});
+/** Scrolt automatisch mee als je bij de boven- of onderrand van het scherm sleept. */
+function sleepScroll() {
+  if (!sleep) return;
+  const kop = $('header.top').getBoundingClientRect().bottom;
+  const y = sleep.y;
+  const stap = y > innerHeight - 120 ? 10 : y < kop + 40 ? -10 : 0;
+  if (stap) { window.scrollBy(0, stap); sleepVolg(y); }
+  requestAnimationFrame(sleepScroll);
+}
+function sleepKlaar(e) {
+  if (!sleep || e.pointerId !== sleep.id) return;
+  const { li, ol, plek } = sleep;
+  sleep = null;
+  ol.insertBefore(li, plek); plek.remove();
+  li.classList.remove('sleept'); li.removeAttribute('style'); li.style.setProperty('--c', winkel(S.routeWinkel).kleur);
+  S.slepen = false;
+  const route = [...ol.children].map(x => x.dataset.c);
+  bewaar('winkels', [{ id: S.routeWinkel, route }]);
+}
+document.addEventListener('pointerup', sleepKlaar);
+document.addEventListener('pointercancel', sleepKlaar);
+
 /** Een rij in de vaste stijl: kaart vooraan, veegknoppen eronder. */
 function veegRij(key, kaart, acties) {
   if (!acties.length) return `<div class="item">${kaart}</div>`;
@@ -1461,9 +1515,8 @@ function tekenInst() {
     $('#w-tabs').innerHTML = ws.map(w => `<button type="button" class="storetab${w.id === S.routeWinkel ? ' active' : ''}" style="--c:${w.kleur}" data-act="route-winkel" data-id="${esc(w.id)}">${esc(w.naam)}</button>`).join('');
     if (!S.routeWinkel) { $('#w-route').innerHTML = '<div class="empty"><strong>Nog geen winkels</strong>Voeg eerst een winkel toe bij Winkels.</div>'; return; }
     const w = winkel(S.routeWinkel), r = volgorde(w.id);
-    $('#w-route').innerHTML = `<ol class="order">${r.map((c, k) => `<li style="--c:${w.kleur}"><span class="pos">${k + 1}</span><span>${esc(catNaam(c))}</span>
-        <button type="button" class="arrow" data-act="route" data-k="${k}" data-d="-1" aria-label="${esc(catNaam(c))} omhoog"${k === 0 ? ' disabled' : ''}>${PIJL_OP}</button>
-        <button type="button" class="arrow" data-act="route" data-k="${k}" data-d="1" aria-label="${esc(catNaam(c))} omlaag"${k === r.length - 1 ? ' disabled' : ''}>${PIJL_NEER}</button></li>`).join('')}</ol>`;
+    $('#w-route').innerHTML = `<ol class="order" id="route-lijst">${r.map((c, k) => `<li data-c="${esc(c)}" style="--c:${w.kleur}"><span class="pos">${k + 1}</span><span>${esc(catNaam(c))}</span>
+        <span class="greep" aria-label="${esc(catNaam(c))} verslepen"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg></span></li>`).join('')}</ol>`;
   }
 
   if (pagina === 'cats') {
@@ -1686,12 +1739,6 @@ const ACTIES = {
   },
 
   'route-winkel': (b, id) => { S.routeWinkel = id; tekenInst(); },
-  route: b => {
-    const r = volgorde(S.routeWinkel), k = Number(b.dataset.k), j = k + Number(b.dataset.d);
-    if (j < 0 || j >= r.length) return;
-    [r[k], r[j]] = [r[j], r[k]];
-    bewaar('winkels', [{ id: S.routeWinkel, route: r }]);
-  },
   'winkel-hernoem': async (b, id) => {
     const w = winkel(id), n = await vraagTekst('Nieuwe naam voor ' + w.naam, w.naam);
     if (n && n.trim()) bewaar('winkels', [{ id, naam: n.trim() }]);
