@@ -56,8 +56,8 @@
   --tab-actief:rgba(255,255,255,.12); --tab-licht:rgba(255,255,255,.18); --tab-schaduw:rgba(0,0,0,.45);
 }
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable;background:var(--bg);overscroll-behavior:none}
-body{overscroll-behavior:none}
+html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable;background:var(--bg);overscroll-behavior:none;min-height:calc(100% + env(safe-area-inset-top,0px))}
+body{overscroll-behavior:none;min-height:100vh;min-height:100lvh}
 body{
   margin:0;background:var(--bg);color:var(--ink);
   font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -328,6 +328,7 @@ h3.cat{font-size:15px;font-weight:700;color:var(--muted);margin:20px 4px 6px;dis
 /* Favorieten: ster rechts in de zoekbalk */
 #add-form .zoekveld{position:relative;flex:1}
 #add-form .zoekveld .field{padding-right:52px}
+#add-zoek::-webkit-search-cancel-button,#add-zoek::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
 .zoekster{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:grid;place-items:center;background:none;border:0;color:var(--primary)}
 .zoekster svg{width:26px;height:26px}
 .zoekster .vol{display:none}
@@ -997,7 +998,7 @@ function skeletLijst() {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>`;
   $('#headerextra').innerHTML = `<div class="stores" id="stores"></div>
     <form class="add" id="add-form" hidden>
-      <span class="zoekveld"><input class="field" id="add-naam" autocomplete="off" autocorrect="off" enterkeyhint="done" placeholder="Product zoeken of toevoegen" aria-label="Product toevoegen" aria-autocomplete="list" aria-controls="ac">
+      <span class="zoekveld"><input class="field" type="search" id="add-zoek" name="zoekterm" inputmode="search" autocomplete="off" autocapitalize="sentences" spellcheck="false" autocorrect="off" enterkeyhint="done" placeholder="Product zoeken of toevoegen" aria-label="Product toevoegen" aria-autocomplete="list" aria-controls="ac">
         <button type="button" class="zoekster" data-act="ac-ster" aria-pressed="false" aria-label="Alleen favorieten tonen">
           <svg class="leeg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>
           <svg class="vol" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>
@@ -1011,7 +1012,7 @@ function toevoegBalk(open) {
   if (!f) return;
   f.hidden = !open;
   if (k) { k.setAttribute('aria-expanded', open); k.classList.toggle('open', open); }
-  if (open) $('#add-naam').focus(); else { $('#add-naam').value = ''; S.acFav = false; const st = $('.zoekster'); if (st) { st.classList.remove('aan'); st.setAttribute('aria-pressed', 'false'); } sluitAc(); }
+  if (open) $('#add-zoek').focus(); else { $('#add-zoek').value = ''; S.acFav = false; const st = $('.zoekster'); if (st) { st.classList.remove('aan'); st.setAttribute('aria-pressed', 'false'); } sluitAc(); }
 }
 const ALLES = '*';
 function catBlokken(open, winkelId) {
@@ -1038,7 +1039,7 @@ function tekenLijst() {
     const n = D().producten.filter(p => nodig(p) && winkelVan(p) === s.id).length;
     return `<button type="button" class="storetab${s.id === S.winkel ? ' active' : ''}" style="--c:${s.kleur}" data-act="winkel" data-id="${esc(s.id)}">${esc(s.naam)} <span class="n">${n}</span></button>`;
   }).join('');
-  $('#add-naam').placeholder = alles ? 'Iets toevoegen' : 'Iets toevoegen bij ' + w.naam;
+  $('#add-zoek').placeholder = alles ? 'Iets toevoegen' : 'Iets toevoegen bij ' + w.naam;
 
   const items = D().producten.filter(p => p.opLijst && (alles || winkelVan(p) === S.winkel));
   const open = items.filter(p => !p.afgevinkt), klaar = items.filter(p => p.afgevinkt).sort(opNaam);
@@ -1076,7 +1077,7 @@ function itemRij(p) {
     </div>${rij}</div>`;
 }
 function voegToeAanLijst() {
-  const inp = $('#add-naam');
+  const inp = $('#add-zoek');
   const naam = inp.value.trim(), hv = '';
   if (!naam) return;
   inp.value = '';
@@ -1100,7 +1101,7 @@ function voegToeAanLijst() {
 
 /* Keuzelijst bij het toevoegen: zoekt in je producten terwijl je typt */
 function tekenAc() {
-  const inp = $('#add-naam'), box = $('#ac');
+  const inp = $('#add-zoek'), box = $('#ac');
   if (!inp || !box) return;
   const q = inp.value.trim().toLowerCase();
   if (document.activeElement !== inp) { sluitAc(); return; }
@@ -1155,13 +1156,13 @@ document.addEventListener('focusout', e => {
     if (f && !f.hidden && !f.contains(document.activeElement) && !$('input', f).value.trim()) instBalk(false);
   }, 250);
   if (e.target.id === 'rb-zoek') setTimeout(() => { if (document.activeElement !== $('#rb-zoek')) { const box = $('#rb-ac'); if (box) { box.hidden = true; box.innerHTML = ''; } } }, 200);
-  if (e.target.id === 'add-naam') setTimeout(() => { if (document.activeElement !== $('#add-naam')) sluitAc(); }, 200);
-  if (e.target.id === 'add-naam') setTimeout(() => {
+  if (e.target.id === 'add-zoek') setTimeout(() => { if (document.activeElement !== $('#add-zoek')) sluitAc(); }, 200);
+  if (e.target.id === 'add-zoek') setTimeout(() => {
     const f = $('#add-form');
     if (f && !f.hidden && !f.contains(document.activeElement)) toevoegBalk(false);
   }, 250);
 });
-document.addEventListener('focusin', e => { if (e.target.id === 'add-naam') tekenAc(); });
+document.addEventListener('focusin', e => { if (e.target.id === 'add-zoek') tekenAc(); });
 document.addEventListener('mousedown', e => { if (e.target.closest('.ac-item, .zoekster')) e.preventDefault(); });
 
 /* ---------- Recepten ---------- */
@@ -1335,7 +1336,7 @@ function openProduct(id, voorgevuld) {
   const inRecepten = p ? D().recepten.filter(r => (r.ingredienten || []).some(i => i.product === p.id)).length : 0;
   openSheet(`<h4>${p ? 'Product wijzigen' : 'Nieuw product'}</h4>
     <form id="product-form">
-      <label class="lbl"><span>Naam</span><input class="field" name="naam" value="${esc(p ? p.naam : cap(voorgevuld || ''))}" required placeholder="Bijvoorbeeld kipfilet"></label>
+      <label class="lbl"><span>Product</span><input class="field" name="titel" autocomplete="off" value="${esc(p ? p.naam : cap(voorgevuld || ''))}" required placeholder="Bijvoorbeeld kipfilet"></label>
       <label class="lbl"><span>Categorie</span><select class="field" name="categorie">${opties(cats(), p ? p.categorie : 'overig')}</select></label>
       <label class="lbl"><span>Standaardwinkel</span><select class="field" name="winkel">${opties(winkels(), p ? p.winkel : winkels()[0].id)}</select></label>
       <label class="schakel"><span>Favoriet</span><input type="checkbox" name="favoriet"${p && p.favoriet ? ' checked' : ''}></label>
@@ -1345,7 +1346,7 @@ function openProduct(id, voorgevuld) {
   $('#product-form').onsubmit = e => {
     e.preventDefault();
     const f = new FormData(e.target);
-    const naam = cap(f.get('naam').trim());
+    const naam = cap(f.get('titel').trim());
     if (!naam) return;
     const dubbel = prodOpNaam(naam);
     if (dubbel && (!p || dubbel.id !== p.id)) return melding(`Er is al een product ${dubbel.naam}.`);
@@ -1381,7 +1382,7 @@ function skeletInst() {
   const balk = (id, inputId, tekst) => `<form class="add kopbalk" id="${id}" hidden><input class="field" id="${inputId}" placeholder="${tekst}" autocomplete="off" enterkeyhint="done" aria-label="${tekst}"></form>`;
   if (pagina === 'winkels') {
     $('#topextra').innerHTML = plusKnop('inst-toevoeg', 'Winkel toevoegen');
-    $('#headerextra').innerHTML = balk('winkel-form', 'winkel-naam', 'Naam van de nieuwe winkel');
+    $('#headerextra').innerHTML = balk('winkel-form', 'winkel-invoer', 'Naam van de nieuwe winkel');
     return '<div id="w-lijst"></div>';
   }
   if (pagina === 'route') {
@@ -1390,7 +1391,7 @@ function skeletInst() {
   }
   if (pagina === 'rcats') {
     $('#topextra').innerHTML = plusKnop('inst-toevoeg', 'Receptcategorie toevoegen');
-    $('#headerextra').innerHTML = balk('rcat-form', 'rcat-naam', 'Naam van de nieuwe categorie');
+    $('#headerextra').innerHTML = balk('rcat-form', 'rcat-invoer', 'Naam van de nieuwe categorie');
     return '<div id="r-cats"></div>';
   }
   if (pagina === 'producten') {
@@ -1399,7 +1400,7 @@ function skeletInst() {
     return '<div id="producten"></div>';
   }
   $('#topextra').innerHTML = plusKnop('inst-toevoeg', 'Categorie toevoegen');
-  $('#headerextra').innerHTML = balk('cat-form', 'cat-naam', 'Naam van de nieuwe categorie');
+  $('#headerextra').innerHTML = balk('cat-form', 'cat-invoer', 'Naam van de nieuwe categorie');
   return '<div id="w-cats"></div>';
 }
 /** Plusje rechtsboven op een subpagina: klapt het invoerveld onder de titel open en dicht. */
@@ -1580,7 +1581,7 @@ const ACTIES = {
   'ac-ster': b => {
     S.acFav = !S.acFav;
     b.classList.toggle('aan', S.acFav); b.setAttribute('aria-pressed', S.acFav);
-    $('#add-naam').focus(); tekenAc();
+    $('#add-zoek').focus(); tekenAc();
     const box = $('#ac'); if (box) box.scrollTop = 0;
   },
   'ac-plus': (b, id) => {
@@ -1590,12 +1591,12 @@ const ACTIES = {
       bewaar('producten', [{ id: p.id, opLijst: true, afgevinkt: false, lijstHoeveelheid: '',
         lijstWinkel: S.winkel === ALLES || p.winkel === S.winkel ? '' : S.winkel }]);
     }
-    $('#add-naam').focus();
+    $('#add-zoek').focus();
     tekenAc();
   },
   'ac-kies': b => {
     // Tikken op een naam zet het product meteen op de lijst (of maakt het nieuwe product aan)
-    $('#add-naam').value = b.dataset.nieuw ? cap(b.dataset.naam) : b.dataset.naam;
+    $('#add-zoek').value = b.dataset.nieuw ? cap(b.dataset.naam) : b.dataset.naam;
     voegToeAanLijst();
   },
   vink: (b, id) => {
@@ -1764,7 +1765,7 @@ document.addEventListener('submit', e => {
   if (id === 'add-form') { e.preventDefault(); voegToeAanLijst(); }
   if (id === 'winkel-form') {
     e.preventDefault();
-    const inp = $('#winkel-naam'), naam = inp.value.trim();
+    const inp = $('#winkel-invoer'), naam = inp.value.trim();
     if (!naam) return;
     if (D().winkels.some(w => w.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} staat er al tussen.`);
     const gebruikt = D().winkels.map(w => w.kleur);
@@ -1778,7 +1779,7 @@ document.addEventListener('submit', e => {
   }
   if (id === 'rcat-form') {
     e.preventDefault();
-    const inp = $('#rcat-naam'), naam = inp.value.trim();
+    const inp = $('#rcat-invoer'), naam = inp.value.trim();
     if (!naam) return;
     if (rcats().some(c => c.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} bestaat al.`);
     inp.value = '';
@@ -1786,7 +1787,7 @@ document.addEventListener('submit', e => {
   }
   if (id === 'cat-form') {
     e.preventDefault();
-    const inp = $('#cat-naam'), naam = inp.value.trim();
+    const inp = $('#cat-invoer'), naam = inp.value.trim();
     if (!naam) return;
     if (D().categorieen.some(c => c.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} bestaat al.`);
     inp.value = '';
@@ -1798,7 +1799,7 @@ document.addEventListener('input', e => {
   if (S.receptBewerk && (e.target.closest('#recept-detail') || e.target.id === 'titel-invoer')) S.rbGewijzigd = true;
   if (e.target.id === 'rb-zoek') tekenRbAc();
   if (e.target.id === 'titel-invoer') groeiTitel();
-  if (e.target.id === 'add-naam') tekenAc();
+  if (e.target.id === 'add-zoek') tekenAc();
   if (e.target.id === 'zoek-r') { S.zoekR = e.target.value; tekenRecepten(); }
   if (e.target.id === 'zoek-p') { S.zoekP = e.target.value; tekenProducten(); }
 });
