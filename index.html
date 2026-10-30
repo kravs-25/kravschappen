@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kravschappen</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kravschappen">
+<meta name="theme-color" content="#EEF3E8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1612" media="(prefers-color-scheme: dark)">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF3E8; --surface:#FFFFFF; --ink:#17251C; --muted:#5B6A60; --line:#D6E0CE;
+  --primary:#2D6A4C; --primary-ink:#FFFFFF; --primary-soft:#D9EADD;
+  --accent:#A8344F; --done:#8C988F;
+  /* vaste kleuren (gelijk in licht en donker) */
+  --op-kleur:#FFFFFF; --op-kleur-zacht:rgba(255,255,255,.25);
+  --merk:#2D6A4C; --actief:#3E5146;
+  /* veegknoppen: groen in twee tinten, zodat knoppen naast elkaar te onderscheiden zijn */
+  --veeg-open:#2D6A4C; --wijzig:#4E8F68; --veeg-favoriet:#2D6A4C;
+  /* winkelkleuren voor nieuwe winkels */
+  --winkel-1:#2F6FA6; --winkel-2:#C2452D; --winkel-3:#7A4FB5; --winkel-4:#1F8A70; --winkel-5:#C2417F; --winkel-6:#4A6378; --winkel-7:#5E8C2F;
+  /* transparant: waas achter vensters, schaduwen, glazen tabbalk */
+  --overlay:var(--overlay); --schaduw:rgba(18,44,30,.16); --schaduw-klein:rgba(0,0,0,.2);
+  --tab-glas:rgba(255,255,255,.72); --tab-glans:rgba(255,255,255,.55); --tab-rand:rgba(255,255,255,.7);
+  --tab-actief:rgba(255,255,255,.7); --tab-licht:rgba(255,255,255,.9); --tab-schaduw:rgba(18,44,30,.14);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1612; --surface:#18221C; --ink:#E4ECE3; --muted:#97A69B; --line:#2A3830;
+    --primary:#7DC49C; --primary-ink:#0D1A12; --primary-soft:#21372A;
+    --accent:#A8344F; --done:#66746A;
+    --schaduw:rgba(0,0,0,.45);
+    --tab-glas:rgba(30,42,35,.72); --tab-glans:rgba(255,255,255,.12); --tab-rand:rgba(255,255,255,.12);
+    --tab-actief:rgba(255,255,255,.12); --tab-licht:rgba(255,255,255,.18); --tab-schaduw:rgba(0,0,0,.45);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1612; --surface:#18221C; --ink:#E4ECE3; --muted:#97A69B; --line:#2A3830;
+  --primary:#7DC49C; --primary-ink:#0D1A12; --primary-soft:#21372A;
+  --accent:#A8344F; --done:#66746A;
+  color-scheme:dark;
+  --schaduw:rgba(0,0,0,.45);
+  --tab-glas:rgba(30,42,35,.72); --tab-glans:rgba(255,255,255,.12); --tab-rand:rgba(255,255,255,.12);
+  --tab-actief:rgba(255,255,255,.12); --tab-licht:rgba(255,255,255,.18); --tab-schaduw:rgba(0,0,0,.45);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable;background:var(--bg);overscroll-behavior:none}
+body{overscroll-behavior:none}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-size:17px;line-height:1.4;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));
+  -webkit-tap-highlight-color:transparent;
+}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+button:disabled{opacity:.35;cursor:default}
+input,select,textarea{font:inherit;color:var(--ink)}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+a{color:var(--primary)}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(14px + env(safe-area-inset-top,0px)) 0 10px}
+body.preview header.top{padding-top:calc(34px + env(safe-area-inset-top,0px))}
+#preview-pill{position:fixed;top:calc(6px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:9;background:var(--accent);color:var(--op-kleur);font-size:12px;font-weight:800;letter-spacing:.04em;border-radius:20px;padding:4px 12px;text-align:center}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px}
+.toprow > div:first-child{flex:1;min-width:0}
+#title{overflow-wrap:normal}
+#topextra:empty{display:none}
+header.top h1{margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em;line-height:1.05}
+#headerextra:empty{display:none}
+#headerextra .stores{margin-top:12px}
+#headerextra #add-form{margin:10px 0 0}
+#add-form[hidden]{display:none}
+.toevoeg-knop{color:var(--primary)}
+.toevoeg-knop svg{width:22px;height:22px;transition:transform .2s}
+.toevoeg-knop.open{background:var(--primary);color:var(--primary-ink);border-color:var(--primary)}
+.toevoeg-knop.open svg{transform:rotate(45deg)}
+#lijst{padding-top:0}
+#headerextra .kopzoek{margin:12px 0 0;min-height:48px}
+#topextra .btn{min-height:44px;padding:0 18px}
+.bewerk-knop{color:var(--primary)}
+.bewerk-knop svg{width:20px;height:20px}
+.bewerk-knop.actief{background:var(--primary);color:var(--primary-ink);border-color:var(--primary)}
+.bewerk-knop.actief svg{width:22px;height:22px}
+.titel-invoer{display:block;width:calc(100% + 12px);margin-left:-12px;font:inherit;color:inherit;letter-spacing:inherit;line-height:1.1;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 11px;min-height:46px}
+.titel-invoer{resize:none;overflow:hidden;font-weight:800}
+.titel-invoer:focus{outline:2px solid var(--primary);outline-offset:0}
+.kaal-select{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:17px;color:var(--ink);padding:14px 40px 14px 16px;min-height:52px;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 22px) 54%,calc(100% - 17px) 54%;background-size:5px 5px;background-repeat:no-repeat}
+.check.bewerkrij{grid-template-columns:28px 1fr 104px;min-height:54px}
+.minrond{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--op-kleur);display:grid;place-items:center}
+.minrond svg{width:14px;height:14px}
+.aantal-invoer{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 10px;font:inherit;font-size:16px;text-align:right;color:var(--ink)}
+.rb-toevoeg .bewerkrij{grid-template-columns:28px 1fr}
+.rb-toevoeg input{width:100%;border:0;background:transparent;font:inherit;font-size:17px;color:var(--ink);padding:8px 0;outline:none}
+.rb-toevoeg input::placeholder{color:var(--muted)}
+.rb-wrap{position:relative}
+.bereiding-invoer{display:block;width:100%;min-height:170px;border:0;background:transparent;padding:14px 16px;font:inherit;font-size:17px;line-height:1.5;color:var(--ink);resize:vertical}
+.bereiding-invoer:focus,.kaal-select:focus{outline:2px solid var(--primary);outline-offset:-2px;border-radius:18px}
+.check.detailrij{grid-template-columns:1fr auto auto;min-height:52px}
+.bereiding{margin:0;padding:14px 16px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:17px;line-height:1.5}
+.rz-rij{width:100%;text-align:left}
+.rz-rij .chevr{justify-self:end;margin-right:4px}
+.pick[hidden],.koppel-groep[hidden]{display:none}
+#koppel-zoek{margin:0 0 4px}
+#koppel h3.cat:first-child{margin-top:14px}
+header.top p{margin:4px 0 0;color:var(--muted);font-size:15px}
+.kopbalk{margin:12px 0 0}
+.kopbalk[hidden]{display:none}
+#headerextra #w-tabs{margin-bottom:0}
+/* Algemene velden en knoppen */
+.field{display:block;width:100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:48px;-webkit-appearance:none;appearance:none}
+.field::placeholder{color:var(--muted)}
+select.field{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 54%,calc(100% - 15px) 54%;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
+textarea.field{resize:vertical;min-height:110px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--primary);color:var(--primary-ink);border-radius:14px;padding:0 18px;font-weight:700;min-height:48px;white-space:nowrap;text-align:center}
+.btn.soft{background:var(--primary-soft);color:var(--ink)}
+.btn.danger{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn.wide{width:100%}
+.link{color:var(--primary);font-weight:700;font-size:15px;padding:8px 0}
+.link.danger{color:var(--accent)}
+.add{display:flex;gap:8px;margin:14px 0 4px}
+.add .field{flex:1}
+#add-form{position:relative}
+#add-form .aantal{flex:0 0 92px}
+.ac-lijst{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:7;max-height:calc(100vh - 290px - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);border:1px solid var(--line);border-radius:18px;touch-action:pan-y;box-shadow:0 14px 34px var(--schaduw)}
+.ac-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;width:100%;padding:0 14px 0 0;min-height:54px;border-top:1px solid var(--line)}
+.ac-item:first-child{border-top:0}
+.wis-knop{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;min-height:52px;border-radius:18px;background:var(--surface);border:1px solid var(--line);color:var(--accent);font-weight:700;text-align:center}
+.wis-knop svg{width:19px;height:19px}
+.wis-knop:active{background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
+.ac-kop{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;padding:14px 16px 6px;background:var(--surface);font-size:15px;font-weight:700;color:var(--muted);border-top:1px solid var(--line)}
+.ac-kop:first-child{border-top:0}
+.ac-kop + .ac-item{border-top:0}
+.ac-plus{align-self:stretch;display:grid;place-items:center;padding:0 0 0 14px}
+.ac-naam{align-self:stretch;display:flex;align-items:center;min-width:0;padding:12px 0}
+.ac-naam:active{opacity:.6}
+.ac-item > .chip,.ac-item > .status{justify-self:end}
+/* Rest van de pagina vervaagt zolang de keuzelijst open is */
+#stores,#lijst{transition:filter .2s,opacity .2s}
+body.ac-open #lijst{filter:blur(6px);opacity:.45;pointer-events:none}
+.ac-item .pname b{font-weight:800}
+.ac-item .status{font-size:14px;color:var(--muted);white-space:nowrap}
+.ac-nieuw{color:var(--primary);font-weight:700}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:18px;padding:22px 18px;color:var(--muted);margin-top:16px}
+.empty strong{display:block;color:var(--ink);font-size:18px;margin-bottom:4px}
+.empty .btn{margin-top:12px}
+/* Vinkje */
+.tick{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;transition:background .15s,border-color .15s;flex:0 0 24px}
+.on .tick{background:var(--primary);border-color:var(--primary)}
+.on .tick::after,.item.done .tick::after{content:"";width:10px;height:6px;border-left:2.5px solid var(--primary-ink);border-bottom:2.5px solid var(--primary-ink);transform:translateY(-1px) rotate(-45deg)}
+/* Op-de-lijst-knop: plus wordt een tasje, zodat het niet lijkt op afvinken */
+.addbtn{width:28px;height:28px;border-radius:50%;border:2px solid color-mix(in srgb,var(--muted) 55%,transparent);display:grid;place-items:center;color:var(--muted);transition:background-color .15s,border-color .15s,color .15s}
+.addbtn svg{grid-area:1/1;width:16px;height:16px}
+.addbtn .bag{display:none}
+.on .addbtn{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.on .addbtn .plus{display:none}
+.on .addbtn .bag{display:block}
+/* Staat op de lijst voor een ander recept: omlijnd tasje */
+.elders .addbtn{border-color:var(--primary);color:var(--primary);background:transparent}
+.elders .addbtn .plus{display:none}
+.elders .addbtn .bag{display:block}
+.samen-uitleg{margin:0 4px 16px;color:var(--muted);font-size:16px}
+.samen-uitleg b{color:var(--ink)}
+.samen-knoppen{display:grid;gap:8px}
+.samen-knoppen .btn{white-space:normal;text-align:center;padding:12px 16px}
+h3.dagkop{align-items:center}
+h3.dagkop.leeg{opacity:.75}
+.round{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.recipe{background:var(--surface);border:1px solid var(--line);border-radius:18px;margin-bottom:10px;overflow:hidden}
+/* Vegen in het weekmenu */
+.swipe{position:relative;margin-bottom:10px;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.swipe .swipe-kaart{position:relative;margin:0;transition:transform .28s cubic-bezier(.2,.9,.3,1)}
+.swipe.open .swipe-kaart{transform:translateX(calc(var(--bw,72px) * -1))}
+.swipe-acties{position:absolute;inset:0;display:flex;justify-content:flex-end;visibility:hidden}
+.swipe.open .swipe-acties,.swipe.bezig .swipe-acties{visibility:visible}
+.swipe-weg{width:96px;height:100%;border-radius:18px;background:var(--accent);color:var(--op-kleur);font-size:14px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.swipe-weg svg{width:22px;height:22px}
+.swipe-weg,.swipe-wk{width:72px !important;font-size:0 !important;gap:0}
+.swipe-weg svg,.swipe-wk svg{width:28px !important;height:28px !important}
+.swipe-wk{width:88px;height:100%;background:var(--c);color:var(--op-kleur);font-size:14px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.swipe-wk svg{width:22px;height:22px}
+.items .swipe{margin:0}
+.items .swipe + .swipe{border-top:1px solid var(--line)}
+.items .swipe-weg{border-radius:0;width:88px}
+.items .item{background:var(--surface)}
+.swipe > .item{border-top:0}
+.dag-plus{display:grid;place-items:center;width:100%;height:44px;border:1.5px dashed var(--line);border-radius:14px;color:var(--muted)}
+.dag-plus svg{width:20px;height:20px}
+.dag-plus:active{background:var(--primary-soft)}
+/* Recepten van één dag samen in één blok, net als de boodschappenlijst */
+.dag-groep{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:10px}
+.dag-groep .swipe{margin:0}
+.dag-groep .swipe + .swipe{border-top:1px solid var(--line)}
+.dag-groep .recipe{border:0;border-radius:0;margin:0}
+.dag-groep .swipe-weg{border-radius:0;width:72px}
+.recipe-head{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:12px;width:100%;padding:12px 16px 12px 14px;min-height:58px}
+.pmeta.has{color:var(--primary);font-weight:600}
+.weekbalk{display:grid;grid-template-columns:52px 1fr 52px;gap:8px;margin-top:12px;padding-bottom:2px}
+.weekpijl{flex:none;padding:0;justify-content:center}
+.weekpijl svg{width:22px;height:22px}
+.weeklabel{padding:6px 12px}
+.weeklabel.active{--c:var(--actief)}
+.dag-groep{margin-bottom:0}
+.dagkop.vandaag{color:var(--primary)}
+.dag-plus-rij{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;padding:8px 14px;text-align:center}
+.dag-plus-rij .addbtn{width:26px;height:26px}
+.dag-plus-rij .pmeta{margin:0;font-size:17px}
+.dag-groep .swipe + .dag-plus-rij{border-top:1px solid var(--line)}
+.dag-plus-rij:active{background:var(--primary-soft)}
+.recipe .ings{padding:0;margin:0;background:color-mix(in srgb,var(--bg) 55%,var(--surface))}
+.ings li + li .ing,.ings li + li.leeg-ing{border-top:1px solid var(--line)}
+.recipe .ings{border-top:1px solid var(--line)}
+.chev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:-4px 4px 0 0;transition:transform .15s}
+[aria-expanded=true] .chev{transform:rotate(-135deg);margin-top:4px}
+.ings{list-style:none;margin:0;padding:0 8px 8px}
+.ing{display:grid;grid-template-columns:28px 1fr auto auto;align-items:center;gap:12px;width:100%;padding:11px 16px 11px 14px;border-radius:0;min-height:52px}
+.ing:active{background:none}
+.ingknop{width:48px;height:48px;margin:-10px;display:grid;place-items:center;border-radius:50%}
+.ingknop:active .addbtn{transform:scale(.88)}
+.addbtn{transition:background-color .15s,border-color .15s,color .15s,transform .12s}
+.iamt{color:var(--muted);font-size:15px;white-space:nowrap}
+.uitleg{color:var(--muted);font-size:15px;margin:0 16px 14px;white-space:pre-wrap;overflow-wrap:anywhere}
+/* Boodschappen */
+.stores{display:flex;gap:8px;margin-top:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.stores::-webkit-scrollbar{display:none}
+.storetab{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:14px;border:2px solid var(--line);background:var(--surface);font-weight:700;min-height:48px}
+.storetab .n{font-variant-numeric:tabular-nums;font-size:14px;background:var(--bg);border-radius:20px;padding:1px 8px;color:var(--muted)}
+.storetab.active{border-color:var(--c);background:var(--c);color:var(--op-kleur)}
+.storetab.active .n{background:var(--op-kleur-zacht);color:var(--op-kleur)}
+.storetab.plus{flex:0 0 auto;color:var(--muted);font-size:22px;padding:0 16px}
+h3.cat{font-size:15px;font-weight:700;color:var(--muted);margin:20px 4px 6px;display:flex;justify-content:space-between}
+.items{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.item{display:grid;grid-template-columns:1fr;align-items:stretch;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.check{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:center;padding:12px 14px;min-height:58px}
+.vinkknop{width:48px;height:48px;margin:-10px;display:grid;place-items:center;border-radius:50%}
+.vinkknop:active .tick{transform:scale(.88)}
+.tick{transition:background .15s,border-color .15s,transform .12s}
+/* Aantal aanpassen */
+.stepper{display:grid;grid-template-columns:60px 1fr 60px;gap:10px;align-items:center;margin:6px 0 14px}
+.step{height:60px;border-radius:18px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center}
+.step svg{width:26px;height:26px}
+.step:active{transform:scale(.94)}
+.stepval{text-align:center;font-size:22px;font-weight:700;min-height:60px}
+.snelkeuze{display:flex;flex-wrap:wrap;gap:8px}
+.sheet h3.cat{margin:6px 4px 8px}
+.sheet h3.cat ~ h3.cat{margin-top:20px}
+.item-winkels{margin:0}
+.stepper{margin-top:0}
+#sheet-wrap .sheet-bg{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:var(--overlay)}
+.snelkeuze button{padding:9px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:700;min-height:40px}
+.snelkeuze button.gekozen{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.check.metchip{grid-template-columns:28px 1fr auto}
+.chip{display:inline-flex;align-items:center;font-size:13px;font-weight:700;line-height:1;color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent);border-radius:999px;padding:6px 10px;white-space:nowrap}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip{color:color-mix(in srgb,var(--c) 55%,white);background:color-mix(in srgb,var(--c) 28%,transparent)}}
+:root[data-theme="dark"] .chip{color:color-mix(in srgb,var(--c) 55%,white);background:color-mix(in srgb,var(--c) 28%,transparent)}
+.check .tick{border-color:var(--muted)}
+.item.done .tick{background:var(--done);border-color:var(--done)}
+.item.done .tick::after{border-color:var(--surface)}
+.pname{font-weight:500;font-size:18px;line-height:1.2}
+.item.done .pname{text-decoration:line-through;color:var(--done)}
+.pmeta{display:block;font-size:14px;color:var(--muted);margin-top:2px}
+.basket{margin-top:28px}
+/* Recepten en producten */
+.rows{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;width:100%;border-top:1px solid var(--line);min-height:58px}
+.row:first-child{border-top:0}
+.row .toggle{padding:12px 6px 12px 14px;align-self:stretch;display:flex;align-items:center}
+/* Winkels */
+.note{color:var(--muted);font-size:15px;margin:12px 0 10px}
+.order{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.order li{display:grid;grid-template-columns:36px 1fr 44px 44px;align-items:center;gap:6px;padding:4px 8px 4px 14px;border-top:1px solid var(--line);min-height:52px}
+.order li:first-child{border-top:0}
+.pos{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);font-variant-numeric:tabular-nums}
+.lead{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
+.lead.vol{background:var(--c);color:var(--op-kleur)}
+.chevr{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);opacity:.6;margin-right:4px}
+.arrow{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;color:var(--muted)}
+.arrow:not(:disabled):active{background:var(--primary-soft)}
+/* Instellingen */
+.back{display:inline-flex;align-items:center;gap:2px;color:var(--primary);font-weight:700;font-size:16px;padding:4px 0 6px;margin-left:-4px}
+.back svg{width:22px;height:22px}
+.group{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:12px}
+.nav-row{display:grid;grid-template-columns:32px 1fr auto 12px;align-items:center;gap:12px;width:100%;padding:0 16px 0 14px;min-height:56px;position:relative}
+.nav-row + .nav-row::before{content:"";position:absolute;top:0;left:60px;right:0;border-top:1px solid var(--line)}
+.nav-row:active{background:var(--primary-soft)}
+.ico{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c)}
+.ico svg{width:18px;height:18px}
+.nav-row .lbltxt{font-weight:500;font-size:18px}
+.nav-row .detail{color:var(--muted);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46vw}
+.nav-row .chev2{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);opacity:.7}
+.foot{color:var(--muted);font-size:14px;margin:14px 16px 0}
+/* Onderbalk */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:8;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs .inner{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 2px 8px;font-size:12px;font-weight:700;color:var(--muted);text-align:center}
+.tabs button svg{width:24px;height:24px}
+.tabs button[aria-current=page]{color:var(--primary)}
+.badge{position:relative;display:inline-flex}
+#badge{position:absolute;top:-6px;right:-12px;background:var(--accent);color:var(--op-kleur);font-size:11px;font-weight:800;border-radius:20px;padding:1px 6px;font-variant-numeric:tabular-nums}
+/* Sheet */
+#sheet-wrap{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center}
+#sheet-wrap[hidden]{display:none}
+.sheet-bg{position:absolute;inset:0;background:var(--overlay)}
+.sheet{position:relative;background:var(--bg);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:24px 24px 0 0;padding:20px 16px calc(18px + env(safe-area-inset-bottom,0px));animation:up .2s ease-out}
+.sheet:focus{outline:none}
+.sheet h4{margin:0 52px 14px 0;font-size:24px;font-weight:800;letter-spacing:-0.01em;line-height:1.1}
+.sheet .close{position:absolute;top:10px;right:8px;width:44px;height:44px;display:grid;place-items:center;font-size:26px;color:var(--muted)}
+@keyframes up{from{transform:translateY(28px);opacity:.5}}
+.lbl{display:block;margin-bottom:14px}
+.lbl>span{display:block;font-size:14px;font-weight:700;color:var(--muted);margin:0 4px 5px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.acts .btn{flex:1 1 auto}
+.pick{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:center;width:100%;padding:12px 14px;border-top:1px solid var(--line);min-height:54px}
+.pick:first-child{border-top:0}
+/* Favorieten: ster rechts in de zoekbalk */
+#add-form .zoekveld{position:relative;flex:1}
+#add-form .zoekveld .field{padding-right:52px}
+.zoekster{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:grid;place-items:center;background:none;border:0;color:var(--primary)}
+.zoekster svg{width:26px;height:26px}
+.zoekster .vol{display:none}
+.zoekster.aan .leeg{display:none}
+.zoekster.aan .vol{display:block}
+.ac-leeg{margin:0;padding:16px;color:var(--muted);font-size:15px}
+.ster{display:inline-grid;vertical-align:1px;margin-left:6px;color:var(--primary)}
+.ster svg{width:13px;height:13px}
+.schakel{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-height:52px;margin-bottom:14px;font-size:17px}
+.schakel input{appearance:none;-webkit-appearance:none;width:51px;height:31px;border-radius:999px;background:var(--line);position:relative;transition:background .2s;margin:0;cursor:pointer}
+.schakel input::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:var(--op-kleur);box-shadow:0 2px 4px var(--schaduw-klein);transition:transform .2s}
+.schakel input:checked{background:var(--primary)}
+.schakel input:checked::after{transform:translateX(20px)}
+/* Codescherm (eerste keer openen op een telefoon) */
+#code-scherm{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;padding:24px}
+.code-kaart{width:100%;max-width:360px;display:grid;gap:12px;text-align:center}
+.code-kaart img{justify-self:center;border-radius:18px}
+.code-kaart h2{margin:6px 0 0;font-size:28px;font-weight:800}
+.code-kaart p{margin:0 0 8px;color:var(--muted)}
+/* Bevestigen */
+#bevestig{position:fixed;inset:0;z-index:40;display:flex;align-items:flex-end;justify-content:center}
+#bevestig[hidden]{display:none}
+.bv-bg{position:absolute;inset:0;background:var(--overlay);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.bv-kaart{position:relative;width:calc(100% - 16px);max-width:440px;margin:0 8px calc(8px + env(safe-area-inset-bottom,0px));background:var(--bg);border-radius:24px;padding:18px 16px 16px;display:grid;gap:8px;animation:up .2s ease-out}
+.bv-kaart p{margin:2px 6px 10px;font-size:17px;text-align:center;line-height:1.35}
+.bv-kaart .bv-gevaar{background:var(--accent);color:var(--op-kleur)}
+.bv-kaart .field{margin-bottom:6px}
+/* Melding */
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:30;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:14px;width:max-content;max-width:calc(100% - 32px);transition:opacity .2s,transform .2s;font-size:15px}
+.toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.toast button{color:var(--bg);font-weight:800;text-decoration:underline;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+/* Kleine correcties */
+#w-tabs{margin-bottom:14px}
+#terug[hidden]{display:none}
+#preview-pill{white-space:nowrap;width:max-content}
+/* ================= Tabbalk: zwevend glas, alleen iconen ================= */
+body{padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
+.tabs{left:0;right:0;bottom:calc(12px + env(safe-area-inset-bottom,0px));padding:0 20px;background:none;border:0}
+.tabs .inner{
+  max-width:400px;height:64px;padding:6px;gap:4px;border-radius:999px;
+  background:linear-gradient(165deg,var(--tab-glans),transparent 50%),var(--tab-glas);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+  border:1px solid var(--tab-rand);
+  box-shadow:inset 0 1px 0 var(--tab-licht),0 10px 30px var(--tab-schaduw);
+}
+.tabs button{display:grid;place-items:center;padding:0;border-radius:999px;color:var(--muted);transition:background-color .25s,color .25s,transform .18s cubic-bezier(.3,1.4,.5,1)}
+.tabs button svg{width:26px;height:26px}
+.tabs button:active{transform:scale(.9)}
+.tabs button[aria-current=page]{
+  color:var(--primary);
+  background:var(--tab-actief);
+  box-shadow:inset 0 1px 0 var(--tab-licht);
+}
+#badge{top:-5px;right:-9px}
+.toast{bottom:calc(90px + env(safe-area-inset-bottom,0px))}
+
+@media (prefers-reduced-transparency: reduce){
+  .tabs .inner{background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .tabs .inner{background:var(--surface)}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top"><button type="button" id="terug" class="back" data-act="inst-terug" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span id="terug-tekst">Instellingen</span></button><div class="toprow"><div><h1 id="title">Boodschappen</h1><p id="subtitle">Even ophalen…</p></div><div id="topextra"></div></div><div id="headerextra"></div></header>
+  <main id="main"></main>
+</div>
+
+<nav class="tabs" aria-label="Onderdelen">
+  <div class="inner">
+    <button type="button" data-act="tab" data-tab="lijst" aria-label="Boodschappenlijst">
+      <span class="badge"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.5 9V7a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M4.6 8h14.8a1 1 0 0 1 1 1.1l-1.1 10.1a2 2 0 0 1-2 1.8H6.7a2 2 0 0 1-2-1.8L3.6 9.1a1 1 0 0 1 1-1.1z"/></svg><span id="badge" hidden></span></span></button>
+    <button type="button" data-act="tab" data-tab="week" aria-label="Weekmenu">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4.5"/><rect x="6.5" y="2" width="3" height="6" rx="1.5"/><rect x="14.5" y="2" width="3" height="6" rx="1.5"/></svg></button>
+    <button type="button" data-act="tab" data-tab="recepten" aria-label="Recepten">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg></button>
+    <button type="button" data-act="tab" data-tab="instellingen" aria-label="Instellingen">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="6" width="18" height="2.6" rx="1.3"/><circle cx="15.5" cy="7.3" r="3.3"/><rect x="3" y="15.4" width="18" height="2.6" rx="1.3"/><circle cx="8.5" cy="16.7" r="3.3"/></svg></button>
+  </div>
+</nav>
+
+<div id="sheet-wrap" hidden>
+  <div class="sheet-bg" data-act="sluit"></div>
+  <div class="sheet" role="dialog" aria-modal="true" tabindex="-1">
+    <button type="button" class="close" data-act="sluit" aria-label="Sluiten">×</button>
+    <div id="sheet-inhoud"></div>
+  </div>
+</div>
+<div id="bevestig" hidden></div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-text"></span><button type="button" id="toast-btn" hidden></button></div>
+<datalist id="producten-dl"></datalist>
+
+<script>
+/* ================= Verbinding met het loket (Apps Script) =================
+   Plak hieronder het adres van je Apps Script-webapp (eindigt op /exec).
+   Leeg laten = previewmodus met voorbeelddata. */
+const API_URL = 'https://script.google.com/macros/s/AKfycbw5coGQ3021Tyjm19Ky7-_PmYuw36oeaCJwF1Cw_nAy0LzSzvF9JucT8fFY9EuSY6aL/exec';
+
+(function () {
+  if (window.google && google.script && google.script.run) return; // draait binnen Apps Script
+  if (!API_URL) return;                                            // geen loket: previewmodus
+  const KEY = 'kravschappen-code';
+  const code = () => { try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; } };
+  function vraagCode(melding) {
+    if (document.getElementById('code-scherm')) return;
+    const toon = () => {
+      const w = document.createElement('div');
+      w.id = 'code-scherm';
+      w.innerHTML = `<form class="code-kaart">
+          <img src="icon-180.png" alt="" width="72" height="72">
+          <h2>Kravschappen</h2>
+          <p>${melding || 'Voer de geheime code in om jullie lijst te openen.'}</p>
+          <input class="field" id="code-invoer" type="password" autocomplete="current-password" placeholder="Geheime code" aria-label="Geheime code">
+          <button class="btn wide" type="submit">Openen</button>
+        </form>`;
+      document.body.appendChild(w);
+      const inp = w.querySelector('#code-invoer');
+      w.querySelector('form').addEventListener('submit', e => {
+        e.preventDefault(); e.stopPropagation();
+        const v = inp.value.trim(); if (!v) return;
+        try { localStorage.setItem(KEY, v); } catch (err) {}
+        location.reload();
+      }, true);
+      inp.focus();
+    };
+    document.body ? toon() : document.addEventListener('DOMContentLoaded', toon);
+  }
+  async function roep(actie, args) {
+    if (!code()) { vraagCode(); throw new Error('Geen code ingevoerd'); }
+    const r = await fetch(API_URL, { method: 'POST', redirect: 'follow',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ sleutel: code(), actie, args }) });
+    const d = await r.json();
+    if (d.fout === 'sleutel') {
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      vraagCode('Die code klopt niet. Probeer het opnieuw.');
+      throw new Error('Onjuiste code');
+    }
+    if (d.fout) throw new Error(d.fout);
+    return d.data;
+  }
+  // Zelfde aanroepvorm als google.script.run, zodat de rest van de app niets merkt
+  window.google = { script: { get run() {
+    let ok = () => {}, fout = () => {};
+    const p = new Proxy({}, { get(_, k) {
+      if (k === 'withSuccessHandler') return f => { ok = f; return p; };
+      if (k === 'withFailureHandler') return f => { fout = f; return p; };
+      return (...a) => { roep(k, a).then(ok, fout); };
+    } });
+    return p;
+  } } };
+})();
+</script>
+<script>
+/* ================= Previewmodus =================
+   Buiten Google Apps Script (lokaal geopend of als preview) draait de app
+   op voorbeelddata die alleen in deze browser wordt bewaard.
+   Binnen Apps Script doet dit blok niets. */
+(function () {
+  if (window.google && google.script && google.script.run) return;
+  const KEY = 'boodschappen-preview-v1';
+  const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  function demo() {
+    const C = [['groente','Groente & fruit'],['brood','Brood'],['vlees','Vlees & vis'],['zuivel','Zuivel & eieren'],['kaas','Kaas & vleeswaren'],['pasta','Pasta, rijst & wereld'],['conserven','Conserven & sauzen'],['kruiden','Kruiden & specerijen'],['ontbijt','Ontbijt & beleg'],['snoep','Snoep & koek'],['drinken','Drinken'],['diepvries','Diepvries'],['baby','Baby'],['drogisterij','Drogisterij'],['huishouden','Huishouden'],['overig','Overig']];
+    const P = [ // id, naam, categorie, winkel
+      ['ui','Ui','groente','ah'],['knoflook','Knoflook','groente','ah'],['courgette','Courgette','groente','ah'],['paprika','Paprika','groente','ah'],
+      ['spinazie','Spinazie','groente','ah'],['bananen','Bananen','groente','dirk'],['tomaten','Tomaten','groente','dirk'],
+      ['brood','Volkorenbrood','brood','dirk'],['wraps','Wraps','brood','ah'],
+      ['kip','Kipfilet','vlees','ah'],['gehakt','Rundergehakt','vlees','dirk'],['zalm','Zalmfilet','vlees','ah'],
+      ['melk','Melk','zuivel','dirk'],['eieren','Eieren','zuivel','dirk'],['yoghurt','Griekse yoghurt','zuivel','ah'],['boter','Roomboter','zuivel','ah'],
+      ['kaas','Geraspte kaas','kaas','ah'],['parmezaan','Parmezaan','kaas','ah'],
+      ['penne','Penne','pasta','ah'],['rijst','Basmatirijst','pasta','ah'],['kokos','Kokosmelk','pasta','ah'],
+      ['pesto','Pesto','conserven','ah'],['tomblok','Tomatenblokjes','conserven','dirk'],['curry','Rode currypasta','conserven','ah'],
+      ['oregano','Oregano','kruiden','ah'],['pindakaas','Pindakaas','ontbijt','dirk'],['havermout','Havermout','ontbijt','dirk'],
+      ['luiers','Luiers','baby','dirk'],['fruithapje','Fruithapje','baby','ah'],['tandpasta','Tandpasta','drogisterij','ah'],['afwas','Afwasmiddel','huishouden','dirk']
+    ];
+    const lijst = { // id: [hoeveelheid, voor, afgevinkt]
+      melk: ['2 pakken', '', false], bananen: ['1 tros', '', false], luiers: ['', '', false], tandpasta: ['', '', false],
+      kip: ['300 g', 'Pasta pesto met kip', false], penne: ['500 g', 'Pasta pesto met kip', false], pesto: ['1 pot', 'Pasta pesto met kip', false],
+      courgette: ['1', 'Pasta pesto met kip', true], eieren: ['10 stuks', '', true]
+    };
+    const FAV = ['melk', 'eieren', 'brood', 'bananen', 'luiers', 'yoghurt'];
+    const producten = P.map(([id, naam, categorie, winkel]) => {
+      const l = lijst[id];
+      return { id, naam, categorie, winkel, opLijst: !!l, afgevinkt: l ? l[2] : false,
+        lijstHoeveelheid: l ? l[0] : '', lijstWinkel: '', lijstVoor: l ? l[1] : '', favoriet: FAV.includes(id) };
+    });
+    const i = (product, hoeveelheid) => ({ product, hoeveelheid });
+    const recepten = [
+      { id: 'r1', naam: 'Pasta pesto met kip', uitleg: 'Penne koken. Kip in reepjes bakken, courgette erbij. Pesto erdoor en afmaken met parmezaan.',
+        ingredienten: [i('penne','500 g'), i('kip','300 g'), i('pesto','1 pot'), i('courgette','1'), i('parmezaan','')] },
+      { id: 'r2', naam: 'Rode curry met rijst', uitleg: 'Currypasta aanfruiten, kip en paprika erbij, afblussen met kokosmelk. Serveren met rijst.',
+        ingredienten: [i('rijst','300 g'), i('kokos','1 blik'), i('curry','2 el'), i('paprika','2'), i('kip','300 g')] },
+      { id: 'r3', naam: 'Wraps met gehakt', uitleg: 'Gehakt rul bakken met ui en paprika, tomatenblokjes erbij. In de wraps met geraspte kaas.',
+        ingredienten: [i('wraps','8'), i('gehakt','400 g'), i('ui','1'), i('paprika','1'), i('tomblok','1 blik'), i('kaas','')] },
+      { id: 'r4', naam: 'Zalm met spinazie', uitleg: 'Zalm in de oven, 15 minuten op 200 graden. Spinazie slinken met knoflook.',
+        ingredienten: [i('zalm','2 stuks'), i('spinazie','400 g'), i('rijst','200 g'), i('knoflook','2 tenen')] }
+    ];
+    ['pasta', 'rijst', 'vlees', 'vlees'].forEach((c, k) => { recepten[k].categorie = c; });
+    const receptcategorieen = [['pasta', 'Pasta'], ['rijst', 'Rijst & wereld'], ['vlees', 'Vlees & vis'], ['vega', 'Vegetarisch'], ['soep', 'Soep & salade'], ['oven', 'Ovenschotels'], ['snel', 'Snel & makkelijk'], ['baby', 'Baby'], ['overig', 'Overig']].map(([id, naam], k) => ({ id, naam, positie: k + 1 }));
+    const ma = new Date(); ma.setHours(0, 0, 0, 0); ma.setDate(ma.getDate() - ((ma.getDay() + 6) % 7));
+    const dag = k => { const d = new Date(ma); d.setDate(ma.getDate() + k); return iso(d); };
+    const mealplan = [[0, ['r1']], [1, ['r2']], [3, ['r3']], [5, ['r4']]].map(([k, r]) => ({ id: dag(k), datum: dag(k), recepten: r }));
+    return {
+      winkels: [
+        { id: 'ah', naam: 'AH', kleur: '#2F6FA6', positie: 1, route: ['groente','brood','vlees','kaas','zuivel','pasta','conserven','kruiden','ontbijt','snoep','drinken','diepvries','baby','drogisterij','huishouden','overig'] },
+        { id: 'dirk', naam: 'Dirk', kleur: '#C2452D', positie: 2, route: ['brood','groente','zuivel','kaas','vlees','conserven','pasta','kruiden','ontbijt','snoep','drinken','baby','diepvries','drogisterij','huishouden','overig'] }
+      ],
+      categorieen: C.map(([id, naam], k) => ({ id, naam, positie: k + 1 })),
+      producten, recepten, mealplan, receptcategorieen
+    };
+  }
+  let db = null;
+  try { db = JSON.parse(localStorage.getItem(KEY)); } catch (e) {}
+  if (!db) db = demo();
+  if (!db.receptcategorieen) { const d = demo(); db.receptcategorieen = d.receptcategorieen; db.recepten.forEach(r => { const x = d.recepten.find(y => y.id === r.id); if (x && !r.categorie) r.categorie = x.categorie; }); }
+  const opslaan = () => { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {} };
+  const kopie = x => JSON.parse(JSON.stringify(x));
+  const api = {
+    getState: () => Object.assign(kopie(db), { gebruiker: 'preview' }),
+    bewaar: (t, rijen) => {
+      rijen.forEach(r => { const b = db[t].find(x => x.id === r.id); if (b) Object.assign(b, r); else db[t].push(Object.assign({}, r)); });
+      opslaan(); return api.getState();
+    },
+    verwijder: (t, ids) => { db[t] = db[t].filter(x => !ids.includes(x.id)); opslaan(); return api.getState(); }
+  };
+  window.PREVIEW = true;
+  window.previewReset = () => { try { localStorage.removeItem(KEY); } catch (e) {} location.reload(); };
+  window.google = { script: { get run() {
+    let ok = () => {}, fout = () => {};
+    const p = new Proxy({}, { get(_, k) {
+      if (k === 'withSuccessHandler') return f => { ok = f; return p; };
+      if (k === 'withFailureHandler') return f => { fout = f; return p; };
+      return (...a) => setTimeout(() => { try { ok(kopie(api[k](...kopie(a)))); } catch (e) { fout(e); } }, 120);
+    } });
+    return p;
+  } } };
+  document.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.add('preview');
+    const b = document.createElement('button');
+    b.type = 'button'; b.id = 'preview-pill'; b.textContent = 'Preview · tik om te resetten';
+    b.onclick = () => bevestig('Voorbeelddata terugzetten naar het begin?', 'Terugzetten').then(ok => { if (ok) window.previewReset(); });
+    document.body.appendChild(b);
+  });
+})();
+</script>
+<script>
+/* ================= Basis ================= */
+const DAGEN = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
+const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+/** Winkelkleuren voor nieuwe winkels komen uit de tokens --winkel-1 t/m --winkel-7. */
+const PALET = () => [1, 2, 3, 4, 5, 6, 7].map(i => getComputedStyle(document.documentElement).getPropertyValue('--winkel-' + i).trim());
+const PIJL_OP = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>';
+const PIJL_NEER = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+
+const S = { data:null, tab:'lijst', winkel:null, routeWinkel:null, instSub:null, week:0, open:new Set(), zoekR:'', zoekP:'' };
+let bezig = 0, teller = 0;
+
+const $ = (s, el=document) => el.querySelector(s);
+const $$ = (s, el=document) => [...el.querySelectorAll(s)];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nieuwId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+const klein = s => s ? s.charAt(0).toLowerCase() + s.slice(1) : s;
+const opNaam = (a, b) => a.naam.localeCompare(b.naam, 'nl');
+const aantal = (n, een, veel) => n + ' ' + (n === 1 ? een : veel);
+
+/* Gegevens */
+const D = () => S.data;
+const winkels = () => [...D().winkels].sort((a, b) => a.positie - b.positie);
+const winkel = id => D().winkels.find(w => w.id === id) || winkels()[0];
+const rcats = () => { const l = [...(D().receptcategorieen || [])].sort((a, b) => (a.id === 'overig') - (b.id === 'overig') || a.positie - b.positie); return l.length ? l : [{ id: 'overig', naam: 'Overig', positie: 1 }]; };
+const rcatNaam = id => ((D().receptcategorieen || []).find(c => c.id === id) || { naam: 'Overig' }).naam;
+/** Recepten gegroepeerd per receptcategorie, in de volgorde uit Instellingen. */
+function perReceptCat(rs) {
+  const ids = rcats().map(c => c.id);
+  const groepen = [...ids, ...new Set(rs.map(r => r.categorie || 'overig').filter(c => !ids.includes(c)))];
+  return groepen.map(c => ({ c, naam: rcatNaam(c), rs: rs.filter(r => (r.categorie || 'overig') === c) })).filter(g => g.rs.length);
+}
+const cats = () => [...D().categorieen].sort((a, b) => (a.id === 'overig') - (b.id === 'overig') || a.positie - b.positie);
+const catNaam = id => (D().categorieen.find(c => c.id === id) || { naam: 'Overig' }).naam;
+const prod = id => D().producten.find(p => p.id === id);
+const prodOpNaam = n => D().producten.find(p => p.naam.toLowerCase() === String(n).trim().toLowerCase());
+const recept = id => D().recepten.find(r => r.id === id);
+const winkelVan = p => { const w = winkel(p.lijstWinkel || p.winkel); return w ? w.id : ''; };
+const nodig = p => p.opLijst && !p.afgevinkt;
+function volgorde(winkelId) {
+  const w = winkel(winkelId);
+  const alle = cats().map(c => c.id);
+  const route = ((w && w.route) || []).filter(id => alle.includes(id));
+  return [...route, ...alle.filter(id => !route.includes(id))];
+}
+function opties(lijst, gekozen) {
+  return lijst.map(o => `<option value="${esc(o.id)}"${o.id === gekozen ? ' selected' : ''}>${esc(o.naam)}</option>`).join('');
+}
+
+/* Datums */
+const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const vanIso = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const kort = d => d.getDate() + ' ' + MAANDEN[d.getMonth()];
+function weekDagen() {
+  const d = new Date(); d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7) + S.week * 7);
+  return [...Array(7)].map((_, k) => { const x = new Date(d); x.setDate(d.getDate() + k); return x; });
+}
+function weeknr(d) {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7));
+  return Math.ceil(((t - new Date(Date.UTC(t.getUTCFullYear(), 0, 1))) / 864e5 + 1) / 7);
+}
+
+/* ================= Server en synchronisatie ================= */
+function laad() {
+  google.script.run
+    .withSuccessHandler(s => { const eerste = !S.data; S.data = s; eerste ? wissel(S.tab) : teken(); })
+    .withFailureHandler(e => { if (!S.data) { $('#subtitle').textContent = 'Laden lukte niet: ' + e.message + '. Herlaad de pagina.'; } })
+    .getState();
+}
+function bel(fn, ...args) {
+  bezig++; teller++;
+  google.script.run
+    .withSuccessHandler(s => { bezig--; if (!bezig) { S.data = s; teken(); } })
+    .withFailureHandler(e => { bezig--; melding('Opslaan lukte niet (' + e.message + '). Gegevens worden opnieuw geladen.'); laad(); })
+    [fn](...args);
+}
+function peil() {
+  if (!S.data || bezig || document.visibilityState !== 'visible') return;
+  const t = teller;
+  google.script.run.withSuccessHandler(s => { if (!bezig && t === teller) { S.data = s; teken(); } }).getState();
+}
+setInterval(peil, 5000);
+document.addEventListener('visibilitychange', peil);
+
+/** Past rijen lokaal meteen aan en slaat ze daarna op. */
+function bewaar(tabel, rijen) {
+  rijen.forEach(r => {
+    const bestaand = D()[tabel].find(x => x.id === r.id);
+    if (bestaand) Object.assign(bestaand, r); else D()[tabel].push(Object.assign({}, r));
+  });
+  teken();
+  bel('bewaar', tabel, rijen);
+}
+function verwijder(tabel, ids) {
+  D()[tabel] = D()[tabel].filter(x => !ids.includes(x.id));
+  teken();
+  bel('verwijder', tabel, ids);
+}
+
+/* Lijst-acties op producten */
+const VAN_LIJST = { opLijst: false, afgevinkt: false, lijstHoeveelheid: '', lijstWinkel: '', lijstVoor: '' };
+function zetOpLijst(p, hoeveelheid, voor) {
+  bewaar('producten', [{ id: p.id, opLijst: true, afgevinkt: false,
+    lijstHoeveelheid: hoeveelheid != null ? hoeveelheid : (p.opLijst ? p.lijstHoeveelheid : ''),
+    lijstVoor: voor != null ? voor : (p.opLijst ? p.lijstVoor : '') }]);
+}
+const voorLijst = s => String(s || '').split(', ').map(x => x.trim()).filter(Boolean);
+const noem = l => l.length < 2 ? (l[0] || '') : l.slice(0, -1).join(', ') + ' en ' + l[l.length - 1];
+function ontleed(v) {
+  const m = String(v || '').trim().match(/^(\d+(?:[.,]\d+)?)\s*(.*)$/);
+  return m ? { n: parseFloat(m[1].replace(',', '.')), u: m[2].trim().toLowerCase() } : null;
+}
+const maak = (n, u) => { const g = String(Math.round(n * 100) / 100).replace('.', ','); return u ? g + ' ' + u : g; };
+/** Telt twee aantallen op als de eenheid gelijk is ("300 g" + "300 g" = "600 g"), anders "300 g + 2 stuks". */
+function telOp(a, b) {
+  if (!a) return b || ''; if (!b) return a;
+  const x = ontleed(a), y = ontleed(b);
+  if (x && y && x.u === y.u) return maak(x.n + y.n, x.u);
+  return a + ' + ' + b;
+}
+/** Trekt b van a af als dat netjes kan; geeft null terug als het niet te berekenen is. */
+function trekAf(a, b) {
+  if (!b) return a || '';
+  const x = ontleed(a), y = ontleed(b);
+  if (x && y && x.u === y.u) return x.n - y.n > 0 ? maak(x.n - y.n, x.u) : '';
+  const delen = String(a || '').split(' + ');
+  const i = delen.indexOf(b);
+  if (i >= 0) { delen.splice(i, 1); return delen.join(' + '); }
+  return null;
+}
+/** Venster als een product al op de lijst staat voor een ander recept: zelf kiezen wat er met het aantal gebeurt. */
+/** Elk recept op een dag telt apart, zodat twee keer hetzelfde recept in een week twee keer opgeteld kan worden. */
+const DAG_AFK = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za'];
+const voorLabel = (r, datum) => `${r.naam} (${DAG_AFK[vanIso(datum).getDay()]})`;
+/** Leesbare tekst voor op de lijst: "2× wraps met gehakt en pasta pesto met kip". */
+function voorTekst(s) {
+  const tel = {};
+  voorLijst(s).forEach(v => { const n = v.replace(/\s\((ma|di|wo|do|vr|za|zo)\)$/, ''); tel[n] = (tel[n] || 0) + 1; });
+  return noem(Object.entries(tel).map(([n, k]) => (k > 1 ? k + '× ' : '') + klein(n)));
+}
+function openSamen(p, rn, amt, hier) {
+  const voor = voorLijst(p.lijstVoor), nu = p.lijstHoeveelheid || '';
+  const knoppen = [];
+  let uitleg;
+  if (!hier) {
+    const anderen = voor.length ? ' voor ' + noem(voor) : '';
+    uitleg = `Staat al op de lijst${nu ? ': <b>' + esc(nu) + '</b>' : ''}${esc(anderen)}.${amt ? ` ${esc(rn)} heeft <b>${esc(amt)}</b> nodig.` : ''}`;
+    const metRecept = rn ? [...voor, rn].join(', ') : p.lijstVoor;
+    if (amt) knoppen.push({ k: 'btn', t: `Optellen → ${telOp(nu, amt)}`, f: () => bewaar('producten', [{ id: p.id, lijstHoeveelheid: telOp(nu, amt), lijstVoor: metRecept }]) });
+    knoppen.push({ k: 'btn soft', t: nu ? `Zo laten (${nu})` : 'Zo laten', f: () => bewaar('producten', [{ id: p.id, lijstVoor: metRecept }]) });
+    knoppen.push({ k: 'btn soft', t: 'Zelf aanpassen', f: () => { bewaar('producten', [{ id: p.id, lijstVoor: metRecept }]); openItem(p.id); } });
+  } else {
+    const zonder = voor.filter(n => n !== rn).join(', ');
+    uitleg = `Staat op de lijst${nu ? ': <b>' + esc(nu) + '</b>' : ''} voor ${esc(noem(voor))}.`;
+    const rest = amt ? trekAf(nu, amt) : null;
+    if (rest !== null && amt) knoppen.push({ k: 'btn', t: `Aandeel van ${rn} aftrekken → ${rest || 'geen aantal'}`, f: () => bewaar('producten', [{ id: p.id, lijstHoeveelheid: rest, lijstVoor: zonder }]) });
+    knoppen.push({ k: 'btn soft', t: `Alleen ${rn} weghalen, aantal blijft`, f: () => bewaar('producten', [{ id: p.id, lijstVoor: zonder }]) });
+    knoppen.push({ k: 'btn danger', t: 'Helemaal van de lijst halen', f: async () => { if (await bevestig(`${p.naam} helemaal van de lijst halen?`)) haalVanLijst(p); } });
+  }
+  openSheet(`<h4>${esc(p.naam)}</h4><p class="samen-uitleg">${uitleg}</p>
+    <div class="samen-knoppen">${knoppen.map((k, i) => `<button type="button" class="${k.k} wide" data-keuze="${i}">${esc(k.t)}</button>`).join('')}</div>`);
+  $('#sheet-inhoud').onclick = e => {
+    const b = e.target.closest('[data-keuze]'); if (!b) return;
+    const k = knoppen[Number(b.dataset.keuze)];
+    sluitSheet();
+    k.f();
+  };
+}
+function haalVanLijst(p) {
+  bewaar('producten', [Object.assign({ id: p.id }, VAN_LIJST)]);
+}
+
+/* ================= Weergaven ================= */
+const VIEWS = {
+  week:      { titel: 'Weekmenu',     skelet: skeletWeek,      teken: tekenWeek },
+  lijst:     { titel: 'Boodschappen', skelet: skeletLijst,     teken: tekenLijst },
+  recepten:  { titel: 'Recepten',     skelet: skeletRecepten,  teken: tekenRecepten },
+  instellingen: { titel: 'Instellingen', skelet: skeletInst, teken: tekenInst }
+};
+function wissel(tab) {
+  S.tab = tab;
+  $$('.tabs button').forEach(b => b.dataset.tab === tab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
+  $('#title').textContent = VIEWS[tab].titel;
+  $('#topextra').innerHTML = '';
+  $('#headerextra').innerHTML = '';
+  $('#terug').hidden = true;
+  $('#terug').dataset.act = 'inst-terug';
+  $('#terug-tekst').textContent = 'Instellingen';
+  $('#main').innerHTML = VIEWS[tab].skelet();
+  teken();
+  pasTitelAan();
+  window.scrollTo(0, 0);
+}
+/** Lange titels van een woord (zoals "Receptcategorieën") worden iets kleiner, zodat de knop ernaast blijft passen. */
+function pasTitelAan() {
+  const h = $('#title');
+  h.style.fontSize = '';
+  if ($('#titel-invoer')) return;
+  let px = parseFloat(getComputedStyle(h).fontSize);
+  while (h.scrollWidth > h.clientWidth + 1 && px > 22) { px -= 1; h.style.fontSize = px + 'px'; }
+}
+function teken() {
+  if (!S.data) return;
+  if (S.slepen) { S.uitgesteld = true; return; }
+  $('#producten-dl').innerHTML = [...D().producten].sort(opNaam).map(p => `<option value="${esc(p.naam)}">`).join('');
+  const open = D().producten.filter(nodig).length;
+  $('#badge').hidden = !open;
+  $('#badge').textContent = open;
+  VIEWS[S.tab].teken();
+}
+const sub = t => { $('#subtitle').textContent = t; $('#subtitle').hidden = !t; };
+
+/* ---------- Weekmenu ---------- */
+const PIJL_LINKS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+const PIJL_RECHTS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+function skeletWeek() {
+  // Vaste balk onder de titel, net als de winkeltabs op de boodschappenlijst
+  $('#headerextra').innerHTML = `<div class="weekbalk">
+    <button type="button" class="storetab weekpijl" data-act="week" data-d="-1" aria-label="Vorige week">${PIJL_LINKS}</button>
+    <button type="button" class="storetab weeklabel" id="weeklabel" data-act="week-nu"></button>
+    <button type="button" class="storetab weekpijl" data-act="week" data-d="1" aria-label="Volgende week">${PIJL_RECHTS}</button></div>`;
+  return '<div id="week"></div>';
+}
+function tekenWeek() {
+  const dagen = weekDagen();
+  sub('');
+  const lab = $('#weeklabel');
+  if (lab) {
+    lab.textContent = `Week ${weeknr(dagen[0])}`;
+    lab.classList.toggle('active', S.week === 0);
+    lab.setAttribute('aria-label', S.week === 0 ? 'Deze week' : 'Terug naar deze week');
+  }
+  const vandaag = iso(new Date());
+  $('#week').innerHTML = dagen.map(d => {
+    const datum = iso(d);
+    const plan = D().mealplan.find(m => m.id === datum);
+    const rs = ((plan && plan.recepten) || []).map(recept).filter(Boolean);
+    const nu = datum === vandaag;
+    return `<h3 class="cat dagkop${nu ? ' vandaag' : ''}${rs.length ? '' : ' leeg'}"><span>${cap(DAGEN[d.getDay()])} ${kort(d)}</span></h3>
+      <div class="items dag-groep">${rs.map(r => receptKaart(r, datum)).join('')}${rs.length ? '' : `<button type="button" class="dag-plus-rij" data-act="koppel" data-datum="${datum}" aria-label="Recept toevoegen aan ${DAGEN[d.getDay()]} ${kort(d)}"><span class="addbtn" aria-hidden="true"><svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button>`}</div>`;
+  }).join('');
+}
+function receptKaart(r, datum) {
+  const key = datum + ':' + r.id;
+  const open = S.open.has(key);
+  const ingr = (r.ingredienten || []).filter(i => prod(i.product));
+  const n = ingr.filter(i => { const p = prod(i.product); return nodig(p) && voorLijst(p.lijstVoor).includes(r.naam); }).length;
+  let h = `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" data-datum="${datum}" data-r="${esc(r.id)}" style="--bw:144px">
+    <div class="swipe-acties"><button type="button" class="swipe-wk" style="--c:var(--veeg-open)" data-act="recept-van-week" data-id="${esc(r.id)}" aria-label="Recept ${esc(r.naam)} bekijken"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg></button><button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="koppel" data-datum="${datum}" aria-label="Recepten van deze dag wijzigen">${PEN_ICON}</button></div>
+    <article class="recipe swipe-kaart">
+    <button type="button" class="recipe-head" data-act="klap" data-key="${esc(key)}" aria-expanded="${open}">
+      <span class="lead" style="--c:var(--primary)">${esc(r.naam.charAt(0).toUpperCase())}</span>
+      <span><span class="pname">${esc(r.naam)}</span></span>
+      <span class="chev"></span></button>`;
+  if (open) {
+    h += '<ul class="ings">' + (ingr.length ? ingr.map(i => {
+      const p = prod(i.product), w = winkel(winkelVan(p));
+      const label = voorLabel(r, datum), voor = voorLijst(p.lijstVoor);
+      const hier = voor.includes(label) || voor.includes(r.naam);
+      const stand = !nodig(p) ? '' : hier ? 'on' : 'elders';
+      // Alleen het rondje is klikbaar; de rest van de rij is om te lezen
+      return `<li><div class="ing ${stand}">
+        <button type="button" class="ingknop" data-act="ing" data-p="${esc(p.id)}" data-r="${esc(r.id)}" data-d="${datum}" data-a="${esc(i.hoeveelheid || '')}" aria-pressed="${stand === 'on'}" aria-label="${esc(p.naam)} ${stand === 'on' ? 'van de lijst halen' : 'op de lijst zetten'}">${ADD_KNOP}</button>
+        <span class="pname">${esc(p.naam)}</span><span class="iamt">${esc(i.hoeveelheid || '')}</span>
+        ${stand && w ? winkelChip(w) : '<span></span>'}</div></li>`;
+    }).join('') : '<li class="ing leeg-ing"><span></span><span class="pmeta">Dit recept heeft nog geen producten.</span></li>') + '</ul>';
+  }
+  return h + '</article></div>';
+}
+
+/* Vegen: kaart naar links schuiven toont de verwijderknop, ver doorvegen verwijdert meteen */
+const STER_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 16.7l-5.4 2.9 1.1-6.1-4.5-4.3 6.1-.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+const sterTje = p => p.favoriet ? '<span class="ster" aria-label="favoriet">'+STER_ICON+'</span>' : '';
+const breedte = sw => parseFloat(sw.style.getPropertyValue('--bw')) || 72;
+/** Verhoogt of verlaagt het getal vooraan een aantal; de eenheid blijft staan ("2 pakken" -> "3 pakken", "500 g" -> "600 g"). */
+function stapAantal(waarde, richting) {
+  const v = String(waarde || '').trim();
+  if (!v) return richting > 0 ? '1' : '';
+  const m = v.match(/^(\d+(?:[.,]\d+)?)\s*(.*)$/);
+  const n = m ? parseFloat(m[1].replace(',', '.')) : 1;
+  const eenheid = m ? m[2] : v;
+  const stap = /^(g|gr|gram|ml)$/i.test(eenheid) && n >= 100 ? 100 : 1;
+  const nieuw = Math.round((n + richting * stap) * 100) / 100;
+  if (nieuw <= 0) return '';
+  const getal = String(nieuw).replace('.', ',');
+  return eenheid ? getal + ' ' + eenheid : getal;
+}
+/** Venster om een product op de lijst aan te passen: aantal en winkel in een keer. */
+function openItem(id) {
+  const p = prod(id); if (!p) return;
+  const SNEL = ['1', '2', '3', '4', '6', '10'];
+  const MIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/></svg>';
+  const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+  let gekozenWinkel = winkelVan(p);
+  openSheet(`<h4>${esc(p.naam)}</h4>
+    <h3 class="cat"><span>Aantal</span></h3>
+    <div class="stepper">
+      <button type="button" class="step" data-stap="-1" aria-label="Minder">${MIN}</button>
+      <input class="field stepval" id="aantal-val" value="${esc(p.lijstHoeveelheid || '')}" placeholder="Geen aantal" autocomplete="off" aria-label="Aantal of hoeveelheid">
+      <button type="button" class="step" data-stap="1" aria-label="Meer">${PLUS}</button>
+    </div>
+    <div class="snelkeuze">${SNEL.map(n => `<button type="button" data-snel="${n}">${n}</button>`).join('')}<button type="button" data-snel="">Geen</button></div>
+    ${winkels().length > 1 ? `<h3 class="cat"><span>Winkel</span></h3>
+    <div class="stores item-winkels">${winkels().map(w => `<button type="button" class="storetab${w.id === gekozenWinkel ? ' active' : ''}" style="--c:${w.kleur}" data-winkel="${esc(w.id)}">${esc(w.naam)}</button>`).join('')}</div>` : ''}`);
+  const inp = $('#aantal-val');
+  const markeer = () => $$('.snelkeuze button').forEach(b => b.classList.toggle('gekozen', b.dataset.snel === inp.value.trim() && b.dataset.snel !== ''));
+  // Elke aanpassing wordt meteen opgeslagen; typen wordt na een korte pauze bewaard
+  let typTimer;
+  const opslaan = () => {
+    clearTimeout(typTimer);
+    bewaar('producten', [{ id, lijstHoeveelheid: inp.value.trim(), lijstWinkel: gekozenWinkel === p.winkel ? '' : gekozenWinkel }]);
+  };
+  $('#sheet-inhoud').onclick = e => {
+    const st = e.target.closest('[data-stap]');
+    if (st) { inp.value = stapAantal(inp.value, Number(st.dataset.stap)); markeer(); opslaan(); return; }
+    const sn = e.target.closest('[data-snel]');
+    if (sn) { inp.value = sn.dataset.snel; markeer(); opslaan(); return; }
+    const wk = e.target.closest('[data-winkel]');
+    if (wk) { gekozenWinkel = wk.dataset.winkel; $$('.item-winkels .storetab').forEach(b => b.classList.toggle('active', b === wk)); opslaan(); return; }
+  };
+  inp.oninput = () => { markeer(); clearTimeout(typTimer); typTimer = setTimeout(opslaan, 500); };
+  inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); opslaan(); sluitSheet(); } };
+  markeer();
+}
+const ADD_KNOP = '<span class="addbtn" aria-hidden="true"><svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><svg class="bag" viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 9V7a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M4.6 8h14.8a1 1 0 0 1 1 1.1l-1.1 10.1a2 2 0 0 1-2 1.8H6.7a2 2 0 0 1-2-1.8L3.6 9.1a1 1 0 0 1 1-1.1z"/></svg></span>';
+const PRUL_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="2.6" rx="1.3"/><rect x="9" y="2.5" width="6" height="3" rx="1.2"/><path d="M6 9h12l-1 10.2a2 2 0 0 1-2 1.8H9a2 2 0 0 1-2-1.8z"/></svg>';
+let veeg = null, klikOnderdrukken = false;
+function sluitVeeg() {
+  if (!S.swipeOpen) return;
+  S.swipeOpen = null;
+  $$('.swipe.open').forEach(x => x.classList.remove('open'));
+}
+document.addEventListener('pointerdown', e => {
+  const sw = e.target.closest('.swipe');
+  if (e.target.closest('.swipe-acties')) return;
+  if (!sw) { sluitVeeg(); return; }
+  if (S.swipeOpen && S.swipeOpen !== sw.dataset.key) sluitVeeg();
+  veeg = { el: sw, kaart: $('.swipe-kaart', sw), x: e.clientX, y: e.clientY, id: e.pointerId,
+    start: sw.classList.contains('open') ? -breedte(sw) : 0, t: 0, actief: false };
+});
+document.addEventListener('pointermove', e => {
+  if (!veeg || e.pointerId !== veeg.id) return;
+  const dx = e.clientX - veeg.x, dy = e.clientY - veeg.y;
+  if (!veeg.actief) {
+    if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      veeg.actief = true; S.slepen = true;
+      veeg.el.classList.add('bezig');
+      veeg.kaart.style.transition = 'none';
+      try { veeg.el.setPointerCapture(e.pointerId); } catch (err) {}
+    } else if (Math.abs(dy) > 10) { veeg = null; return; }
+    else return;
+  }
+  let t = veeg.start + dx;
+  if (t > 0) t = t / 4;
+  t = Math.max(t, -veeg.el.offsetWidth);
+  veeg.t = t;
+  veeg.kaart.style.transform = `translateX(${t}px)`;
+});
+function eindVeeg(e) {
+  if (!veeg || e.pointerId !== veeg.id) return;
+  const v = veeg; veeg = null;
+  if (!v.actief) return;
+  S.slepen = false;
+  klikOnderdrukken = true; setTimeout(() => { klikOnderdrukken = false; }, 60);
+  v.kaart.style.transition = ''; v.kaart.style.transform = '';
+  v.el.classList.remove('bezig');
+  if (v.t < -v.el.offsetWidth * 0.55 && $('[data-vol]', v.el)) { const vol = $('[data-vol]', v.el); ACTIES[vol.dataset.act](vol, vol.dataset.id); return; }
+  if (v.t < -breedte(v.el) / 2) { S.swipeOpen = v.el.dataset.key; v.el.classList.add('open'); }
+  else { if (S.swipeOpen === v.el.dataset.key) S.swipeOpen = null; v.el.classList.remove('open'); }
+  if (S.uitgesteld) { S.uitgesteld = false; teken(); }
+}
+document.addEventListener('pointerup', eindVeeg);
+document.addEventListener('pointercancel', eindVeeg);
+document.addEventListener('click', e => {
+  if (klikOnderdrukken) { e.preventDefault(); e.stopPropagation(); return; }
+  const sw = e.target.closest('.swipe.open');
+  if (sw && !e.target.closest('.swipe-acties')) { e.preventDefault(); e.stopPropagation(); sluitVeeg(); }
+}, true);
+function openKoppel(datum) {
+  const d = vanIso(datum);
+  const plan = D().mealplan.find(m => m.id === datum);
+  const gekozen = new Set((plan && plan.recepten) || []);
+  const rs = [...D().recepten].sort(opNaam);
+  if (!rs.length) {
+    return openSheet(`<h4>Nog geen recepten</h4><p class="note">Maak eerst een recept in het receptenboek, dan kun je het hier aan een dag koppelen.</p>
+      <div class="acts"><button type="button" class="btn" data-act="naar-recepten">Naar recepten</button></div>`);
+  }
+  openSheet(`<h4>${cap(DAGEN[d.getDay()])} ${kort(d)}</h4>
+    <input type="search" class="field" id="koppel-zoek" placeholder="Zoek een recept" autocomplete="off" aria-label="Recept zoeken">
+    <div id="koppel">${perReceptCat(rs).map(g => `<section class="koppel-groep"><h3 class="cat"><span>${esc(g.naam)}</span></h3><div class="items">${g.rs.map(r => `<button type="button" class="pick${gekozen.has(r.id) ? ' on' : ''}" data-id="${esc(r.id)}" data-naam="${esc(r.naam.toLowerCase())}" aria-pressed="${gekozen.has(r.id)}">
+      <span class="tick"></span><span class="pname">${esc(r.naam)}</span></button>`).join('')}</div></section>`).join('')}</div>
+    <p class="note" id="koppel-leeg" hidden>Geen recept gevonden.</p>`);
+  $('#koppel-zoek').oninput = e => {
+    const q = e.target.value.trim().toLowerCase();
+    $$('#koppel .pick').forEach(b => { b.hidden = !!q && !b.dataset.naam.includes(q); });
+    $$('#koppel .koppel-groep').forEach(g => { g.hidden = !$$('.pick', g).some(b => !b.hidden); });
+    $('#koppel-leeg').hidden = $$('#koppel .pick').some(b => !b.hidden);
+  };
+  // Elke tik slaat meteen op: aanvinken voegt toe, uitvinken haalt weg
+  $('#koppel').onclick = e => {
+    const b = e.target.closest('.pick'); if (!b) return;
+    b.classList.toggle('on'); b.setAttribute('aria-pressed', b.classList.contains('on'));
+    const ids = $$('#koppel .pick.on').map(x => x.dataset.id);
+    const nu = D().mealplan.find(m => m.id === datum);
+    const vorige = (nu && nu.recepten) || [];
+    const lijst = [...vorige.filter(id => ids.includes(id)), ...ids.filter(id => !vorige.includes(id))];
+    if (lijst.length) bewaar('mealplan', [{ id: datum, datum, recepten: lijst }]);
+    else if (nu) verwijder('mealplan', [datum]);
+  };
+}
+
+/* ---------- Boodschappenlijst ---------- */
+function skeletLijst() {
+  $('#topextra').innerHTML = `<button type="button" class="round toevoeg-knop" data-act="toevoeg-open" aria-label="Product toevoegen" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>`;
+  $('#headerextra').innerHTML = `<div class="stores" id="stores"></div>
+    <form class="add" id="add-form" hidden>
+      <span class="zoekveld"><input class="field" id="add-naam" autocomplete="off" autocorrect="off" enterkeyhint="done" placeholder="Product zoeken of toevoegen" aria-label="Product toevoegen" aria-autocomplete="list" aria-controls="ac">
+        <button type="button" class="zoekster" data-act="ac-ster" aria-pressed="false" aria-label="Alleen favorieten tonen">
+          <svg class="leeg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>
+          <svg class="vol" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>
+        </button></span>
+      <div class="ac-lijst" id="ac" role="listbox" hidden></div>
+    </form>`;
+  return '<div id="lijst"></div>';
+}
+function toevoegBalk(open) {
+  const f = $('#add-form'), k = $('.toevoeg-knop');
+  if (!f) return;
+  f.hidden = !open;
+  if (k) { k.setAttribute('aria-expanded', open); k.classList.toggle('open', open); }
+  if (open) $('#add-naam').focus(); else { $('#add-naam').value = ''; S.acFav = false; const st = $('.zoekster'); if (st) { st.classList.remove('aan'); st.setAttribute('aria-pressed', 'false'); } sluitAc(); }
+}
+const ALLES = '*';
+function catBlokken(open, winkelId) {
+  const route = winkelId === ALLES ? cats().map(c => c.id) : volgorde(winkelId);
+  let h = '';
+  route.forEach(c => {
+    const inCat = open.filter(p => (p.categorie || 'overig') === c).sort(opNaam);
+    if (!inCat.length) return;
+    h += `<h3 class="cat"><span>${esc(catNaam(c))}</span></h3><div class="items">${inCat.map(itemRij).join('')}</div>`;
+  });
+  const los = open.filter(p => !route.includes(p.categorie || 'overig'));
+  if (los.length) h += `<h3 class="cat"><span>Zonder categorie</span></h3><div class="items">${los.map(itemRij).join('')}</div>`;
+  return h;
+}
+function tekenLijst() {
+  const ws = winkels();
+  if (!ws.length) { $('#lijst').innerHTML = '<div class="empty"><strong>Nog geen winkels</strong>Voeg eerst een winkel toe bij Instellingen.</div>'; return; }
+  if (S.winkel !== ALLES && !ws.some(w => w.id === S.winkel)) S.winkel = ws[0].id;
+  const alles = S.winkel === ALLES;
+  const w = alles ? null : winkel(S.winkel);
+  sub('');
+  const totaal = D().producten.filter(nodig).length;
+  $('#stores').innerHTML = `<button type="button" class="storetab${alles ? ' active' : ''}" style="--c:var(--actief)" data-act="winkel" data-id="${ALLES}">Alles <span class="n">${totaal}</span></button>` + ws.map(s => {
+    const n = D().producten.filter(p => nodig(p) && winkelVan(p) === s.id).length;
+    return `<button type="button" class="storetab${s.id === S.winkel ? ' active' : ''}" style="--c:${s.kleur}" data-act="winkel" data-id="${esc(s.id)}">${esc(s.naam)} <span class="n">${n}</span></button>`;
+  }).join('');
+  $('#add-naam').placeholder = alles ? 'Iets toevoegen' : 'Iets toevoegen bij ' + w.naam;
+
+  const items = D().producten.filter(p => p.opLijst && (alles || winkelVan(p) === S.winkel));
+  const open = items.filter(p => !p.afgevinkt), klaar = items.filter(p => p.afgevinkt).sort(opNaam);
+  const waar = alles ? '' : ' bij ' + esc(w.naam);
+  let h = '';
+  if (!items.length) {
+    h = `<div class="empty"><strong>Niets te halen${waar}</strong>Tik op + rechtsboven of zet producten op de lijst vanuit het weekmenu.</div>`;
+  } else if (!open.length) {
+    h = `<div class="empty"><strong>Alles is gekocht</strong>Klaar${waar}.</div>`;
+  }
+  h += catBlokken(open, alles ? ALLES : S.winkel);
+  if (klaar.length) {
+    h += `<section class="basket"><h3 class="cat"><span>Gekocht</span></h3>
+      <div class="items">${klaar.map(itemRij).join('')}</div>
+      <button type="button" class="wis-knop" data-act="mandje-leeg">${PRUL_ICON}Wis gekochte producten</button></section>`;
+  }
+  $('#lijst').innerHTML = h;
+}
+function itemRij(p) {
+  const meta = [p.lijstHoeveelheid, p.lijstVoor ? 'voor ' + voorTekst(p.lijstVoor) : ''].filter(Boolean).join(', ');
+  const chip = S.winkel === ALLES ? winkelChip(winkel(winkelVan(p))) : '';
+  // Alleen het rondje vinkt af; de rest van de rij is voor lezen en vegen
+  const rij = `<div class="item${p.afgevinkt ? ' done' : ' swipe-kaart'}">
+    <div class="check${chip ? ' metchip' : ''}">
+      <button type="button" class="vinkknop" data-act="vink" data-id="${esc(p.id)}" aria-pressed="${!!p.afgevinkt}" aria-label="${esc(p.naam)} ${p.afgevinkt ? 'terugzetten' : 'afvinken'}"><span class="tick"></span></button>
+      <span><span class="pname">${esc(p.naam)}</span>${meta ? `<span class="pmeta">${esc(meta)}</span>` : ''}</span>${chip}
+    </div>
+  </div>`;
+  if (p.afgevinkt) return rij;
+  const key = 'p:' + p.id;
+  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--bw:144px">
+    <div class="swipe-acties">
+      <button type="button" class="swipe-wk" data-act="item-bewerk" data-id="${esc(p.id)}" style="--c:var(--wijzig)" aria-label="${esc(p.naam)} aanpassen">${PEN_ICON}</button>
+      <button type="button" class="swipe-weg" data-act="lijst-weg" data-id="${esc(p.id)}" data-vol aria-label="${esc(p.naam)} van de lijst halen">${PRUL_ICON}Verwijder</button>
+    </div>${rij}</div>`;
+}
+function voegToeAanLijst() {
+  const inp = $('#add-naam');
+  const naam = inp.value.trim(), hv = '';
+  if (!naam) return;
+  inp.value = '';
+  sluitAc();
+  inp.focus();
+  // Enter na een paar letters kiest het eerste product dat ermee begint; voor een nieuw product tik je op de onderste regel
+  const p = prodOpNaam(naam) || D().producten.filter(x => x.naam.toLowerCase().startsWith(naam.toLowerCase())).sort(opNaam)[0];
+  if (p) {
+    const al = nodig(p);
+    bewaar('producten', [{ id: p.id, opLijst: true, afgevinkt: false,
+      lijstHoeveelheid: hv || (al ? p.lijstHoeveelheid : ''),
+      lijstWinkel: S.winkel === ALLES || p.winkel === S.winkel ? '' : S.winkel }]);
+    melding(al ? (hv ? `Aantal van ${p.naam} aangepast.` : `${p.naam} stond al op de lijst.`) : `${p.naam} staat op de lijst.`);
+  } else {
+    const n = { id: nieuwId(), naam: cap(naam), categorie: 'overig', winkel: S.winkel === ALLES ? winkels()[0].id : S.winkel, opLijst: true, afgevinkt: false, lijstHoeveelheid: hv, lijstWinkel: '', lijstVoor: '' };
+    bewaar('producten', [n]);
+    melding(`${n.naam} is nieuw en staat onder Overig.`, 'Categorie kiezen', () => openProduct(n.id));
+  }
+  tekenAc();
+}
+
+/* Keuzelijst bij het toevoegen: zoekt in je producten terwijl je typt */
+function tekenAc() {
+  const inp = $('#add-naam'), box = $('#ac');
+  if (!inp || !box) return;
+  const q = inp.value.trim().toLowerCase();
+  if (document.activeElement !== inp) { sluitAc(); return; }
+  // Zonder zoekterm: alle producten op alfabet; met zoekterm: de beste zes
+  const hits = !q ? [...D().producten].sort(opNaam) : D().producten
+    .filter(p => p.naam.toLowerCase().includes(q))
+    .sort(opNaam);
+  if (!hits.length && !q && !S.acFav) { sluitAc(); return; }
+  const exact = hits.some(p => p.naam.toLowerCase() === q);
+  const markeer = n => { if (!q) return esc(n); const i = n.toLowerCase().indexOf(q); return esc(n.slice(0, i)) + '<b>' + esc(n.slice(i, i + q.length)) + '</b>' + esc(n.slice(i + q.length)); };
+  const acRij = p => `<div class="ac-item${nodig(p) ? ' on' : ''}" role="option">
+      <button type="button" class="ac-plus" data-act="ac-plus" data-id="${esc(p.id)}" aria-pressed="${nodig(p)}" aria-label="${esc(p.naam)} ${nodig(p) ? 'van de lijst halen' : 'op de lijst zetten'}">${ADD_KNOP}</button>
+      <button type="button" class="ac-naam pname" data-act="ac-kies" data-naam="${esc(p.naam)}">${markeer(p.naam)}${sterTje(p)}</button>
+      ${winkelChip(winkel(winkelVan(p)))}</div>`;
+  let h = '';
+  // Ster aan: alleen favorieten (ook tijdens het zoeken)
+  {
+    const lijst = S.acFav ? hits.filter(p => p.favoriet) : hits;
+    if (S.acFav && !lijst.length) h += `<p class="ac-leeg">${q ? 'Geen favoriet gevonden.' : 'Nog geen favorieten. Geef een product een ster bij Instellingen &gt; Producten.'}</p>`;
+    // Per categorie, in dezelfde volgorde als bij Producten; zoeken filtert binnen de categorieën
+    const ids = cats().map(c => c.id);
+    [...ids, ...new Set(lijst.map(p => p.categorie).filter(c => !ids.includes(c)))].forEach(c => {
+      const inCat = lijst.filter(p => (p.categorie || 'overig') === c);
+      if (inCat.length) h += `<div class="ac-kop"><span>${esc(catNaam(c))}</span></div>` + inCat.map(acRij).join('');
+    });
+  }
+  if (q && !exact) h = `<div class="ac-item" role="option">
+      <button type="button" class="ac-plus" data-act="ac-kies" data-naam="${esc(inp.value.trim())}" data-nieuw="1" aria-label="Nieuw product">${ADD_KNOP}</button>
+      <button type="button" class="ac-naam pname ac-nieuw" data-act="ac-kies" data-naam="${esc(inp.value.trim())}" data-nieuw="1">${esc(cap(inp.value.trim()))}</button>
+      <span class="status">nieuw product</span></div>` + h;
+  box.innerHTML = h;
+  box.hidden = false;
+  document.body.classList.add('ac-open');
+  pasAcHoogteAan();
+}
+/* De keuzelijst past altijd boven het toetsenbord en de tabbalk, en scrolt binnen zichzelf */
+function pasAcHoogteAan() {
+  const box = $('#ac');
+  if (!box || box.hidden) return;
+  const vv = window.visualViewport;
+  const zicht = Math.min(window.innerHeight, vv ? vv.height + vv.offsetTop : window.innerHeight);
+  const onder = (vv && vv.height < window.innerHeight - 100) ? 12 : 96;
+  box.style.maxHeight = Math.max(160, zicht - box.getBoundingClientRect().top - onder) + 'px';
+}
+if (window.visualViewport) { visualViewport.addEventListener('resize', pasAcHoogteAan); visualViewport.addEventListener('scroll', pasAcHoogteAan); }
+window.addEventListener('resize', pasAcHoogteAan);
+function sluitAc() { const box = $('#ac'); if (box) { box.hidden = true; box.innerHTML = ''; } document.body.classList.remove('ac-open'); }
+document.addEventListener('change', e => { if (S.receptBewerk && e.target.id === 'rb-cat') S.rbGewijzigd = true; });
+document.addEventListener('focusout', e => {
+  if (e.target.closest && e.target.closest('.kopbalk')) setTimeout(() => {
+    const f = $('#headerextra .kopbalk');
+    if (f && !f.hidden && !f.contains(document.activeElement) && !$('input', f).value.trim()) instBalk(false);
+  }, 250);
+  if (e.target.id === 'rb-zoek') setTimeout(() => { if (document.activeElement !== $('#rb-zoek')) { const box = $('#rb-ac'); if (box) { box.hidden = true; box.innerHTML = ''; } } }, 200);
+  if (e.target.id === 'add-naam') setTimeout(() => { if (document.activeElement !== $('#add-naam')) sluitAc(); }, 200);
+  if (e.target.id === 'add-naam') setTimeout(() => {
+    const f = $('#add-form');
+    if (f && !f.hidden && !f.contains(document.activeElement)) toevoegBalk(false);
+  }, 250);
+});
+document.addEventListener('focusin', e => { if (e.target.id === 'add-naam') tekenAc(); });
+document.addEventListener('mousedown', e => { if (e.target.closest('.ac-item, .zoekster')) e.preventDefault(); });
+
+/* ---------- Recepten ---------- */
+function skeletRecepten() {
+  // Een geopend recept is een eigen pagina met een terugknop, net als in Instellingen
+  const bewerk = S.receptBewerk && S.receptBewerk.id === S.receptOpen;
+  if (bewerk || (S.receptOpen && recept(S.receptOpen))) {
+    $('#terug').hidden = false;
+    $('#terug').dataset.act = bewerk ? 'recept-annuleer' : 'recept-terug';
+    $('#terug-tekst').textContent = bewerk ? 'Annuleer' : S.receptTerug === 'week' ? 'Weekmenu' : 'Recepten';
+    $('#topextra').innerHTML = bewerk
+      ? `<button type="button" class="round bewerk-knop actief" data-act="recept-opslaan" aria-label="Opslaan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>`
+      : `<button type="button" class="round bewerk-knop" data-act="recept-bewerkmodus" aria-label="Recept bewerken">${PEN_ICON}</button>`;
+    if (bewerk) {
+      $('#title').innerHTML = `<textarea id="titel-invoer" class="titel-invoer" rows="1" placeholder="Naam van het recept" autocomplete="off" aria-label="Naam van het recept">${esc(S.receptBewerk.naam)}</textarea>`;
+      requestAnimationFrame(groeiTitel);
+      return `<div id="recept-detail">${bewerkHtml()}</div>`;
+    }
+    $('#title').textContent = recept(S.receptOpen).naam;
+    return '<div id="recept-detail"></div>';
+  }
+  S.receptOpen = null;
+  $('#topextra').innerHTML = '<button type="button" class="btn" data-act="recept-nieuw">Nieuw</button>';
+  $('#headerextra').innerHTML = `<input type="search" class="field kopzoek" id="zoek-r" placeholder="Zoek op recept of product" value="${esc(S.zoekR)}" autocomplete="off" aria-label="Recepten zoeken">`;
+  return '<div id="recepten"></div>';
+}
+/* ---------- Recept bewerken op de pagina zelf ---------- */
+const rbProd = id => prod(id) || (S.rbNieuw || []).find(p => p.id === id);
+const MIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 12h12"/></svg>';
+function bewerkHtml() {
+  const d = S.receptBewerk;
+  const ingr = d.ingredienten.map((i, k) => ({ i, k, p: rbProd(i.product) })).filter(x => x.p);
+  return `<h3 class="cat"><span>Categorie</span></h3>
+    <div class="items"><select id="rb-cat" class="kaal-select" aria-label="Categorie">${opties(rcats(), d.categorie || 'overig')}</select></div>
+    <h3 class="cat"><span>Producten</span></h3>
+    <div class="rb-wrap"><div class="items">
+      ${ingr.map(x => `<div class="item"><div class="check bewerkrij">
+        <button type="button" class="minrond" data-act="rb-weg" data-i="${x.k}" aria-label="${esc(x.p.naam)} weghalen">${MIN_ICON}</button>
+        <span class="pname">${esc(x.p.naam)}</span>
+        <input class="aantal-invoer" data-i="${x.k}" value="${esc(x.i.hoeveelheid || '')}" placeholder="Aantal" autocomplete="off" aria-label="Aantal ${esc(x.p.naam)}"></div></div>`).join('')}
+      <div class="item rb-toevoeg"><div class="check bewerkrij">
+        <span class="addbtn" aria-hidden="true"><svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        <input id="rb-zoek" placeholder="Product toevoegen" autocomplete="off" autocorrect="off" enterkeyhint="done" aria-label="Product toevoegen"></div></div>
+    </div><div class="ac-lijst" id="rb-ac" hidden></div></div>
+    <h3 class="cat"><span>Bereiding</span></h3>
+    <div class="items"><textarea id="rb-uitleg" class="bereiding-invoer" placeholder="Hoe je het maakt, of een link naar het recept">${esc(d.uitleg || '')}</textarea></div>`;
+}
+/** Het titelveld groeit mee met lange receptnamen, zodat je de hele naam ziet. */
+function groeiTitel() { const t = $('#titel-invoer'); if (!t) return; t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; }
+function syncBewerk() {
+  const d = S.receptBewerk; if (!d) return;
+  const t = $('#titel-invoer'); if (t) d.naam = t.value;
+  const c = $('#rb-cat'); if (c) d.categorie = c.value;
+  $$('.aantal-invoer').forEach(inp => { const i = d.ingredienten[Number(inp.dataset.i)]; if (i) i.hoeveelheid = inp.value; });
+  const u = $('#rb-uitleg'); if (u) d.uitleg = u.value;
+}
+function tekenBewerk(focusZoek) {
+  syncBewerk();
+  $('#recept-detail').innerHTML = bewerkHtml();
+  if (focusZoek) $('#rb-zoek').focus();
+}
+function startBewerk(id) {
+  const r = id ? recept(id) : null;
+  S.receptBewerk = r
+    ? { id: r.id, naam: r.naam, categorie: r.categorie || 'overig', uitleg: r.uitleg || '', ingredienten: (r.ingredienten || []).map(i => ({ product: i.product, hoeveelheid: i.hoeveelheid || '' })) }
+    : { id: nieuwId(), naam: '', categorie: 'overig', uitleg: '', ingredienten: [], nieuw: true };
+  S.rbNieuw = [];
+  S.rbGewijzigd = false;
+  S.receptOpen = S.receptBewerk.id;
+  wissel('recepten');
+  if (!r) $('#titel-invoer').focus();
+}
+function stopBewerk(naarLijst) {
+  S.receptBewerk = null; S.rbNieuw = []; S.rbGewijzigd = false;
+  if (naarLijst) { S.receptOpen = null; S.receptTerug = null; }
+  wissel('recepten');
+}
+function tekenRbAc() {
+  const inp = $('#rb-zoek'), box = $('#rb-ac');
+  if (!inp || !box) return;
+  const q = inp.value.trim().toLowerCase();
+  if (!q || document.activeElement !== inp) { box.hidden = true; box.innerHTML = ''; return; }
+  const al = new Set(S.receptBewerk.ingredienten.map(i => i.product));
+  const hits = [...D().producten, ...(S.rbNieuw || [])].filter(p => p.naam.toLowerCase().includes(q))
+    .sort((a, b) => (b.naam.toLowerCase().startsWith(q) - a.naam.toLowerCase().startsWith(q)) || opNaam(a, b)).slice(0, 8);
+  const exact = hits.some(p => p.naam.toLowerCase() === q);
+  let h = hits.map(p => `<button type="button" class="ac-item rz-rij${al.has(p.id) ? ' on' : ''}" data-act="rb-kies" data-id="${esc(p.id)}">
+      <span class="ac-plus">${ADD_KNOP}</span><span class="ac-naam pname">${esc(p.naam)}</span>${winkelChip(winkel(p.winkel))}</button>`).join('');
+  if (!exact) h += `<button type="button" class="ac-item rz-rij" data-act="rb-nieuw" data-naam="${esc(inp.value.trim())}">
+      <span class="ac-plus">${ADD_KNOP}</span><span class="ac-naam pname ac-nieuw">${esc(cap(inp.value.trim()))}</span><span class="status">nieuw product</span></button>`;
+  box.innerHTML = h;
+  box.hidden = false;
+}
+function tekenReceptDetail() {
+  if (S.receptBewerk) return; // tijdens het bewerken niet opnieuw tekenen, anders verlies je wat je typt
+  const r = recept(S.receptOpen);
+  if (!r) { S.receptOpen = null; wissel('recepten'); return; }
+  $('#title').textContent = r.naam;
+  const ingr = (r.ingredienten || []).map(i => ({ p: prod(i.product), a: i.hoeveelheid })).filter(i => i.p);
+  $('#recept-detail').innerHTML = `<h3 class="cat"><span>Producten</span></h3>
+    ${ingr.length ? `<div class="items">${ingr.map(i => `<div class="item"><div class="check detailrij"><span class="pname">${esc(i.p.naam)}</span><span class="iamt">${esc(i.a || '')}</span>${winkelChip(winkel(i.p.winkel))}</div></div>`).join('')}</div>`
+      : '<div class="empty">Nog geen producten.</div>'}
+    ${r.uitleg ? `<h3 class="cat"><span>Bereiding</span></h3><div class="items"><p class="bereiding">${linkify(esc(r.uitleg))}</p></div>` : ''}`;
+}
+function tekenRecepten() {
+  const alle = D().recepten;
+  sub('');
+  if (S.receptOpen) return tekenReceptDetail();
+  const q = S.zoekR.trim().toLowerCase();
+  const rs = [...alle].sort(opNaam).filter(r => !q || r.naam.toLowerCase().includes(q) ||
+    (r.ingredienten || []).some(i => { const p = prod(i.product); return p && p.naam.toLowerCase().includes(q); }));
+  $('#recepten').innerHTML = !alle.length
+    ? '<div class="empty"><strong>Het receptenboek is nog leeg</strong>Voeg een recept toe met de producten die erin gaan en een korte uitleg.<br><button type="button" class="btn" data-act="recept-nieuw">Eerste recept maken</button></div>'
+    : !rs.length ? `<div class="empty">Geen recept gevonden met “${esc(S.zoekR.trim())}”.</div>`
+    : perReceptCat(rs).map(g => `<h3 class="cat"><span>${esc(g.naam)}</span></h3><div class="items">${g.rs.map(r => veegRij('r:' + r.id,
+          `<button type="button" class="check metchip" data-act="recept-pagina" data-id="${esc(r.id)}"><span class="lead" style="--c:var(--primary)">${esc(r.naam.charAt(0).toUpperCase())}</span>
+            <span><span class="pname">${esc(r.naam)}</span></span><span class="chevr"></span></button>`,
+          [{ act: 'recept-weg', id: r.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: r.naam + ' verwijderen' }])).join('')}</div>`).join('');
+}
+/** Een rij in de vaste stijl: kaart vooraan, veegknoppen eronder. */
+function veegRij(key, kaart, acties) {
+  if (!acties.length) return `<div class="item">${kaart}</div>`;
+  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--bw:${acties.length * 72}px">
+    <div class="swipe-acties">${acties.map(a => `<button type="button" class="${a.weg ? 'swipe-weg' : 'swipe-wk'}"${a.weg ? '' : ` style="--c:${a.kleur || 'var(--wijzig)'}"`} data-act="${a.act}" data-id="${esc(a.id)}" aria-label="${esc(a.aria || a.label)}">${a.icon}${a.label}</button>`).join('')}</div>
+    <div class="item swipe-kaart">${kaart}</div></div>`;
+}
+const linkify = s => s.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+
+/* ---------- Producten ---------- */
+function tekenProducten() {
+  const alle = D().producten;
+  sub('');
+  const q = S.zoekP.trim().toLowerCase();
+  const ps = alle.filter(p => !q || p.naam.toLowerCase().includes(q));
+  if (!alle.length) {
+    $('#producten').innerHTML = '<div class="empty"><strong>Nog geen producten</strong>Voeg producten toe met een vaste winkel en categorie. Producten uit recepten en de lijst komen hier ook vanzelf terecht.<br><button type="button" class="btn" data-act="product-nieuw">Eerste product toevoegen</button></div>';
+    return;
+  }
+  if (!ps.length) { $('#producten').innerHTML = `<div class="empty">Geen product gevonden met “${esc(S.zoekP.trim())}”.<br><button type="button" class="btn" data-act="product-nieuw" data-naam="${esc(S.zoekP.trim())}">${esc(cap(S.zoekP.trim()))} toevoegen</button></div>`; return; }
+  const ids = cats().map(c => c.id);
+  const groepen = [...ids, ...new Set(ps.map(p => p.categorie).filter(c => !ids.includes(c)))];
+  $('#producten').innerHTML = groepen.map(c => {
+    const inCat = ps.filter(p => (p.categorie || 'overig') === c).sort(opNaam);
+    if (!inCat.length) return '';
+    return `<h3 class="cat"><span>${esc(catNaam(c))}</span></h3><div class="items">${inCat.map(productRij).join('')}</div>`;
+  }).join('');
+}
+const winkelChip = w => w ? `<span class="chip" style="--c:${w.kleur}">${esc(w.naam)}</span>` : '';
+const PEN_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.2 4.3a2.5 2.5 0 0 1 3.5 0l1 1a2.5 2.5 0 0 1 0 3.5L9.4 19.1 4 20l.9-5.4z"/></svg>';
+function productRij(p) {
+  const on = nodig(p), inMandje = p.opLijst && p.afgevinkt;
+  const status = on ? ['Op de lijst', p.lijstHoeveelheid].filter(Boolean).join(', ') : inMandje ? 'Gekocht' : '';
+  const key = 'pr:' + p.id;
+  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--bw:216px">
+    <div class="swipe-acties">
+      <button type="button" class="swipe-wk" style="--c:var(--veeg-favoriet)" data-act="product-ster" data-id="${esc(p.id)}" aria-label="${esc(p.naam)} ${p.favoriet ? 'geen favoriet meer' : 'favoriet maken'}">${STER_ICON}</button>
+      <button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="product" data-id="${esc(p.id)}" aria-label="${esc(p.naam)} wijzigen">${PEN_ICON}Wijzig</button>
+      <button type="button" class="swipe-weg" data-act="product-weg" data-id="${esc(p.id)}" aria-label="${esc(p.naam)} verwijderen">${PRUL_ICON}Verwijder</button>
+    </div>
+    <div class="item swipe-kaart${on ? ' on' : ''}">
+      <button type="button" class="check metchip" data-act="product-vink" data-id="${esc(p.id)}" aria-pressed="${on}" aria-label="${esc(p.naam)} ${on ? 'van de lijst halen' : 'op de lijst zetten'}">
+        ${ADD_KNOP}
+        <span><span class="pname">${esc(p.naam)}${sterTje(p)}</span>${status ? `<span class="pmeta">${esc(status)}</span>` : ''}</span>
+        ${winkelChip(winkel(p.winkel))}
+      </button>
+    </div>
+  </div>`;
+}
+function openProduct(id, voorgevuld) {
+  const p = id ? prod(id) : null;
+  const inRecepten = p ? D().recepten.filter(r => (r.ingredienten || []).some(i => i.product === p.id)).length : 0;
+  openSheet(`<h4>${p ? 'Product wijzigen' : 'Nieuw product'}</h4>
+    <form id="product-form">
+      <label class="lbl"><span>Naam</span><input class="field" name="naam" value="${esc(p ? p.naam : cap(voorgevuld || ''))}" required placeholder="Bijvoorbeeld kipfilet"></label>
+      <label class="lbl"><span>Categorie</span><select class="field" name="categorie">${opties(cats(), p ? p.categorie : 'overig')}</select></label>
+      <label class="lbl"><span>Standaardwinkel</span><select class="field" name="winkel">${opties(winkels(), p ? p.winkel : winkels()[0].id)}</select></label>
+      <label class="schakel"><span>Favoriet</span><input type="checkbox" name="favoriet"${p && p.favoriet ? ' checked' : ''}></label>
+      ${p && inRecepten ? `<p class="note">Gebruikt in ${aantal(inRecepten, 'recept', 'recepten')}.</p>` : ''}
+      <div class="acts"><button class="btn">${p ? 'Opslaan' : 'Product toevoegen'}</button>${p ? `<button type="button" class="btn danger" data-act="product-weg" data-id="${esc(p.id)}">Verwijderen</button>` : ''}</div>
+    </form>`);
+  $('#product-form').onsubmit = e => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const naam = cap(f.get('naam').trim());
+    if (!naam) return;
+    const dubbel = prodOpNaam(naam);
+    if (dubbel && (!p || dubbel.id !== p.id)) return melding(`Er is al een product ${dubbel.naam}.`);
+    sluitSheet();
+    bewaar('producten', [Object.assign({}, p ? {} : VAN_LIJST, { id: p ? p.id : nieuwId(), naam, categorie: f.get('categorie'), winkel: f.get('winkel'), favoriet: f.get('favoriet') === 'on' })]);
+    melding(p ? `${naam} opgeslagen.` : `${naam} toegevoegd.`);
+  };
+}
+
+/* ---------- Instellingen ---------- */
+const ICO = {
+  winkels: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5.2 3h13.6a1.5 1.5 0 0 1 1.4 1l1.6 4.6a3 3 0 0 1-2.8 4 3 3 0 0 1-2.5-1.3 3 3 0 0 1-5 0 3 3 0 0 1-5 0 3 3 0 0 1-2.5 1.3 3 3 0 0 1-2.8-4L3.8 4a1.5 1.5 0 0 1 1.4-1z"/><path d="M4.5 14.3a4.6 4.6 0 0 0 3-.6 4.7 4.7 0 0 0 4.5.4 4.7 4.7 0 0 0 4.5-.4 4.6 4.6 0 0 0 3 .6V19a2 2 0 0 1-2 2H15v-4.5H9V21H6.5a2 2 0 0 1-2-2z"/></svg>',
+  route: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5.5" r="2.3"/><rect x="9.5" y="4" width="11.5" height="3" rx="1.5"/><circle cx="5" cy="12" r="2.3"/><rect x="9.5" y="10.5" width="11.5" height="3" rx="1.5"/><circle cx="5" cy="18.5" r="2.3"/><rect x="9.5" y="17" width="11.5" height="3" rx="1.5"/></svg>',
+  rcats: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg>',
+  producten: '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h5.4a2.5 2.5 0 0 1 1.8.7l8 8a2.5 2.5 0 0 1 0 3.6l-5.4 5.4a2.5 2.5 0 0 1-3.6 0l-8-8a2.5 2.5 0 0 1-.7-1.8zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>',
+  cats: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2.4"/><rect x="13" y="3" width="8" height="8" rx="2.4"/><rect x="3" y="13" width="8" height="8" rx="2.4"/><rect x="13" y="13" width="8" height="8" rx="2.4"/></svg>'
+};
+const INST = {
+  producten: { titel: 'Producten' },
+  rcats: { titel: 'Receptcategorieën' },
+  winkels: { titel: 'Winkels', uitleg: 'Tik om de naam te wijzigen, veeg om te verwijderen.' },
+  route:   { titel: 'Winkelroute', uitleg: 'De volgorde van de afdelingen per winkel.' },
+  cats:    { titel: 'Categorieën', uitleg: 'Tik om de naam te wijzigen, veeg om te verwijderen.' }
+};
+function skeletInst() {
+  const pagina = S.instSub;
+  if (!pagina) return '<div id="inst"></div>';
+  $('#terug').hidden = false;
+  $('#title').textContent = INST[pagina].titel;
+  // Zelfde opbouw als de hoofdpagina's: actie rechtsboven, balk onder de titel, daaronder de lijst
+  const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+  const plusKnop = (act, label) => `<button type="button" class="round toevoeg-knop" data-act="${act}" aria-label="${label}" aria-expanded="false">${PLUS}</button>`;
+  const balk = (id, inputId, tekst) => `<form class="add kopbalk" id="${id}" hidden><input class="field" id="${inputId}" placeholder="${tekst}" autocomplete="off" enterkeyhint="done" aria-label="${tekst}"></form>`;
+  if (pagina === 'winkels') {
+    $('#topextra').innerHTML = plusKnop('inst-toevoeg', 'Winkel toevoegen');
+    $('#headerextra').innerHTML = balk('winkel-form', 'winkel-naam', 'Naam van de nieuwe winkel');
+    return '<div id="w-lijst"></div>';
+  }
+  if (pagina === 'route') {
+    $('#headerextra').innerHTML = '<div class="stores" id="w-tabs"></div>';
+    return '<div id="w-route"></div>';
+  }
+  if (pagina === 'rcats') {
+    $('#topextra').innerHTML = plusKnop('inst-toevoeg', 'Receptcategorie toevoegen');
+    $('#headerextra').innerHTML = balk('rcat-form', 'rcat-naam', 'Naam van de nieuwe categorie');
+    return '<div id="r-cats"></div>';
+  }
+  if (pagina === 'producten') {
+    $('#topextra').innerHTML = plusKnop('product-nieuw', 'Nieuw product');
+    $('#headerextra').innerHTML = `<input type="search" class="field kopzoek" id="zoek-p" placeholder="Zoek een product" value="${esc(S.zoekP)}" autocomplete="off" aria-label="Producten zoeken">`;
+    return '<div id="producten"></div>';
+  }
+  $('#topextra').innerHTML = plusKnop('inst-toevoeg', 'Categorie toevoegen');
+  $('#headerextra').innerHTML = balk('cat-form', 'cat-naam', 'Naam van de nieuwe categorie');
+  return '<div id="w-cats"></div>';
+}
+/** Plusje rechtsboven op een subpagina: klapt het invoerveld onder de titel open en dicht. */
+function instBalk(open) {
+  const f = $('#headerextra .kopbalk'), k = $('#topextra .toevoeg-knop');
+  if (!f) return;
+  f.hidden = !open;
+  if (k) { k.classList.toggle('open', open); k.setAttribute('aria-expanded', open); }
+  const inp = $('input', f);
+  if (open) inp.focus(); else inp.value = '';
+}
+function tekenInst() {
+  const pagina = S.instSub;
+  if (pagina === 'producten') { tekenProducten(); return; }
+  if (pagina === 'rcats') {
+    sub('');
+    $('#r-cats').innerHTML = `<h3 class="cat"><span>Alle receptcategorieën</span></h3><div class="items">${rcats().map(c => {
+      const n = D().recepten.filter(r => (r.categorie || 'overig') === c.id).length;
+      const vast = c.id === 'overig';
+      return veegRij('rc:' + c.id,
+        `<button type="button" class="check" ${vast ? 'disabled style="opacity:1;cursor:default"' : `data-act="rcat-hernoem" data-id="${esc(c.id)}"`}><span class="lead" style="--c:var(--primary)">${esc(c.naam.charAt(0).toUpperCase())}</span>
+          <span><span class="pname">${esc(c.naam)}</span></span></button>`,
+        vast ? [] : [{ act: 'rcat-weg', id: c.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: c.naam + ' verwijderen' }]);
+    }).join('')}</div>`;
+    return;
+  }
+  const ws = winkels();
+  if (!pagina) {
+    sub('');
+    const rijen = [
+      ['winkels', 'var(--primary)', ws.map(w => w.naam).join(', ')],
+      ['route', 'var(--primary)', aantal(ws.length, 'winkel', 'winkels')],
+      ['cats', 'var(--primary)', String(D().categorieen.length)],
+      ['producten', 'var(--primary)', String(D().producten.length)],
+      ['rcats', 'var(--primary)', String(rcats().length)]
+    ];
+    $('#inst').innerHTML = `<div class="group">${rijen.map(([id, kleur, detail]) =>
+      `<button type="button" class="nav-row" data-act="inst-ga" data-sub="${id}"><span class="ico" style="--c:${kleur}">${ICO[id]}</span>
+        <span class="lbltxt">${INST[id].titel}</span><span class="detail">${esc(detail)}</span><span class="chev2"></span></button>`).join('')}</div>
+      ${D().gebruiker ? `<p class="foot">Ingelogd als ${esc(D().gebruiker)}. Alle gegevens staan in jullie Google Sheet.</p>` : ''}`;
+    return;
+  }
+  sub('');
+
+  if (pagina === 'winkels') {
+    $('#w-lijst').innerHTML = `<h3 class="cat"><span>Je winkels</span></h3><div class="items">${ws.map(w => {
+      const n = D().producten.filter(p => p.winkel === w.id).length;
+      return veegRij('w:' + w.id,
+        `<button type="button" class="check" data-act="winkel-hernoem" data-id="${esc(w.id)}"><span class="lead vol" style="--c:${w.kleur}">${esc(w.naam.charAt(0).toUpperCase())}</span>
+          <span><span class="pname">${esc(w.naam)}</span></span></button>`,
+        ws.length > 1 ? [{ act: 'winkel-weg', id: w.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: w.naam + ' verwijderen' }] : []);
+    }).join('')}</div>`;
+  }
+
+
+  if (pagina === 'route') {
+    if (!ws.some(w => w.id === S.routeWinkel)) S.routeWinkel = ws.length ? ws[0].id : null;
+    $('#w-tabs').innerHTML = ws.map(w => `<button type="button" class="storetab${w.id === S.routeWinkel ? ' active' : ''}" style="--c:${w.kleur}" data-act="route-winkel" data-id="${esc(w.id)}">${esc(w.naam)}</button>`).join('');
+    if (!S.routeWinkel) { $('#w-route').innerHTML = '<div class="empty"><strong>Nog geen winkels</strong>Voeg eerst een winkel toe bij Winkels.</div>'; return; }
+    const w = winkel(S.routeWinkel), r = volgorde(w.id);
+    $('#w-route').innerHTML = `<ol class="order">${r.map((c, k) => `<li style="--c:${w.kleur}"><span class="pos">${k + 1}</span><span>${esc(catNaam(c))}</span>
+        <button type="button" class="arrow" data-act="route" data-k="${k}" data-d="-1" aria-label="${esc(catNaam(c))} omhoog"${k === 0 ? ' disabled' : ''}>${PIJL_OP}</button>
+        <button type="button" class="arrow" data-act="route" data-k="${k}" data-d="1" aria-label="${esc(catNaam(c))} omlaag"${k === r.length - 1 ? ' disabled' : ''}>${PIJL_NEER}</button></li>`).join('')}</ol>`;
+  }
+
+  if (pagina === 'cats') {
+    $('#w-cats').innerHTML = `<h3 class="cat"><span>Alle categorieën</span></h3><div class="items">${cats().map(c => {
+      const n = D().producten.filter(p => p.categorie === c.id).length;
+      const vast = c.id === 'overig';
+      return veegRij('c:' + c.id,
+        `<button type="button" class="check" ${vast ? 'disabled style="opacity:1;cursor:default"' : `data-act="cat-hernoem" data-id="${esc(c.id)}"`}><span class="lead" style="--c:var(--primary)">${esc(c.naam.charAt(0).toUpperCase())}</span>
+          <span><span class="pname">${esc(c.naam)}</span></span></button>`,
+        vast ? [] : [{ act: 'cat-weg', id: c.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: c.naam + ' verwijderen' }]);
+    }).join('')}</div>`;
+  }
+
+}
+function naarInst(pagina) {
+  S.instSub = pagina;
+  wissel('instellingen');
+}
+
+/* ================= Sheet en melding ================= */
+/** Eigen bevestigvenster (werkt ook waar de browser confirm() blokkeert, zoals in de preview). */
+function bevestig(tekst, knop = 'Verwijder', gevaar = true) {
+  return new Promise(klaar => {
+    const w = $('#bevestig');
+    w.innerHTML = `<div class="bv-bg" data-bv="0"></div>
+      <div class="bv-kaart" role="alertdialog" aria-modal="true" aria-label="${esc(tekst)}">
+        <p>${esc(tekst)}</p>
+        <button type="button" class="btn wide${gevaar ? ' bv-gevaar' : ''}" data-bv="1">${esc(knop)}</button>
+        <button type="button" class="btn soft wide" data-bv="0">Annuleer</button>
+      </div>`;
+    w.hidden = false;
+    w.onclick = e => { const b = e.target.closest('[data-bv]'); if (!b) return; w.hidden = true; w.innerHTML = ''; klaar(b.dataset.bv === '1'); };
+    $('[data-bv="1"]', w).focus();
+  });
+}
+/** Eigen invoervenster voor een naam (in plaats van prompt()). Geeft de tekst terug, of null bij annuleren. */
+function vraagTekst(titel, waarde) {
+  return new Promise(klaar => {
+    const w = $('#bevestig');
+    w.innerHTML = `<div class="bv-bg" data-bv="0"></div>
+      <div class="bv-kaart" role="dialog" aria-modal="true" aria-label="${esc(titel)}">
+        <p>${esc(titel)}</p>
+        <input class="field" id="bv-invoer" value="${esc(waarde || '')}" autocomplete="off" enterkeyhint="done">
+        <button type="button" class="btn wide" data-bv="1">Opslaan</button>
+        <button type="button" class="btn soft wide" data-bv="0">Annuleer</button>
+      </div>`;
+    w.hidden = false;
+    const inp = $('#bv-invoer');
+    const sluit = ok => { const v = inp.value.trim(); w.hidden = true; w.innerHTML = ''; klaar(ok && v ? v : null); };
+    w.onclick = e => { const b = e.target.closest('[data-bv]'); if (b) sluit(b.dataset.bv === '1'); };
+    inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); sluit(true); } };
+    inp.focus(); inp.select();
+  });
+}
+function openSheet(html) {
+  const inh = $('#sheet-inhoud');
+  inh.onclick = null; inh.onchange = null;
+  inh.innerHTML = html;
+  $('#sheet-wrap').hidden = false;
+  document.body.style.overflow = 'hidden';
+  const s = $('.sheet'); s.scrollTop = 0; s.focus();
+}
+function sluitSheet() {
+  $('#sheet-wrap').hidden = true;
+  document.body.style.overflow = '';
+}
+let toastTimer, toastActie;
+function melding(tekst, knop, actie) {
+  $('#toast-text').textContent = tekst;
+  const b = $('#toast-btn');
+  b.hidden = !knop; b.textContent = knop || '';
+  toastActie = actie || null;
+  $('#toast').classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { $('#toast').classList.remove('show'); toastActie = null; }, knop ? 5000 : 3500);
+}
+$('#toast-btn').onclick = () => { const a = toastActie; toastActie = null; $('#toast').classList.remove('show'); if (a) a(); };
+
+/* ================= Acties ================= */
+const ACTIES = {
+  tab: async b => {
+    if (!S.data) return;
+    if (S.receptBewerk) { syncBewerk(); if (S.rbGewijzigd && !(await bevestig('Je wijzigingen aan het recept weggooien?', 'Weggooien'))) return; S.receptBewerk = null; }
+    if (b.dataset.tab === 'instellingen') S.instSub = null;
+    if (b.dataset.tab === 'recepten') S.receptOpen = null;
+    S.receptTerug = null;
+    wissel(b.dataset.tab);
+  },
+  'recept-pagina': (b, id) => { sluitVeeg(); S.receptOpen = id; S.receptTerug = null; wissel('recepten'); },
+  'recept-terug': () => { const t = S.receptTerug; S.receptOpen = null; S.receptTerug = null; wissel(t === 'week' ? 'week' : 'recepten'); },
+  'recept-van-week': (b, id) => { sluitVeeg(); S.receptOpen = id; S.receptTerug = 'week'; wissel('recepten'); },
+  'inst-ga': b => naarInst(b.dataset.sub),
+  'inst-terug': () => naarInst(null),
+  sluit: () => sluitSheet(),
+
+  week: b => { S.week += Number(b.dataset.d); tekenWeek(); },
+  'week-nu': () => { if (S.week !== 0) { S.week = 0; tekenWeek(); } },
+  klap: b => { const k = b.dataset.key; S.open.has(k) ? S.open.delete(k) : S.open.add(k); tekenWeek(); },
+  koppel: b => { sluitVeeg(); openKoppel(b.dataset.datum); },
+  'naar-recepten': () => { sluitSheet(); wissel('recepten'); },
+  ing: b => {
+    const p = prod(b.dataset.p), r = recept(b.dataset.r);
+    if (!p || !r) return;
+    const amt = b.dataset.a, label = voorLabel(r, b.dataset.d);
+    if (!nodig(p)) return zetOpLijst(p, amt, label);
+    const voor = voorLijst(p.lijstVoor);
+    const eigen = voor.includes(label) ? label : voor.includes(r.naam) ? r.naam : null;
+    if (eigen && voor.length === 1) return haalVanLijst(p);
+    openSamen(p, eigen || label, amt, !!eigen);
+  },
+
+  winkel: (b, id) => { S.winkel = id; tekenLijst(); },
+  'inst-toevoeg': () => { const f = $('#headerextra .kopbalk'); instBalk(!!(f && f.hidden)); },
+  'toevoeg-open': () => { const f = $('#add-form'); toevoegBalk(f && f.hidden); },
+  'ac-ster': b => {
+    S.acFav = !S.acFav;
+    b.classList.toggle('aan', S.acFav); b.setAttribute('aria-pressed', S.acFav);
+    $('#add-naam').focus(); tekenAc();
+    const box = $('#ac'); if (box) box.scrollTop = 0;
+  },
+  'ac-plus': (b, id) => {
+    const p = prod(id); if (!p) return;
+    if (nodig(p)) haalVanLijst(p);
+    else {
+      bewaar('producten', [{ id: p.id, opLijst: true, afgevinkt: false, lijstHoeveelheid: '',
+        lijstWinkel: S.winkel === ALLES || p.winkel === S.winkel ? '' : S.winkel }]);
+    }
+    $('#add-naam').focus();
+    tekenAc();
+  },
+  'ac-kies': b => {
+    // Tikken op een naam zet het product meteen op de lijst (of maakt het nieuwe product aan)
+    $('#add-naam').value = b.dataset.nieuw ? cap(b.dataset.naam) : b.dataset.naam;
+    voegToeAanLijst();
+  },
+  vink: (b, id) => {
+    const p = prod(id); if (!p) return;
+    bewaar('producten', [{ id, afgevinkt: !p.afgevinkt }]);
+  },
+  'item-bewerk': (b, id) => { sluitVeeg(); openItem(id); },
+  'lijst-weg': async (b, id) => {
+    S.swipeOpen = null;
+    const p = prod(id); if (!p) return;
+    if (!(await bevestig(`${p.naam} van de lijst halen?`))) { teken(); return; }
+    const terug = { id, opLijst: true, afgevinkt: p.afgevinkt, lijstHoeveelheid: p.lijstHoeveelheid, lijstWinkel: p.lijstWinkel, lijstVoor: p.lijstVoor };
+    haalVanLijst(p);
+    melding(`${p.naam} van de lijst gehaald.`, 'Ongedaan maken', () => bewaar('producten', [terug]));
+  },
+  'mandje-leeg': async () => {
+    const weg = D().producten.filter(p => p.opLijst && p.afgevinkt && (S.winkel === ALLES || winkelVan(p) === S.winkel));
+    if (!weg.length || !(await bevestig(`${aantal(weg.length, 'gekocht product', 'gekochte producten')} van de lijst halen?`, 'Wis'))) return;
+    const terug = weg.map(p => ({ id: p.id, opLijst: true, afgevinkt: true, lijstHoeveelheid: p.lijstHoeveelheid, lijstWinkel: p.lijstWinkel, lijstVoor: p.lijstVoor }));
+    bewaar('producten', weg.map(p => Object.assign({ id: p.id }, VAN_LIJST)));
+    melding(aantal(weg.length, 'product', 'producten') + ' van de lijst gehaald.', 'Ongedaan maken', () => bewaar('producten', terug));
+  },
+
+  'recept-nieuw': () => startBewerk(null),
+  'recept-bewerkmodus': () => startBewerk(S.receptOpen),
+  'recept-opslaan': () => {
+    syncBewerk();
+    const d = S.receptBewerk; if (!d) return;
+    if (!d.naam.trim()) { melding('Geef het recept een naam.'); $('#titel-invoer').focus(); return; }
+    const nieuwe = (S.rbNieuw || []).filter(p => d.ingredienten.some(i => i.product === p.id));
+    if (nieuwe.length) bewaar('producten', nieuwe);
+    bewaar('recepten', [{ id: d.id, naam: cap(d.naam.trim()), categorie: d.categorie || 'overig', uitleg: (d.uitleg || '').trim(),
+      ingredienten: d.ingredienten.map(i => ({ product: i.product, hoeveelheid: (i.hoeveelheid || '').trim() })) }]);
+    stopBewerk(false);
+    melding(nieuwe.length ? `Recept opgeslagen. ${aantal(nieuwe.length, 'nieuw product staat', 'nieuwe producten staan')} onder Overig.` : 'Recept opgeslagen.');
+  },
+  'recept-annuleer': async () => {
+    syncBewerk();
+    if (S.rbGewijzigd && !(await bevestig('Je wijzigingen weggooien?', 'Weggooien'))) return;
+    stopBewerk(!!(S.receptBewerk && S.receptBewerk.nieuw));
+  },
+  'rb-weg': b => { syncBewerk(); S.receptBewerk.ingredienten.splice(Number(b.dataset.i), 1); S.rbGewijzigd = true; tekenBewerk(); },
+  'rb-kies': (b, id) => {
+    syncBewerk();
+    if (!S.receptBewerk.ingredienten.some(i => i.product === id)) S.receptBewerk.ingredienten.push({ product: id, hoeveelheid: '' });
+    S.rbGewijzigd = true;
+    tekenBewerk(true);
+  },
+  'rb-nieuw': b => {
+    syncBewerk();
+    const p = Object.assign({ id: nieuwId(), naam: cap(b.dataset.naam), categorie: 'overig', winkel: winkels()[0].id }, VAN_LIJST);
+    S.rbNieuw.push(p);
+    S.receptBewerk.ingredienten.push({ product: p.id, hoeveelheid: '' });
+    S.rbGewijzigd = true;
+    tekenBewerk(true);
+  },
+  'recept-weg': async (b, id) => {
+    sluitVeeg();
+    const r = recept(id);
+    if (!r || !(await bevestig(`${r.naam} verwijderen? Het verdwijnt ook uit het weekmenu.`))) return;
+    sluitSheet();
+    const plannen = D().mealplan.filter(m => (m.recepten || []).includes(id));
+    if (plannen.length) bewaar('mealplan', plannen.map(m => ({ id: m.id, recepten: m.recepten.filter(x => x !== id) })));
+    verwijder('recepten', [id]);
+    melding(`${r.naam} verwijderd.`);
+  },
+
+  'product-nieuw': b => openProduct(null, b.dataset.naam),
+  product: (b, id) => { sluitVeeg(); openProduct(id); },
+  'product-vink': (b, id) => { const p = prod(id); if (p) nodig(p) ? haalVanLijst(p) : zetOpLijst(p); },
+  'product-ster': (b, id) => {
+    sluitVeeg();
+    const p = prod(id); if (!p) return;
+    const nu = !p.favoriet;
+    bewaar('producten', [{ id, favoriet: nu }]);
+    melding(nu ? `${p.naam} staat bij je favorieten.` : `${p.naam} is geen favoriet meer.`);
+  },
+  'product-weg': async (b, id) => {
+    sluitVeeg();
+    const p = prod(id);
+    const n = D().recepten.filter(r => (r.ingredienten || []).some(i => i.product === id));
+    if (!p || !(await bevestig(`${p.naam} verwijderen?${n.length ? ` Het wordt ook uit ${aantal(n.length, 'recept', 'recepten')} gehaald.` : ''}`))) return;
+    sluitSheet();
+    if (n.length) bewaar('recepten', n.map(r => ({ id: r.id, ingredienten: r.ingredienten.filter(i => i.product !== id) })));
+    verwijder('producten', [id]);
+    melding(`${p.naam} verwijderd.`);
+  },
+
+  'route-winkel': (b, id) => { S.routeWinkel = id; tekenInst(); },
+  route: b => {
+    const r = volgorde(S.routeWinkel), k = Number(b.dataset.k), j = k + Number(b.dataset.d);
+    if (j < 0 || j >= r.length) return;
+    [r[k], r[j]] = [r[j], r[k]];
+    bewaar('winkels', [{ id: S.routeWinkel, route: r }]);
+  },
+  'winkel-hernoem': async (b, id) => {
+    const w = winkel(id), n = await vraagTekst('Nieuwe naam voor ' + w.naam, w.naam);
+    if (n && n.trim()) bewaar('winkels', [{ id, naam: n.trim() }]);
+  },
+  'winkel-weg': async (b, id) => {
+    sluitVeeg();
+    const w = winkel(id), ander = winkels().find(x => x.id !== id);
+    if (!ander || !(await bevestig(`${w.naam} verwijderen? Producten met ${w.naam} als standaardwinkel gaan naar ${ander.naam}.`))) return;
+    const patches = D().producten.filter(p => p.winkel === id || p.lijstWinkel === id).map(p => ({
+      id: p.id, winkel: p.winkel === id ? ander.id : p.winkel, lijstWinkel: p.lijstWinkel === id ? '' : p.lijstWinkel }));
+    if (patches.length) bewaar('producten', patches);
+    verwijder('winkels', [id]);
+    melding(`${w.naam} verwijderd.`);
+  },
+  'rcat-hernoem': async (b, id) => {
+    const c = (D().receptcategorieen || []).find(x => x.id === id); if (!c) return;
+    const n = await vraagTekst('Nieuwe naam voor ' + c.naam, c.naam);
+    if (n && n.trim()) bewaar('receptcategorieen', [{ id, naam: n.trim() }]);
+  },
+  'rcat-weg': async (b, id) => {
+    sluitVeeg();
+    const c = (D().receptcategorieen || []).find(x => x.id === id);
+    const rs = D().recepten.filter(r => r.categorie === id);
+    if (!c || !(await bevestig(`Categorie ${c.naam} verwijderen?${rs.length ? ` ${aantal(rs.length, 'recept gaat', 'recepten gaan')} naar Overig.` : ''}`))) return;
+    if (rs.length) bewaar('recepten', rs.map(r => ({ id: r.id, categorie: 'overig' })));
+    verwijder('receptcategorieen', [id]);
+  },
+  'cat-hernoem': async (b, id) => {
+    const c = D().categorieen.find(x => x.id === id), n = await vraagTekst('Nieuwe naam voor ' + c.naam, c.naam);
+    if (n && n.trim()) bewaar('categorieen', [{ id, naam: n.trim() }]);
+  },
+  'cat-weg': async (b, id) => {
+    sluitVeeg();
+    const c = D().categorieen.find(x => x.id === id);
+    const ps = D().producten.filter(p => p.categorie === id);
+    if (!c || !(await bevestig(`Categorie ${c.naam} verwijderen?${ps.length ? ` ${aantal(ps.length, 'product gaat', 'producten gaan')} naar Overig.` : ''}`))) return;
+    if (ps.length) bewaar('producten', ps.map(p => ({ id: p.id, categorie: 'overig' })));
+    verwijder('categorieen', [id]);
+  }
+};
+
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]');
+  if (!b || b.disabled) return;
+  const f = ACTIES[b.dataset.act];
+  if (!f) return;
+  e.preventDefault();
+  f(b, b.dataset.id);
+});
+
+/* Formulieren zelf afhandelen: Enter of de verzendknop stuurt een eigen submit-event,
+   zodat het ook werkt waar echte formulierverzending geblokkeerd is. */
+function verstuur(form) { form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); }
+document.addEventListener('click', e => {
+  const b = e.target.closest('form button:not([type=button])');
+  if (!b || b.disabled) return;
+  e.preventDefault();
+  verstuur(b.form);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.id === 'rb-zoek') { e.preventDefault(); const eerste = $('#rb-ac .ac-item'); if (eerste) eerste.click(); return; }
+  if (e.key === 'Enter' && e.target.id === 'titel-invoer') { e.preventDefault(); e.target.blur(); return; }
+  if (e.key !== 'Enter' || e.isComposing) return;
+  const el = e.target;
+  if (el.tagName !== 'INPUT' || !el.form) return;
+  e.preventDefault();
+  verstuur(el.form);
+});
+document.addEventListener('submit', e => {
+  const id = e.target.id;
+  if (id === 'add-form') { e.preventDefault(); voegToeAanLijst(); }
+  if (id === 'winkel-form') {
+    e.preventDefault();
+    const inp = $('#winkel-naam'), naam = inp.value.trim();
+    if (!naam) return;
+    if (D().winkels.some(w => w.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} staat er al tussen.`);
+    const gebruikt = D().winkels.map(w => w.kleur);
+    const palet = PALET().map(k => k.toUpperCase());
+    const kleur = palet.find(k => !gebruikt.map(g => String(g).toUpperCase()).includes(k)) || palet[D().winkels.length % palet.length];
+    const w = { id: 'w' + nieuwId(), naam, kleur, positie: Math.max(0, ...D().winkels.map(x => x.positie)) + 1, route: [] };
+    inp.value = '';
+    S.routeWinkel = w.id;
+    bewaar('winkels', [w]);
+    melding(`${naam} toegevoegd.`, 'Route instellen', () => naarInst('route'));
+  }
+  if (id === 'rcat-form') {
+    e.preventDefault();
+    const inp = $('#rcat-naam'), naam = inp.value.trim();
+    if (!naam) return;
+    if (rcats().some(c => c.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} bestaat al.`);
+    inp.value = '';
+    bewaar('receptcategorieen', [{ id: 'rc' + nieuwId(), naam: cap(naam), positie: Math.max(0, ...(D().receptcategorieen || []).map(c => c.positie)) + 1 }]);
+  }
+  if (id === 'cat-form') {
+    e.preventDefault();
+    const inp = $('#cat-naam'), naam = inp.value.trim();
+    if (!naam) return;
+    if (D().categorieen.some(c => c.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} bestaat al.`);
+    inp.value = '';
+    bewaar('categorieen', [{ id: 'c' + nieuwId(), naam: cap(naam), positie: Math.max(0, ...D().categorieen.map(c => c.positie)) + 1 }]);
+  }
+});
+
+document.addEventListener('input', e => {
+  if (S.receptBewerk && (e.target.closest('#recept-detail') || e.target.id === 'titel-invoer')) S.rbGewijzigd = true;
+  if (e.target.id === 'rb-zoek') tekenRbAc();
+  if (e.target.id === 'titel-invoer') groeiTitel();
+  if (e.target.id === 'add-naam') tekenAc();
+  if (e.target.id === 'zoek-r') { S.zoekR = e.target.value; tekenRecepten(); }
+  if (e.target.id === 'zoek-p') { S.zoekP = e.target.value; tekenProducten(); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheet-wrap').hidden) sluitSheet(); });
+
+laad();
+</script>
+</body>
+</html>
