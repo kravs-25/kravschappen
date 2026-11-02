@@ -25,6 +25,8 @@
   /* vaste kleuren (gelijk in licht en donker) */
   --op-kleur:#FFFFFF; --op-kleur-zacht:rgba(255,255,255,.25);
   --merk:#2D6A4C; --actief:#3E5146;
+  /* ontkoppelen (iets van een lijst, dag of recept halen); zelfde rood als verwijderen, ander icoon */
+  --ontkoppel:#A8344F;
   /* veegknoppen: groen in twee tinten, zodat knoppen naast elkaar te onderscheiden zijn */
   --veeg-open:#2D6A4C; --wijzig:#4E8F68; --veeg-favoriet:#2D6A4C;
   /* winkelkleuren voor nieuwe winkels */
@@ -106,26 +108,31 @@ header.top h1{margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em;lin
 .titel-invoer{resize:none;overflow:hidden;font-weight:800}
 .titel-invoer:focus{outline:2px solid var(--primary);outline-offset:0}
 .kaal-select{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:17px;color:var(--ink);padding:14px 40px 14px 16px;min-height:52px;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 22px) 54%,calc(100% - 17px) 54%;background-size:5px 5px;background-repeat:no-repeat}
+.check.staprij,.check.stapweergave{grid-template-columns:28px 1fr 28px;align-items:start;min-height:54px}
+.check.stapweergave{grid-template-columns:28px 1fr}
+.staprij .pos,.stapweergave .pos{margin-top:1px}
+.staptekst{font-size:17px;line-height:1.45;padding-top:3px;overflow-wrap:anywhere}
+.stap-invoer{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:17px;line-height:1.45;color:var(--ink);resize:none;overflow:hidden;padding:3px 0;margin:0;outline:none}
+.stap-invoer::placeholder{color:var(--muted)}
+.staprij:focus-within{background:color-mix(in srgb,var(--primary) 6%,transparent)}
+.rb-stap-plus{display:block;width:100%;text-align:left;border-top:1px solid var(--line)}
+.rb-stap-plus .pmeta{font-size:17px;margin:0}
 .check.bewerkrij{grid-template-columns:28px 1fr 104px;min-height:54px}
-.minrond{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--op-kleur);display:grid;place-items:center}
+.minrond{width:26px;height:26px;border-radius:50%;background:var(--ontkoppel);color:var(--op-kleur);display:grid;place-items:center}
 .minrond svg{width:14px;height:14px}
 .aantal-invoer{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 10px;font:inherit;font-size:16px;text-align:right;color:var(--ink)}
 .rb-toevoeg .bewerkrij{grid-template-columns:28px 1fr}
 .rb-toevoeg input{width:100%;border:0;background:transparent;font:inherit;font-size:17px;color:var(--ink);padding:8px 0;outline:none}
 .rb-toevoeg input::placeholder{color:var(--muted)}
 .rb-wrap{position:relative}
-.bereiding-invoer{display:block;width:100%;min-height:170px;border:0;background:transparent;padding:14px 16px;font:inherit;font-size:17px;line-height:1.5;color:var(--ink);resize:vertical}
-.bereiding-invoer:focus,.kaal-select:focus{outline:2px solid var(--primary);outline-offset:-2px;border-radius:18px}
+.kaal-select:focus{outline:2px solid var(--primary);outline-offset:-2px;border-radius:18px}
 .check.detailrij{grid-template-columns:1fr auto auto;min-height:52px}
-.bereiding{margin:0;padding:14px 16px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:17px;line-height:1.5}
 .rz-rij{width:100%;text-align:left}
 .rz-rij .chevr{justify-self:end;margin-right:4px}
 .pick[hidden],.koppel-groep[hidden]{display:none}
 #koppel-zoek{margin:0 0 4px}
 #koppel h3.cat:first-child{margin-top:14px}
 header.top p{margin:4px 0 0;color:var(--muted);font-size:15px}
-.kopbalk{margin:12px 0 0}
-.kopbalk[hidden]{display:none}
 #headerextra #w-tabs{margin-bottom:0}
 /* Algemene velden en knoppen */
 .field{display:block;width:100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:48px;-webkit-appearance:none;appearance:none}
@@ -145,12 +152,16 @@ textarea.field{resize:vertical;min-height:110px}
 .ac-lijst{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:7;max-height:calc(100vh - 290px - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);border:1px solid var(--line);border-radius:18px;touch-action:pan-y;box-shadow:0 14px 34px var(--schaduw)}
 .ac-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;width:100%;padding:0 14px 0 0;min-height:54px;border-top:1px solid var(--line)}
 .ac-item:first-child{border-top:0}
-.wis-knop{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;min-height:52px;border-radius:18px;background:var(--surface);border:1px solid var(--line);color:var(--accent);font-weight:700;text-align:center}
+.wis-knop{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;min-height:52px;border-radius:18px;background:var(--surface);border:1px solid var(--line);color:var(--ontkoppel);font-weight:700;text-align:center}
 .wis-knop svg{width:19px;height:19px}
-.wis-knop:active{background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
+.wis-knop:active{background:color-mix(in srgb,var(--ontkoppel) 10%,var(--surface))}
 .ac-kop{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;padding:14px 16px 6px;background:var(--surface);font-size:15px;font-weight:700;color:var(--muted);border-top:1px solid var(--line)}
 .ac-kop:first-child{border-top:0}
 .ac-kop + .ac-item{border-top:0}
+#ac .swipe{margin:0}
+#ac .swipe > .ac-item{border-top:0;background:var(--surface)}
+#ac .swipe + .swipe{border-top:1px solid var(--line)}
+#ac .swipe-weg{border-radius:0}
 .ac-plus{align-self:stretch;display:grid;place-items:center;padding:0 0 0 14px}
 .ac-naam{align-self:stretch;display:flex;align-items:center;min-width:0;padding:12px 0}
 .ac-naam:active{opacity:.6}
@@ -291,11 +302,14 @@ h3.cat{font-size:15px;font-weight:700;color:var(--muted);margin:20px 4px 6px;dis
 .order{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
 .order li{display:grid;grid-template-columns:36px 1fr 48px;align-items:center;gap:6px;padding:4px 8px 4px 14px;border-top:1px solid var(--line);min-height:52px}
 .order li:first-child{border-top:0}
+.check.greeprij{grid-template-columns:1fr 48px;padding:0 8px 0 0}
+.greeprij-hoofd{display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:52px;text-align:left;width:100%}
+.items .sleept{border-radius:16px}
 .greep{display:grid;place-items:center;width:48px;height:48px;margin-right:-6px;color:var(--muted);touch-action:none;cursor:grab}
 .greep svg{width:22px;height:22px}
-.order li.sleept{position:fixed;z-index:30;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px var(--schaduw);transform:scale(1.02);pointer-events:none}
-.order li.plek{background:var(--primary-soft);border-top:1px solid var(--line);min-height:52px}
-.order li.plek + li{border-top:0}
+.sleept{position:fixed;z-index:30;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px var(--schaduw);transform:scale(1.02);pointer-events:none}
+.plek{background:var(--primary-soft);border-top:1px solid var(--line);min-height:52px}
+.plek + *{border-top:0 !important}
 .pos{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);font-variant-numeric:tabular-nums}
 .lead{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
 .lead.vol{background:var(--c);color:var(--op-kleur)}
@@ -366,6 +380,7 @@ h3.cat{font-size:15px;font-weight:700;color:var(--muted);margin:20px 4px 6px;dis
 .bv-kaart{position:relative;width:calc(100% - 16px);max-width:440px;margin:0 8px calc(8px + env(safe-area-inset-bottom,0px));background:var(--bg);border-radius:24px;padding:18px 16px 16px;display:grid;gap:8px;animation:up .2s ease-out}
 .bv-kaart p{margin:2px 6px 10px;font-size:17px;text-align:center;line-height:1.35}
 .bv-kaart .bv-gevaar{background:var(--accent);color:var(--op-kleur)}
+.bv-kaart .bv-ontkoppel,.samen-knoppen .ontkoppel-knop{background:var(--ontkoppel);color:var(--op-kleur)}
 .bv-kaart .field{margin-bottom:6px}
 /* Melding */
 .toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:30;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:14px;width:max-content;max-width:calc(100% - 32px);transition:opacity .2s,transform .2s;font-size:15px}
@@ -533,13 +548,13 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbw5coGQ3021Tyjm19Ky7-_P
     });
     const i = (product, hoeveelheid) => ({ product, hoeveelheid });
     const recepten = [
-      { id: 'r1', naam: 'Pasta pesto met kip', uitleg: 'Penne koken. Kip in reepjes bakken, courgette erbij. Pesto erdoor en afmaken met parmezaan.',
+      { id: 'r1', naam: 'Pasta pesto met kip', uitleg: 'Kook de penne volgens de verpakking.\nSnijd de kip in reepjes en bak hem goudbruin.\nBak de courgette 3 minuten mee.\nRoer de pesto en de penne erdoor en maak af met parmezaan.',
         ingredienten: [i('penne','500 g'), i('kip','300 g'), i('pesto','1 pot'), i('courgette','1'), i('parmezaan','')] },
-      { id: 'r2', naam: 'Rode curry met rijst', uitleg: 'Currypasta aanfruiten, kip en paprika erbij, afblussen met kokosmelk. Serveren met rijst.',
+      { id: 'r2', naam: 'Rode curry met rijst', uitleg: 'Kook de rijst.\nFruit de currypasta 1 minuut aan.\nBak de kip en paprika mee.\nBlus af met kokosmelk en laat 10 minuten pruttelen.\nServeer met de rijst.',
         ingredienten: [i('rijst','300 g'), i('kokos','1 blik'), i('curry','2 el'), i('paprika','2'), i('kip','300 g')] },
-      { id: 'r3', naam: 'Wraps met gehakt', uitleg: 'Gehakt rul bakken met ui en paprika, tomatenblokjes erbij. In de wraps met geraspte kaas.',
+      { id: 'r3', naam: 'Wraps met gehakt', uitleg: 'Bak het gehakt rul met ui en paprika.\nVoeg de tomatenblokjes toe en laat 5 minuten inkoken.\nVul de wraps en strooi er geraspte kaas over.',
         ingredienten: [i('wraps','8'), i('gehakt','400 g'), i('ui','1'), i('paprika','1'), i('tomblok','1 blik'), i('kaas','')] },
-      { id: 'r4', naam: 'Zalm met spinazie', uitleg: 'Zalm in de oven, 15 minuten op 200 graden. Spinazie slinken met knoflook.',
+      { id: 'r4', naam: 'Zalm met spinazie', uitleg: 'Verwarm de oven voor op 200 graden.\nBak de zalm 15 minuten in de oven.\nLaat de spinazie slinken met knoflook.\nServeer met rijst.',
         ingredienten: [i('zalm','2 stuks'), i('spinazie','400 g'), i('rijst','200 g'), i('knoflook','2 tenen')] }
     ];
     ['pasta', 'rijst', 'vlees', 'vlees'].forEach((c, k) => { recepten[k].categorie = c; });
@@ -756,7 +771,7 @@ function openSamen(p, rn, amt, hier) {
     const rest = amt ? trekAf(nu, amt) : null;
     if (rest !== null && amt) knoppen.push({ k: 'btn', t: `Aandeel van ${rn} aftrekken → ${rest || 'geen aantal'}`, f: () => bewaar('producten', [{ id: p.id, lijstHoeveelheid: rest, lijstVoor: zonder }]) });
     knoppen.push({ k: 'btn soft', t: `Alleen ${rn} weghalen, aantal blijft`, f: () => bewaar('producten', [{ id: p.id, lijstVoor: zonder }]) });
-    knoppen.push({ k: 'btn danger', t: 'Helemaal van de lijst halen', f: async () => { if (await bevestig(`${p.naam} helemaal van de lijst halen?`)) haalVanLijst(p); } });
+    knoppen.push({ k: 'btn ontkoppel-knop', t: 'Helemaal van de lijst halen', f: async () => { if (await bevestig(`${p.naam} helemaal van de lijst halen?`, 'Van de lijst halen', 'ontkoppel')) haalVanLijst(p); } });
   }
   openSheet(`<h4>${esc(p.naam)}</h4><p class="samen-uitleg">${uitleg}</p>
     <div class="samen-knoppen">${knoppen.map((k, i) => `<button type="button" class="${k.k} wide" data-keuze="${i}">${esc(k.t)}</button>`).join('')}</div>`);
@@ -808,6 +823,7 @@ function teken() {
   $('#badge').hidden = !open;
   $('#badge').textContent = open;
   VIEWS[S.tab].teken();
+  const ac = $('#ac'); if (ac && !ac.hidden) tekenAc();
 }
 const sub = t => { $('#subtitle').textContent = t; $('#subtitle').hidden = !t; };
 
@@ -846,8 +862,8 @@ function receptKaart(r, datum) {
   const open = S.open.has(key);
   const ingr = (r.ingredienten || []).filter(i => prod(i.product));
   const n = ingr.filter(i => { const p = prod(i.product); return nodig(p) && voorLijst(p.lijstVoor).includes(r.naam); }).length;
-  let h = `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" data-datum="${datum}" data-r="${esc(r.id)}" style="--bw:144px">
-    <div class="swipe-acties"><button type="button" class="swipe-wk" style="--c:var(--veeg-open)" data-act="recept-van-week" data-id="${esc(r.id)}" aria-label="Recept ${esc(r.naam)} bekijken"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg></button><button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="koppel" data-datum="${datum}" aria-label="Recepten van deze dag wijzigen">${PEN_ICON}</button></div>
+  let h = `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" data-datum="${datum}" data-r="${esc(r.id)}" style="--bw:216px">
+    <div class="swipe-acties"><button type="button" class="swipe-wk" style="--c:var(--veeg-open)" data-act="recept-van-week" data-id="${esc(r.id)}" aria-label="Recept ${esc(r.naam)} bekijken"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg></button><button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="koppel" data-datum="${datum}" aria-label="Recepten van deze dag wijzigen">${PEN_ICON}</button><button type="button" class="swipe-wk" style="--c:var(--ontkoppel)" data-act="dag-ontkoppel" aria-label="${esc(r.naam)} van deze dag halen">${ONTKOPPEL_ICON}</button></div>
     <article class="recipe swipe-kaart">
     <button type="button" class="recipe-head" data-act="klap" data-key="${esc(key)}" aria-expanded="${open}">
       <span class="lead" style="--c:var(--primary)">${esc(r.naam.charAt(0).toUpperCase())}</span>
@@ -872,6 +888,7 @@ function receptKaart(r, datum) {
 /* Vegen: kaart naar links schuiven toont de verwijderknop, ver doorvegen verwijdert meteen */
 const STER_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 16.7l-5.4 2.9 1.1-6.1-4.5-4.3 6.1-.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
 const sterTje = p => p.favoriet ? '<span class="ster" aria-label="favoriet">'+STER_ICON+'</span>' : '';
+const ONTKOPPEL_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2.5a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19zM7.4 10.7a1.3 1.3 0 0 0 0 2.6h9.2a1.3 1.3 0 0 0 0-2.6z"/></svg>';
 const breedte = sw => parseFloat(sw.style.getPropertyValue('--bw')) || 72;
 /** Verhoogt of verlaagt het getal vooraan een aantal; de eenheid blijft staan ("2 pakken" -> "3 pakken", "500 g" -> "600 g"). */
 function stapAantal(waarde, richting) {
@@ -933,7 +950,7 @@ function sluitVeeg() {
 }
 document.addEventListener('pointerdown', e => {
   const sw = e.target.closest('.swipe');
-  if (e.target.closest('.swipe-acties')) return;
+  if (e.target.closest('.swipe-acties') || e.target.closest('.greep')) return;
   if (!sw) { sluitVeeg(); return; }
   if (S.swipeOpen && S.swipeOpen !== sw.dataset.key) sluitVeeg();
   veeg = { el: sw, kaart: $('.swipe-kaart', sw), x: e.clientX, y: e.clientY, id: e.pointerId,
@@ -1072,7 +1089,7 @@ function tekenLijst() {
   if (klaar.length) {
     h += `<section class="basket"><h3 class="cat"><span>Gekocht</span></h3>
       <div class="items">${klaar.map(itemRij).join('')}</div>
-      <button type="button" class="wis-knop" data-act="mandje-leeg">${PRUL_ICON}Wis gekochte producten</button></section>`;
+      <button type="button" class="wis-knop" data-act="mandje-leeg">${ONTKOPPEL_ICON}Gekochte van de lijst halen</button></section>`;
   }
   $('#lijst').innerHTML = h;
 }
@@ -1091,7 +1108,7 @@ function itemRij(p) {
   return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--bw:144px">
     <div class="swipe-acties">
       <button type="button" class="swipe-wk" data-act="item-bewerk" data-id="${esc(p.id)}" style="--c:var(--wijzig)" aria-label="${esc(p.naam)} aanpassen">${PEN_ICON}</button>
-      <button type="button" class="swipe-weg" data-act="lijst-weg" data-id="${esc(p.id)}" data-vol aria-label="${esc(p.naam)} van de lijst halen">${PRUL_ICON}Verwijder</button>
+      <button type="button" class="swipe-wk" style="--c:var(--ontkoppel)" data-act="lijst-weg" data-id="${esc(p.id)}" data-vol aria-label="${esc(p.naam)} van de lijst halen">${ONTKOPPEL_ICON}</button>
     </div>${rij}</div>`;
 }
 function voegToeAanLijst() {
@@ -1130,10 +1147,10 @@ function tekenAc() {
   if (!hits.length && !q && !S.acFav) { sluitAc(); return; }
   const exact = hits.some(p => p.naam.toLowerCase() === q);
   const markeer = n => { if (!q) return esc(n); const i = n.toLowerCase().indexOf(q); return esc(n.slice(0, i)) + '<b>' + esc(n.slice(i, i + q.length)) + '</b>' + esc(n.slice(i + q.length)); };
-  const acRij = p => `<div class="ac-item${nodig(p) ? ' on' : ''}" role="option">
+  const acRij = p => `<div class="swipe${S.swipeOpen === 'ac:' + p.id ? ' open' : ''}" data-key="ac:${esc(p.id)}" style="--bw:216px">${productVeegKnoppen(p)}<div class="ac-item swipe-kaart${nodig(p) ? ' on' : ''}" role="option">
       <button type="button" class="ac-plus" data-act="ac-plus" data-id="${esc(p.id)}" aria-pressed="${nodig(p)}" aria-label="${esc(p.naam)} ${nodig(p) ? 'van de lijst halen' : 'op de lijst zetten'}">${ADD_KNOP}</button>
       <button type="button" class="ac-naam pname" data-act="ac-kies" data-naam="${esc(p.naam)}">${markeer(p.naam)}${sterTje(p)}</button>
-      ${winkelChip(winkel(winkelVan(p)))}</div>`;
+      ${winkelChip(winkel(winkelVan(p)))}</div></div>`;
   let h = '';
   // Ster aan: alleen favorieten (ook tijdens het zoeken)
   {
@@ -1169,10 +1186,6 @@ window.addEventListener('resize', pasAcHoogteAan);
 function sluitAc() { const box = $('#ac'); if (box) { box.hidden = true; box.innerHTML = ''; } document.body.classList.remove('ac-open'); }
 document.addEventListener('change', e => { if (S.receptBewerk && e.target.id === 'rb-cat') S.rbGewijzigd = true; });
 document.addEventListener('focusout', e => {
-  if (e.target.closest && e.target.closest('.kopbalk')) setTimeout(() => {
-    const f = $('#headerextra .kopbalk');
-    if (f && !f.hidden && !f.contains(document.activeElement) && !$('input', f).value.trim()) instBalk(false);
-  }, 250);
   if (e.target.id === 'rb-zoek') setTimeout(() => { if (document.activeElement !== $('#rb-zoek')) { const box = $('#rb-ac'); if (box) { box.hidden = true; box.innerHTML = ''; } } }, 200);
   if (e.target.id === 'add-zoek') setTimeout(() => { if (document.activeElement !== $('#add-zoek')) sluitAc(); }, 200);
   if (e.target.id === 'add-zoek') setTimeout(() => {
@@ -1181,7 +1194,7 @@ document.addEventListener('focusout', e => {
   }, 250);
 });
 document.addEventListener('focusin', e => { if (e.target.id === 'add-zoek') tekenAc(); });
-document.addEventListener('mousedown', e => { if (e.target.closest('.ac-item, .zoekster')) e.preventDefault(); });
+document.addEventListener('mousedown', e => { if (e.target.closest('.ac-item, .zoekster, #ac .swipe-acties')) e.preventDefault(); });
 
 /* ---------- Recepten ---------- */
 function skeletRecepten() {
@@ -1196,7 +1209,7 @@ function skeletRecepten() {
       : `<button type="button" class="round bewerk-knop" data-act="recept-bewerkmodus" aria-label="Recept bewerken">${PEN_ICON}</button>`;
     if (bewerk) {
       $('#title').innerHTML = `<textarea id="titel-invoer" class="titel-invoer" rows="1" placeholder="Naam van het recept" autocomplete="off" aria-label="Naam van het recept">${esc(S.receptBewerk.naam)}</textarea>`;
-      requestAnimationFrame(groeiTitel);
+      requestAnimationFrame(() => { groeiTitel(); groeiStappen(); });
       return `<div id="recept-detail">${bewerkHtml()}</div>`;
     }
     $('#title').textContent = recept(S.receptOpen).naam;
@@ -1226,7 +1239,15 @@ function bewerkHtml() {
         <input id="rb-zoek" placeholder="Product toevoegen" autocomplete="off" autocorrect="off" enterkeyhint="done" aria-label="Product toevoegen"></div></div>
     </div><div class="ac-lijst" id="rb-ac" hidden></div></div>
     <h3 class="cat"><span>Bereiding</span></h3>
-    <div class="items"><textarea id="rb-uitleg" class="bereiding-invoer" placeholder="Hoe je het maakt, of een link naar het recept">${esc(d.uitleg || '')}</textarea></div>`;
+    <div class="items" id="rb-stappen">
+      ${d.stappen.map((t, k) => `<div class="item"><div class="check staprij">
+        <span class="pos" style="--c:var(--primary)">${k + 1}</span>
+        <textarea class="stap-invoer" data-k="${k}" rows="1" enterkeyhint="next" placeholder="Beschrijf stap ${k + 1}" aria-label="Stap ${k + 1}">${esc(t)}</textarea>
+        <button type="button" class="minrond" data-act="rb-stap-weg" data-k="${k}" aria-label="Stap ${k + 1} weghalen">${MIN_ICON}</button></div></div>`).join('')}
+      <button type="button" class="item rb-stap-plus" data-act="rb-stap-plus"><span class="check bewerkrij">
+        <span class="addbtn" aria-hidden="true"><svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        <span class="pmeta">Stap toevoegen</span></span></button>
+    </div>`;
 }
 /** Het titelveld groeit mee met lange receptnamen, zodat je de hele naam ziet. */
 function groeiTitel() { const t = $('#titel-invoer'); if (!t) return; t.style.height = 'auto'; t.style.height = t.scrollHeight + 2 + 'px'; }
@@ -1235,18 +1256,24 @@ function syncBewerk() {
   const t = $('#titel-invoer'); if (t) d.naam = t.value;
   const c = $('#rb-cat'); if (c) d.categorie = c.value;
   $$('.aantal-invoer').forEach(inp => { const i = d.ingredienten[Number(inp.dataset.i)]; if (i) i.hoeveelheid = inp.value; });
-  const u = $('#rb-uitleg'); if (u) d.uitleg = u.value;
+  $$('.stap-invoer').forEach(t => { d.stappen[Number(t.dataset.k)] = t.value; });
 }
+/** Bereiding staat in de Sheet als tekst met een stap per regel. */
+const naarStappen = tekst => String(tekst || '').split('\n').map(x => x.trim()).filter(Boolean);
+function groeiStappen() { $$('.stap-invoer').forEach(t => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }); }
+function focusStap(k, eind) { const t = $(`.stap-invoer[data-k="${k}"]`); if (!t) return; t.focus(); const n = eind ? t.value.length : 0; t.setSelectionRange(n, n); }
+/** Tekent de bewerkpagina opnieuw. Let op: roep eerst syncBewerk() aan en pas dan de gegevens aan,
+    anders zouden de oude invoervelden de wijziging overschrijven. */
 function tekenBewerk(focusZoek) {
-  syncBewerk();
   $('#recept-detail').innerHTML = bewerkHtml();
-  if (focusZoek) $('#rb-zoek').focus();
+  groeiStappen();
+  if (focusZoek === true) $('#rb-zoek').focus();
 }
 function startBewerk(id) {
   const r = id ? recept(id) : null;
   S.receptBewerk = r
-    ? { id: r.id, naam: r.naam, categorie: r.categorie || 'overig', uitleg: r.uitleg || '', ingredienten: (r.ingredienten || []).map(i => ({ product: i.product, hoeveelheid: i.hoeveelheid || '' })) }
-    : { id: nieuwId(), naam: '', categorie: 'overig', uitleg: '', ingredienten: [], nieuw: true };
+    ? { id: r.id, naam: r.naam, categorie: r.categorie || 'overig', stappen: naarStappen(r.uitleg).concat(naarStappen(r.uitleg).length ? [] : ['']), ingredienten: (r.ingredienten || []).map(i => ({ product: i.product, hoeveelheid: i.hoeveelheid || '' })) }
+    : { id: nieuwId(), naam: '', categorie: 'overig', stappen: [''], ingredienten: [], nieuw: true };
   S.rbNieuw = [];
   S.rbGewijzigd = false;
   S.receptOpen = S.receptBewerk.id;
@@ -1283,7 +1310,7 @@ function tekenReceptDetail() {
   $('#recept-detail').innerHTML = `<h3 class="cat"><span>Producten</span></h3>
     ${ingr.length ? `<div class="items">${ingr.map(i => `<div class="item"><div class="check detailrij"><span class="pname">${esc(i.p.naam)}</span><span class="iamt">${esc(i.a || '')}</span>${winkelChip(winkel(i.p.winkel))}</div></div>`).join('')}</div>`
       : '<div class="empty">Nog geen producten.</div>'}
-    ${r.uitleg ? `<h3 class="cat"><span>Bereiding</span></h3><div class="items"><p class="bereiding">${linkify(esc(r.uitleg))}</p></div>` : ''}`;
+    ${naarStappen(r.uitleg).length ? `<h3 class="cat"><span>Bereiding</span></h3><div class="items">${naarStappen(r.uitleg).map((t, k) => `<div class="item"><div class="check stapweergave"><span class="pos" style="--c:var(--primary)">${k + 1}</span><span class="staptekst">${linkify(esc(t))}</span></div></div>`).join('')}</div>` : ''}`;
 }
 function tekenRecepten() {
   const alle = D().recepten;
@@ -1302,28 +1329,31 @@ function tekenRecepten() {
 }
 /* ---------- Winkelroute: afdelingen verslepen ---------- */
 let sleep = null;
+// Werkt voor elke lijst met data-sorteer: de winkelroute, de categorieën en de receptcategorieën
 document.addEventListener('pointerdown', e => {
   const g = e.target.closest('.greep'); if (!g) return;
-  const li = g.closest('li'), ol = li.parentElement;
-  e.preventDefault();
-  const r = li.getBoundingClientRect();
-  const plek = document.createElement('li'); plek.className = 'plek'; plek.style.height = r.height + 'px';
-  ol.insertBefore(plek, li.nextSibling);
-  Object.assign(li.style, { top: r.top + 'px', left: r.left + 'px', width: r.width + 'px' });
-  li.classList.add('sleept');
-  sleep = { li, ol, plek, dy: e.clientY - r.top, id: e.pointerId, y: e.clientY };
+  const el = g.closest('[data-sid]'), lijst = el && el.parentElement;
+  if (!lijst || !lijst.dataset.sorteer) return;
+  e.preventDefault(); e.stopPropagation();
+  const r = el.getBoundingClientRect();
+  const plek = document.createElement(el.tagName); plek.className = 'plek'; plek.style.height = r.height + 'px';
+  lijst.insertBefore(plek, el.nextSibling);
+  Object.assign(el.style, { top: r.top + 'px', left: r.left + 'px', width: r.width + 'px' });
+  el.classList.add('sleept');
+  sleep = { el, lijst, plek, dy: e.clientY - r.top, id: e.pointerId, y: e.clientY };
   S.slepen = true;
   try { g.setPointerCapture(e.pointerId); } catch (err) {}
   sleepScroll();
-});
+}, true);
 function sleepVolg(y) {
-  const { li, ol, plek } = sleep;
-  li.style.top = (y - sleep.dy) + 'px';
-  const rest = [...ol.children].filter(x => x !== li && x !== plek);
+  const { el, lijst, plek } = sleep;
+  el.style.top = (y - sleep.dy) + 'px';
+  const rest = [...lijst.children].filter(x => x !== el && x !== plek && x.dataset.sid);
   const voor = rest.find(x => { const r = x.getBoundingClientRect(); return y < r.top + r.height / 2; });
-  ol.insertBefore(plek, voor || null);
+  // vaste regels zonder greep (zoals Overig) blijven onderaan
+  lijst.insertBefore(plek, voor || [...lijst.children].find(x => x !== el && x !== plek && !x.dataset.sid) || null);
   let k = 0;
-  [...ol.children].forEach(x => { if (x === li) return; const pos = x === plek ? li.querySelector('.pos') : x.querySelector('.pos'); if (pos) pos.textContent = ++k; });
+  [...lijst.children].forEach(x => { if (x === el) return; const pos = x === plek ? el.querySelector('.pos') : x.querySelector('.pos'); if (pos) pos.textContent = ++k; });
 }
 document.addEventListener('pointermove', e => {
   if (!sleep || e.pointerId !== sleep.id) return;
@@ -1342,21 +1372,25 @@ function sleepScroll() {
 }
 function sleepKlaar(e) {
   if (!sleep || e.pointerId !== sleep.id) return;
-  const { li, ol, plek } = sleep;
+  const { el, lijst, plek } = sleep;
   sleep = null;
-  ol.insertBefore(li, plek); plek.remove();
-  li.classList.remove('sleept'); li.removeAttribute('style'); li.style.setProperty('--c', winkel(S.routeWinkel).kleur);
+  lijst.insertBefore(el, plek); plek.remove();
+  el.classList.remove('sleept'); el.style.top = el.style.left = el.style.width = '';
   S.slepen = false;
-  const route = [...ol.children].map(x => x.dataset.c);
-  bewaar('winkels', [{ id: S.routeWinkel, route }]);
+  klikOnderdrukken = true; setTimeout(() => { klikOnderdrukken = false; }, 60);
+  const ids = [...lijst.children].map(x => x.dataset.sid).filter(Boolean);
+  const soort = lijst.dataset.sorteer;
+  if (soort === 'route') bewaar('winkels', [{ id: S.routeWinkel, route: ids }]);
+  if (soort === 'cats') bewaar('categorieen', ids.map((id, k) => ({ id, positie: k + 1 })));
+  if (soort === 'rcats') bewaar('receptcategorieen', ids.map((id, k) => ({ id, positie: k + 1 })));
 }
 document.addEventListener('pointerup', sleepKlaar);
 document.addEventListener('pointercancel', sleepKlaar);
 
 /** Een rij in de vaste stijl: kaart vooraan, veegknoppen eronder. */
-function veegRij(key, kaart, acties) {
-  if (!acties.length) return `<div class="item">${kaart}</div>`;
-  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--bw:${acties.length * 72}px">
+function veegRij(key, kaart, acties, extra = '') {
+  if (!acties.length) return `<div class="item"${extra}>${kaart}</div>`;
+  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}"${extra} style="--bw:${acties.length * 72}px">
     <div class="swipe-acties">${acties.map(a => `<button type="button" class="${a.weg ? 'swipe-weg' : 'swipe-wk'}"${a.weg ? '' : ` style="--c:${a.kleur || 'var(--wijzig)'}"`} data-act="${a.act}" data-id="${esc(a.id)}" aria-label="${esc(a.aria || a.label)}">${a.icon}${a.label}</button>`).join('')}</div>
     <div class="item swipe-kaart">${kaart}</div></div>`;
 }
@@ -1383,16 +1417,20 @@ function tekenProducten() {
 }
 const winkelChip = w => w ? `<span class="chip" style="--c:${w.kleur}">${esc(w.naam)}</span>` : '';
 const PEN_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.2 4.3a2.5 2.5 0 0 1 3.5 0l1 1a2.5 2.5 0 0 1 0 3.5L9.4 19.1 4 20l.9-5.4z"/></svg>';
+/** Veegknoppen voor een product: favoriet, wijzigen, verwijderen (Instellingen > Producten en de keuzelijst). */
+function productVeegKnoppen(p) {
+  return `<div class="swipe-acties">
+      <button type="button" class="swipe-wk" style="--c:var(--veeg-favoriet)" data-act="product-ster" data-id="${esc(p.id)}" aria-label="${esc(p.naam)} ${p.favoriet ? 'geen favoriet meer' : 'favoriet maken'}">${STER_ICON}</button>
+      <button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="product" data-id="${esc(p.id)}" aria-label="${esc(p.naam)} wijzigen">${PEN_ICON}</button>
+      <button type="button" class="swipe-weg" data-act="product-weg" data-id="${esc(p.id)}" aria-label="${esc(p.naam)} verwijderen">${PRUL_ICON}</button>
+    </div>`;
+}
 function productRij(p) {
   const on = nodig(p), inMandje = p.opLijst && p.afgevinkt;
   const status = on ? ['Op de lijst', p.lijstHoeveelheid].filter(Boolean).join(', ') : inMandje ? 'Gekocht' : '';
   const key = 'pr:' + p.id;
   return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--bw:216px">
-    <div class="swipe-acties">
-      <button type="button" class="swipe-wk" style="--c:var(--veeg-favoriet)" data-act="product-ster" data-id="${esc(p.id)}" aria-label="${esc(p.naam)} ${p.favoriet ? 'geen favoriet meer' : 'favoriet maken'}">${STER_ICON}</button>
-      <button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="product" data-id="${esc(p.id)}" aria-label="${esc(p.naam)} wijzigen">${PEN_ICON}Wijzig</button>
-      <button type="button" class="swipe-weg" data-act="product-weg" data-id="${esc(p.id)}" aria-label="${esc(p.naam)} verwijderen">${PRUL_ICON}Verwijder</button>
-    </div>
+    ${productVeegKnoppen(p)}
     <div class="item swipe-kaart${on ? ' on' : ''}">
       <button type="button" class="check metchip" data-act="product-vink" data-id="${esc(p.id)}" aria-pressed="${on}" aria-label="${esc(p.naam)} ${on ? 'van de lijst halen' : 'op de lijst zetten'}">
         ${ADD_KNOP}
@@ -1450,10 +1488,8 @@ function skeletInst() {
   // Zelfde opbouw als de hoofdpagina's: actie rechtsboven, balk onder de titel, daaronder de lijst
   const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
   const plusKnop = (act, label) => `<button type="button" class="round toevoeg-knop" data-act="${act}" aria-label="${label}" aria-expanded="false">${PLUS}</button>`;
-  const balk = (id, inputId, tekst) => `<form class="add kopbalk" id="${id}" hidden><input class="field" id="${inputId}" placeholder="${tekst}" autocomplete="off" enterkeyhint="done" aria-label="${tekst}"></form>`;
   if (pagina === 'winkels') {
-    $('#topextra').innerHTML = plusKnop('inst-toevoeg', 'Winkel toevoegen');
-    $('#headerextra').innerHTML = balk('winkel-form', 'winkel-invoer', 'Naam van de nieuwe winkel');
+    $('#topextra').innerHTML = plusKnop('nieuw-venster', 'Winkel toevoegen');
     return '<div id="w-lijst"></div>';
   }
   if (pagina === 'route') {
@@ -1461,8 +1497,7 @@ function skeletInst() {
     return '<div id="w-route"></div>';
   }
   if (pagina === 'rcats') {
-    $('#topextra').innerHTML = plusKnop('inst-toevoeg', 'Receptcategorie toevoegen');
-    $('#headerextra').innerHTML = balk('rcat-form', 'rcat-invoer', 'Naam van de nieuwe categorie');
+    $('#topextra').innerHTML = plusKnop('nieuw-venster', 'Receptcategorie toevoegen');
     return '<div id="r-cats"></div>';
   }
   if (pagina === 'producten') {
@@ -1470,47 +1505,31 @@ function skeletInst() {
     $('#headerextra').innerHTML = `<input type="search" class="field kopzoek" id="zoek-p" placeholder="Zoek een product" value="${esc(S.zoekP)}" autocomplete="off" aria-label="Producten zoeken">`;
     return '<div id="producten"></div>';
   }
-  $('#topextra').innerHTML = plusKnop('inst-toevoeg', 'Categorie toevoegen');
-  $('#headerextra').innerHTML = balk('cat-form', 'cat-invoer', 'Naam van de nieuwe categorie');
+  $('#topextra').innerHTML = plusKnop('nieuw-venster', 'Categorie toevoegen');
   return '<div id="w-cats"></div>';
-}
-/** Plusje rechtsboven op een subpagina: klapt het invoerveld onder de titel open en dicht. */
-function instBalk(open) {
-  const f = $('#headerextra .kopbalk'), k = $('#topextra .toevoeg-knop');
-  if (!f) return;
-  f.hidden = !open;
-  if (k) { k.classList.toggle('open', open); k.setAttribute('aria-expanded', open); }
-  const inp = $('input', f);
-  if (open) inp.focus(); else inp.value = '';
 }
 function tekenInst() {
   const pagina = S.instSub;
   if (pagina === 'producten') { tekenProducten(); return; }
   if (pagina === 'rcats') {
     sub('');
-    $('#r-cats').innerHTML = `<h3 class="cat"><span>Alle receptcategorieën</span></h3><div class="items">${rcats().map(c => {
+    $('#r-cats').innerHTML = `<h3 class="cat"><span>Volgorde</span></h3><div class="items" data-sorteer="rcats">${rcats().map(c => {
       const n = D().recepten.filter(r => (r.categorie || 'overig') === c.id).length;
       const vast = c.id === 'overig';
       return veegRij('rc:' + c.id,
-        `<button type="button" class="check" ${vast ? 'disabled style="opacity:1;cursor:default"' : `data-act="rcat-hernoem" data-id="${esc(c.id)}"`}><span class="lead" style="--c:var(--primary)">${esc(c.naam.charAt(0).toUpperCase())}</span>
-          <span><span class="pname">${esc(c.naam)}</span></span></button>`,
-        vast ? [] : [{ act: 'rcat-weg', id: c.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: c.naam + ' verwijderen' }]);
+        `<div class="check greeprij"><button type="button" class="greeprij-hoofd" ${vast ? 'disabled style="opacity:1;cursor:default"' : `data-act="rcat-hernoem" data-id="${esc(c.id)}"`}><span class="lead" style="--c:var(--primary)">${esc(c.naam.charAt(0).toUpperCase())}</span>
+          <span class="pname">${esc(c.naam)}</span></button>${vast ? '<span></span>' : `<span class="greep" aria-label="${esc(c.naam)} verslepen"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg></span>`}</div>`,
+        vast ? [] : [{ act: 'rcat-weg', id: c.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: c.naam + ' verwijderen' }],
+        vast ? '' : ` data-sid="${esc(c.id)}"`);
     }).join('')}</div>`;
     return;
   }
   const ws = winkels();
   if (!pagina) {
     sub('');
-    const rijen = [
-      ['winkels', 'var(--primary)', ws.map(w => w.naam).join(', ')],
-      ['route', 'var(--primary)', aantal(ws.length, 'winkel', 'winkels')],
-      ['cats', 'var(--primary)', String(D().categorieen.length)],
-      ['producten', 'var(--primary)', String(D().producten.length)],
-      ['rcats', 'var(--primary)', String(rcats().length)]
-    ];
-    $('#inst').innerHTML = `<div class="group">${rijen.map(([id, kleur, detail]) =>
-      `<button type="button" class="nav-row" data-act="inst-ga" data-sub="${id}"><span class="ico" style="--c:${kleur}">${ICO[id]}</span>
-        <span class="lbltxt">${INST[id].titel}</span><span class="detail">${esc(detail)}</span><span class="chev2"></span></button>`).join('')}</div>
+    $('#inst').innerHTML = `<div class="group">${['winkels', 'route', 'cats', 'producten', 'rcats'].map(id =>
+      `<button type="button" class="nav-row" data-act="inst-ga" data-sub="${id}"><span class="ico" style="--c:var(--primary)">${ICO[id]}</span>
+        <span class="lbltxt">${INST[id].titel}</span><span></span><span class="chev2"></span></button>`).join('')}</div>
       ${D().gebruiker ? `<p class="foot">Ingelogd als ${esc(D().gebruiker)}. Alle gegevens staan in jullie Google Sheet.</p>` : ''}`;
     return;
   }
@@ -1532,18 +1551,19 @@ function tekenInst() {
     $('#w-tabs').innerHTML = ws.map(w => `<button type="button" class="storetab${w.id === S.routeWinkel ? ' active' : ''}" style="--c:${w.kleur}" data-act="route-winkel" data-id="${esc(w.id)}">${esc(w.naam)}</button>`).join('');
     if (!S.routeWinkel) { $('#w-route').innerHTML = '<div class="empty"><strong>Nog geen winkels</strong>Voeg eerst een winkel toe bij Winkels.</div>'; return; }
     const w = winkel(S.routeWinkel), r = volgorde(w.id);
-    $('#w-route').innerHTML = `<ol class="order" id="route-lijst">${r.map((c, k) => `<li data-c="${esc(c)}" style="--c:${w.kleur}"><span class="pos">${k + 1}</span><span>${esc(catNaam(c))}</span>
+    $('#w-route').innerHTML = `<ol class="order" id="route-lijst" data-sorteer="route">${r.map((c, k) => `<li data-sid="${esc(c)}" style="--c:${w.kleur}"><span class="pos">${k + 1}</span><span>${esc(catNaam(c))}</span>
         <span class="greep" aria-label="${esc(catNaam(c))} verslepen"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg></span></li>`).join('')}</ol>`;
   }
 
   if (pagina === 'cats') {
-    $('#w-cats').innerHTML = `<h3 class="cat"><span>Alle categorieën</span></h3><div class="items">${cats().map(c => {
+    $('#w-cats').innerHTML = `<h3 class="cat"><span>Standaardvolgorde</span></h3><div class="items" data-sorteer="cats">${cats().map(c => {
       const n = D().producten.filter(p => p.categorie === c.id).length;
       const vast = c.id === 'overig';
       return veegRij('c:' + c.id,
-        `<button type="button" class="check" ${vast ? 'disabled style="opacity:1;cursor:default"' : `data-act="cat-hernoem" data-id="${esc(c.id)}"`}><span class="lead" style="--c:var(--primary)">${esc(c.naam.charAt(0).toUpperCase())}</span>
-          <span><span class="pname">${esc(c.naam)}</span></span></button>`,
-        vast ? [] : [{ act: 'cat-weg', id: c.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: c.naam + ' verwijderen' }]);
+        `<div class="check greeprij"><button type="button" class="greeprij-hoofd" ${vast ? 'disabled style="opacity:1;cursor:default"' : `data-act="cat-hernoem" data-id="${esc(c.id)}"`}><span class="lead" style="--c:var(--primary)">${esc(c.naam.charAt(0).toUpperCase())}</span>
+          <span class="pname">${esc(c.naam)}</span></button>${vast ? '<span></span>' : `<span class="greep" aria-label="${esc(c.naam)} verslepen"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg></span>`}</div>`,
+        vast ? [] : [{ act: 'cat-weg', id: c.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: c.naam + ' verwijderen' }],
+        vast ? '' : ` data-sid="${esc(c.id)}"`);
     }).join('')}</div>`;
   }
 
@@ -1555,13 +1575,14 @@ function naarInst(pagina) {
 
 /* ================= Sheet en melding ================= */
 /** Eigen bevestigvenster (werkt ook waar de browser confirm() blokkeert, zoals in de preview). */
+/** soort: true of 'gevaar' = rood (verwijderen), 'ontkoppel' = grijsgroen (van een lijst halen), false = neutraal */
 function bevestig(tekst, knop = 'Verwijder', gevaar = true) {
   return new Promise(klaar => {
     const w = $('#bevestig');
     w.innerHTML = `<div class="bv-bg" data-bv="0"></div>
       <div class="bv-kaart" role="alertdialog" aria-modal="true" aria-label="${esc(tekst)}">
         <p>${esc(tekst)}</p>
-        <button type="button" class="btn wide${gevaar ? ' bv-gevaar' : ''}" data-bv="1">${esc(knop)}</button>
+        <button type="button" class="btn wide${gevaar === 'ontkoppel' ? ' bv-ontkoppel' : gevaar ? ' bv-gevaar' : ''}" data-bv="1">${esc(knop)}</button>
         <button type="button" class="btn soft wide" data-bv="0">Annuleer</button>
       </div>`;
     w.hidden = false;
@@ -1634,6 +1655,16 @@ const ACTIES = {
   week: b => { S.week += Number(b.dataset.d); tekenWeek(); },
   'week-nu': () => { if (S.week !== 0) { S.week = 0; tekenWeek(); } },
   klap: b => { const k = b.dataset.key; S.open.has(k) ? S.open.delete(k) : S.open.add(k); tekenWeek(); },
+  'dag-ontkoppel': async b => {
+    const sw = b.closest('.swipe'); if (!sw) return;
+    sluitVeeg();
+    const datum = sw.dataset.datum, rid = sw.dataset.r;
+    const plan = D().mealplan.find(m => m.id === datum), r = recept(rid), d = vanIso(datum);
+    if (!plan || !(await bevestig(`${r ? r.naam : 'Dit recept'} van ${DAGEN[d.getDay()]} halen?`, 'Van deze dag halen', 'ontkoppel'))) return;
+    const vorige = [...plan.recepten], lijst = vorige.filter(id => id !== rid);
+    if (lijst.length) bewaar('mealplan', [{ id: datum, datum, recepten: lijst }]); else verwijder('mealplan', [datum]);
+    melding(`${r ? r.naam : 'Recept'} van ${DAGEN[d.getDay()]} gehaald.`, 'Ongedaan maken', () => bewaar('mealplan', [{ id: datum, datum, recepten: vorige }]));
+  },
   koppel: b => { sluitVeeg(); openKoppel(b.dataset.datum); },
   'naar-recepten': () => { sluitSheet(); wissel('recepten'); },
   ing: b => {
@@ -1648,7 +1679,17 @@ const ACTIES = {
   },
 
   winkel: (b, id) => { S.winkel = id; tekenLijst(); },
-  'inst-toevoeg': () => { const f = $('#headerextra .kopbalk'); instBalk(!!(f && f.hidden)); },
+  'nieuw-venster': () => {
+    const soort = { winkels: ['Nieuwe winkel', 'winkel-form', 'winkel-invoer', 'Winkel', 'Bijvoorbeeld Lidl'],
+      cats: ['Nieuwe categorie', 'cat-form', 'cat-invoer', 'Categorie', 'Bijvoorbeeld Chips en zoutjes'],
+      rcats: ['Nieuwe receptcategorie', 'rcat-form', 'rcat-invoer', 'Receptcategorie', 'Bijvoorbeeld Feestdagen'] }[S.instSub];
+    if (!soort) return;
+    const [titel, formId, inputId, label, voorbeeld] = soort;
+    openSheet(`<h4>${titel}</h4><form id="${formId}">
+      <label class="lbl"><span>${label}</span><input class="field" id="${inputId}" placeholder="${voorbeeld}" autocomplete="off" enterkeyhint="done"></label>
+      <div class="acts"><button class="btn wide">Toevoegen</button></div></form>`);
+    $('#' + inputId).focus();
+  },
   'toevoeg-open': () => { const f = $('#add-form'); toevoegBalk(f && f.hidden); },
   'ac-ster': b => {
     S.acFav = !S.acFav;
@@ -1679,14 +1720,14 @@ const ACTIES = {
   'lijst-weg': async (b, id) => {
     S.swipeOpen = null;
     const p = prod(id); if (!p) return;
-    if (!(await bevestig(`${p.naam} van de lijst halen?`))) { teken(); return; }
+    if (!(await bevestig(`${p.naam} van de lijst halen?`, 'Van de lijst halen', 'ontkoppel'))) { teken(); return; }
     const terug = { id, opLijst: true, afgevinkt: p.afgevinkt, lijstHoeveelheid: p.lijstHoeveelheid, lijstWinkel: p.lijstWinkel, lijstVoor: p.lijstVoor };
     haalVanLijst(p);
     melding(`${p.naam} van de lijst gehaald.`, 'Ongedaan maken', () => bewaar('producten', [terug]));
   },
   'mandje-leeg': async () => {
     const weg = D().producten.filter(p => p.opLijst && p.afgevinkt && (S.winkel === ALLES || winkelVan(p) === S.winkel));
-    if (!weg.length || !(await bevestig(`${aantal(weg.length, 'gekocht product', 'gekochte producten')} van de lijst halen?`, 'Wis'))) return;
+    if (!weg.length || !(await bevestig(`${aantal(weg.length, 'gekocht product', 'gekochte producten')} van de lijst halen?`, 'Van de lijst halen', 'ontkoppel'))) return;
     const terug = weg.map(p => ({ id: p.id, opLijst: true, afgevinkt: true, lijstHoeveelheid: p.lijstHoeveelheid, lijstWinkel: p.lijstWinkel, lijstVoor: p.lijstVoor }));
     bewaar('producten', weg.map(p => Object.assign({ id: p.id }, VAN_LIJST)));
     melding(aantal(weg.length, 'product', 'producten') + ' van de lijst gehaald.', 'Ongedaan maken', () => bewaar('producten', terug));
@@ -1700,7 +1741,7 @@ const ACTIES = {
     if (!d.naam.trim()) { melding('Geef het recept een naam.'); $('#titel-invoer').focus(); return; }
     const nieuwe = (S.rbNieuw || []).filter(p => d.ingredienten.some(i => i.product === p.id));
     if (nieuwe.length) bewaar('producten', nieuwe);
-    bewaar('recepten', [{ id: d.id, naam: cap(d.naam.trim()), categorie: d.categorie || 'overig', uitleg: (d.uitleg || '').trim(),
+    bewaar('recepten', [{ id: d.id, naam: cap(d.naam.trim()), categorie: d.categorie || 'overig', uitleg: d.stappen.map(x => x.trim().replace(/\s*\n\s*/g, ' ')).filter(Boolean).join('\n'),
       ingredienten: d.ingredienten.map(i => ({ product: i.product, hoeveelheid: (i.hoeveelheid || '').trim() })) }]);
     stopBewerk(false);
     melding(nieuwe.length ? `Recept opgeslagen. ${aantal(nieuwe.length, 'nieuw product staat', 'nieuwe producten staan')} onder Overig.` : 'Recept opgeslagen.');
@@ -1709,6 +1750,15 @@ const ACTIES = {
     syncBewerk();
     if (S.rbGewijzigd && !(await bevestig('Je wijzigingen weggooien?', 'Weggooien'))) return;
     stopBewerk(!!(S.receptBewerk && S.receptBewerk.nieuw));
+  },
+  'rb-stap-plus': () => {
+    syncBewerk(); S.receptBewerk.stappen.push(''); S.rbGewijzigd = true;
+    tekenBewerk(); focusStap(S.receptBewerk.stappen.length - 1);
+  },
+  'rb-stap-weg': b => {
+    syncBewerk(); const k = Number(b.dataset.k);
+    S.receptBewerk.stappen.splice(k, 1); if (!S.receptBewerk.stappen.length) S.receptBewerk.stappen.push('');
+    S.rbGewijzigd = true; tekenBewerk();
   },
   'rb-weg': b => { syncBewerk(); S.receptBewerk.ingredienten.splice(Number(b.dataset.i), 1); S.rbGewijzigd = true; tekenBewerk(); },
   'rb-kies': (b, id) => {
@@ -1740,11 +1790,13 @@ const ACTIES = {
   product: (b, id) => { sluitVeeg(); openProduct(id); },
   'product-vink': (b, id) => { const p = prod(id); if (p) nodig(p) ? haalVanLijst(p) : zetOpLijst(p); },
   'product-ster': (b, id) => {
+    const inLijst = !!b.closest('#ac');
     sluitVeeg();
     const p = prod(id); if (!p) return;
     const nu = !p.favoriet;
     bewaar('producten', [{ id, favoriet: nu }]);
     melding(nu ? `${p.naam} staat bij je favorieten.` : `${p.naam} is geen favoriet meer.`);
+    if (inLijst) { $('#add-zoek').focus(); tekenAc(); }
   },
   'product-weg': async (b, id) => {
     sluitVeeg();
@@ -1818,6 +1870,19 @@ document.addEventListener('click', e => {
   verstuur(b.form);
 });
 document.addEventListener('keydown', e => {
+  if (e.target.classList && e.target.classList.contains('stap-invoer') && !e.isComposing) {
+    const k = Number(e.target.dataset.k);
+    if (e.key === 'Enter') {
+      e.preventDefault(); syncBewerk();
+      S.receptBewerk.stappen.splice(k + 1, 0, ''); S.rbGewijzigd = true;
+      tekenBewerk(); focusStap(k + 1); return;
+    }
+    if (e.key === 'Backspace' && !e.target.value && S.receptBewerk.stappen.length > 1) {
+      e.preventDefault(); syncBewerk();
+      S.receptBewerk.stappen.splice(k, 1); S.rbGewijzigd = true;
+      tekenBewerk(); focusStap(Math.max(0, k - 1), true); return;
+    }
+  }
   if (e.key === 'Enter' && e.target.id === 'rb-zoek') { e.preventDefault(); const eerste = $('#rb-ac .ac-item'); if (eerste) eerste.click(); return; }
   if (e.key === 'Enter' && e.target.id === 'titel-invoer') { e.preventDefault(); e.target.blur(); return; }
   if (e.key !== 'Enter' || e.isComposing) return;
@@ -1839,6 +1904,7 @@ document.addEventListener('submit', e => {
     const kleur = palet.find(k => !gebruikt.map(g => String(g).toUpperCase()).includes(k)) || palet[D().winkels.length % palet.length];
     const w = { id: 'w' + nieuwId(), naam, kleur, positie: Math.max(0, ...D().winkels.map(x => x.positie)) + 1, route: [] };
     inp.value = '';
+    sluitSheet();
     S.routeWinkel = w.id;
     bewaar('winkels', [w]);
     melding(`${naam} toegevoegd.`, 'Route instellen', () => naarInst('route'));
@@ -1849,6 +1915,8 @@ document.addEventListener('submit', e => {
     if (!naam) return;
     if (rcats().some(c => c.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} bestaat al.`);
     inp.value = '';
+    sluitSheet();
+    melding(`${cap(naam)} toegevoegd.`);
     bewaar('receptcategorieen', [{ id: 'rc' + nieuwId(), naam: cap(naam), positie: Math.max(0, ...(D().receptcategorieen || []).map(c => c.positie)) + 1 }]);
   }
   if (id === 'cat-form') {
@@ -1857,6 +1925,8 @@ document.addEventListener('submit', e => {
     if (!naam) return;
     if (D().categorieen.some(c => c.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} bestaat al.`);
     inp.value = '';
+    sluitSheet();
+    melding(`${cap(naam)} toegevoegd.`);
     bewaar('categorieen', [{ id: 'c' + nieuwId(), naam: cap(naam), positie: Math.max(0, ...D().categorieen.map(c => c.positie)) + 1 }]);
   }
 });
@@ -1865,6 +1935,7 @@ document.addEventListener('input', e => {
   if (S.receptBewerk && (e.target.closest('#recept-detail') || e.target.id === 'titel-invoer')) S.rbGewijzigd = true;
   if (e.target.id === 'rb-zoek') tekenRbAc();
   if (e.target.id === 'titel-invoer') groeiTitel();
+  if (e.target.classList && e.target.classList.contains('stap-invoer')) { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }
   if (e.target.id === 'add-zoek') tekenAc();
   if (e.target.id === 'zoek-r') { S.zoekR = e.target.value; tekenRecepten(); }
   if (e.target.id === 'zoek-p') { S.zoekP = e.target.value; tekenProducten(); }
