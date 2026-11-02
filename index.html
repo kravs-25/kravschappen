@@ -436,6 +436,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbw5coGQ3021Tyjm19Ky7-_P
 (function () {
   if (window.google && google.script && google.script.run) return; // draait binnen Apps Script
   if (!API_URL) return;                                            // geen loket: previewmodus
+  window.API_MODUS = true;
   const KEY = 'kravschappen-code';
   const code = () => { try { return localStorage.getItem(KEY) || ''; } catch (e) { return ''; } };
   function vraagCode(melding) {
@@ -645,23 +646,29 @@ function weeknr(d) {
 }
 
 /* ================= Server en synchronisatie ================= */
+/* Snel opstarten: de laatst bekende stand staat op de telefoon. De app toont die meteen
+   en haalt op de achtergrond de nieuwste stand op. */
+const LOKAAL = 'kravschappen-stand';
+function onthoudLokaal(s) { if (!window.API_MODUS) return; try { localStorage.setItem(LOKAAL, JSON.stringify(s)); } catch (e) {} }
+function leesLokaal() { if (!window.API_MODUS) return null; try { return JSON.parse(localStorage.getItem(LOKAAL)); } catch (e) { return null; } }
 function laad() {
+  if (!S.data) { const l = leesLokaal(); if (l) { S.data = l; wissel(S.tab); } }
   google.script.run
-    .withSuccessHandler(s => { const eerste = !S.data; S.data = s; eerste ? wissel(S.tab) : teken(); })
+    .withSuccessHandler(s => { const eerste = !S.data; S.data = s; onthoudLokaal(s); if (eerste) wissel(S.tab); else if (!bezig) teken(); })
     .withFailureHandler(e => { if (!S.data) { $('#subtitle').textContent = 'Laden lukte niet: ' + e.message + '. Herlaad de pagina.'; } })
     .getState();
 }
 function bel(fn, ...args) {
   bezig++; teller++;
   google.script.run
-    .withSuccessHandler(s => { bezig--; if (!bezig) { S.data = s; teken(); } })
+    .withSuccessHandler(s => { bezig--; if (!bezig) { S.data = s; onthoudLokaal(s); teken(); } })
     .withFailureHandler(e => { bezig--; melding('Opslaan lukte niet (' + e.message + '). Gegevens worden opnieuw geladen.'); laad(); })
     [fn](...args);
 }
 function peil() {
   if (!S.data || bezig || document.visibilityState !== 'visible') return;
   const t = teller;
-  google.script.run.withSuccessHandler(s => { if (!bezig && t === teller) { S.data = s; teken(); } }).getState();
+  google.script.run.withSuccessHandler(s => { if (!bezig && t === teller) { S.data = s; onthoudLokaal(s); teken(); } }).getState();
 }
 setInterval(peil, 5000);
 document.addEventListener('visibilitychange', peil);
