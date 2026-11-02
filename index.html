@@ -56,8 +56,11 @@
   --tab-actief:rgba(255,255,255,.12); --tab-licht:rgba(255,255,255,.18); --tab-schaduw:rgba(0,0,0,.45);
 }
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable;background:var(--bg);overscroll-behavior:none;min-height:calc(100% + env(safe-area-inset-top,0px))}
-body{overscroll-behavior:none;min-height:100vh;min-height:100lvh}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+/* De pagina zelf scrolt nooit; alleen #scroller scrolt. Zo staat de menubalk altijd onderaan
+   en blijft hij altijd aanklikbaar, ook bij weinig inhoud of na doorscrollen op iOS. */
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+#scroller{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-gutter:stable;padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 body{
   margin:0;background:var(--bg);color:var(--ink);
   font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -369,7 +372,7 @@ h3.cat{font-size:15px;font-weight:700;color:var(--muted);margin:20px 4px 6px;dis
 #terug[hidden]{display:none}
 #preview-pill{white-space:nowrap;width:max-content}
 /* ================= Tabbalk: zwevend glas, alleen iconen ================= */
-body{padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
+
 .tabs{left:0;right:0;bottom:calc(12px + env(safe-area-inset-bottom,0px));padding:0 20px;background:none;border:0}
 .tabs .inner{
   max-width:400px;height:64px;padding:6px;gap:4px;border-radius:999px;
@@ -398,10 +401,10 @@ body{padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div id="scroller"><div class="wrap">
   <header class="top"><button type="button" id="terug" class="back" data-act="inst-terug" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span id="terug-tekst">Instellingen</span></button><div class="toprow"><div><h1 id="title">Boodschappen</h1><p id="subtitle">Even ophalen…</p></div><div id="topextra"></div></div><div id="headerextra"></div></header>
   <main id="main"></main>
-</div>
+</div></div>
 
 <nav class="tabs" aria-label="Onderdelen">
   <div class="inner">
@@ -646,6 +649,8 @@ function weeknr(d) {
 }
 
 /* ================= Server en synchronisatie ================= */
+window.addEventListener('error', e => { try { melding('Er ging iets mis: ' + (e.message || 'onbekende fout')); } catch (x) {} });
+window.addEventListener('unhandledrejection', e => { try { melding('Er ging iets mis: ' + ((e.reason && e.reason.message) || 'onbekende fout')); } catch (x) {} });
 /* Snel opstarten: de laatst bekende stand staat op de telefoon. De app toont die meteen
    en haalt op de achtergrond de nieuwste stand op. */
 const LOKAAL = 'kravschappen-stand';
@@ -780,7 +785,7 @@ function wissel(tab) {
   $('#main').innerHTML = VIEWS[tab].skelet();
   teken();
   pasTitelAan();
-  window.scrollTo(0, 0);
+  $('#scroller').scrollTop = 0;
 }
 /** Lange titels van een woord (zoals "Receptcategorieën") worden iets kleiner, zodat de knop ernaast blijft passen. */
 function pasTitelAan() {
@@ -1327,7 +1332,7 @@ function sleepScroll() {
   const kop = $('header.top').getBoundingClientRect().bottom;
   const y = sleep.y;
   const stap = y > innerHeight - 120 ? 10 : y < kop + 40 ? -10 : 0;
-  if (stap) { window.scrollBy(0, stap); sleepVolg(y); }
+  if (stap) { $('#scroller').scrollBy(0, stap); sleepVolg(y); }
   requestAnimationFrame(sleepScroll);
 }
 function sleepKlaar(e) {
@@ -1605,6 +1610,8 @@ $('#toast-btn').onclick = () => { const a = toastActie; toastActie = null; $('#t
 /* ================= Acties ================= */
 const ACTIES = {
   tab: async b => {
+    // vangnet: nooit vast blijven zitten in een half afgemaakte veeg- of sleepbeweging
+    S.slepen = false; S.uitgesteld = false; veeg = null; sleep = null; klikOnderdrukken = false;
     if (!S.data) return;
     if (S.receptBewerk) { syncBewerk(); if (S.rbGewijzigd && !(await bevestig('Je wijzigingen aan het recept weggooien?', 'Weggooien'))) return; S.receptBewerk = null; }
     if (b.dataset.tab === 'instellingen') S.instSub = null;
