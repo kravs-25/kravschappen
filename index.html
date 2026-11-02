@@ -59,7 +59,12 @@
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
 /* De pagina zelf scrolt nooit; alleen #scroller scrolt. Zo staat de menubalk altijd onderaan
    en blijft hij altijd aanklikbaar, ook bij weinig inhoud of na doorscrollen op iOS. */
-html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+html,body{overflow:hidden;overscroll-behavior:none}
+/* iOS rekent bij web-apps op het beginscherm soms de statusbalk niet mee in de schermhoogte,
+   waardoor alles wat onderaan vastzit iets hoger komt te staan. Daarom is de pagina altijd
+   schermhoog plus de statusbalk; omdat hij niet scrolt, heeft dat verder geen gevolgen. */
+html{height:calc(100% + env(safe-area-inset-top,0px))}
+body{height:100%}
 #scroller{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-gutter:stable;padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 body{
   margin:0;background:var(--bg);color:var(--ink);
