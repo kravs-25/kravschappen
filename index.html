@@ -29,6 +29,7 @@
   --veeg-open:var(--merk); --wijzig:#8C6E55; --veeg-favoriet:var(--merk);
   /* winkelkleuren; een winkel bewaart de naam van het token ('winkel-1'), niet de kleur */
   --winkel-1:#B06A48; --winkel-2:#8A8550; --winkel-3:#8B78B8; --winkel-4:#5A9585; --winkel-5:#B56A82; --winkel-6:#7D8A97; --winkel-7:#A8873F;
+  --winkel-8:#9A4A5A; /* wijnrood: bewust donkerder en paarser dan --accent (verwijderen) */
   /* chips: tekst = --c gemengd met --chip-meng; vlak = --c met --chip-vlak dekking */
   --chip-meng:var(--op-kleur); --chip-tint:55%; --chip-vlak:28%;
   /* transparant: waas achter vensters en schaduwen */
@@ -42,6 +43,7 @@
   --font:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --fs-xs:12px; --fs-s:14px; --fs-m:15px; --fs-basis:17px; --fs-l:18px; --fs-xl:24px; --fs-titel:34px;
   --gewicht-naam:500; --gewicht-vet:700; --gewicht-zwaar:800;
+  --spatie-titel:-0.02em; --spatie-kop:-0.01em; --spatie-label:.04em; /* letterafstand: titel, vensterkop, label */
 
   /* ---------- Vorm ---------- */
   --r-s:10px; --r-m:14px; --r-l:18px; --r-xl:24px; --r-rond:999px; --r-blok:var(--r-xl); /* hoeken van blokken met rijen */
@@ -66,6 +68,16 @@
   --ico:32px;       /* icoon in een menurij */
   --icoonknop:36px; /* knop binnen een veld */
   --icoon-s:16px; --icoon-m:22px; --icoon-l:28px;
+  /* lijnen: randen, scheidingen, focusrand */
+  --lijn:1px; --lijn-dik:2px;
+  /* tekeningen in CSS (vormen, geen afstanden): vinkje, pijltjes, keuzepijl, schakelaar */
+  --vink-b:10px; --vink-h:6px; --vink-dik:2.5px;
+  --pijl:9px; --pijl-l:10px;
+  --keuzepijl:5px; --keuzepijl-rand:15px;
+  --schakel-b:51px; --schakel-h:31px; --schakel-knop:27px;
+  /* vaste breedtes van onderdelen */
+  --aantal-breedte:104px;   /* aantal-veld in de bewerkmodus van een recept */
+  --keuzelijst-marge:290px; /* ruimte boven en onder de keuzelijst bij een recept */
   --veegknop:72px;
   /* actieknop onderin het midden (+, Nieuw, potlood, vinkje) */
   --actie-hoogte:var(--menu-knop); --actie-afstand:var(--ruimte-3); /* even groot als de menuknop */
@@ -73,6 +85,8 @@
   --actie-ruimte:calc(var(--actie-afstand) + var(--actie-hoogte) + var(--ruimte-6));
   /* menu rechtsboven: plek voor de puntjes links van de cirkel, en het aantal tabs */
   --menu-knop:var(--tik); --menu-puntjes:var(--ruimte-6); --tab-aantal:4;
+  /* buitenmaat van de dichte menupil: cirkel plus puntjes, met --ruimte-1 rondom */
+  --menu-breedte:calc(var(--menu-knop) + var(--menu-puntjes) + var(--ruimte-1) * 2); --menu-hoogte:calc(var(--menu-knop) + var(--ruimte-1) * 2);
 
   /* ---------- Beweging ---------- */
   --duur-snel:.15s; --duur:.2s; --duur-traag:.25s; --duur-lus:1.2s; /* lus: herhalende animatie (skelet) */
@@ -103,14 +117,16 @@ body{
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
 button:disabled{opacity:.35;cursor:default}
 input,select,textarea{font:inherit;color:var(--ink)}
-:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+:focus-visible{outline:var(--lijn-dik) solid var(--primary);outline-offset:var(--lijn-dik)}
 a{color:var(--primary)}
 .wrap{max-width:var(--breedte);margin:0 auto;padding:0 var(--rand)}
 /* Ruimte boven de kop: de veilige zone plus --ruimte-5, zodat de menuknop vrij staat van de vervaagde statusbalk van Safari (web-app op het beginscherm) */
 header.top{position:sticky;top:0;z-index:var(--z-kop);background:var(--bg);padding:calc(var(--ruimte-5) + env(safe-area-inset-top,0px)) 0 var(--ruimte-2)}
 body.preview header.top{padding-top:calc(var(--ruimte-6) + var(--ruimte-1) + env(safe-area-inset-top,0px))}
-#preview-pill{position:fixed;top:calc(var(--ruimte-1) + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:var(--z-label);background:var(--accent);color:var(--op-kleur);font-size:var(--fs-xs);font-weight:var(--gewicht-zwaar);letter-spacing:.04em;border-radius:var(--r-rond);padding:var(--ruimte-1) var(--ruimte-3);text-align:center;white-space:nowrap;width:max-content}
-.toprow{display:flex;align-items:center;justify-content:space-between;gap:var(--ruimte-3);min-height:var(--tik)}
+body.preview .tabs{top:calc(var(--ruimte-6) + var(--ruimte-1) + env(safe-area-inset-top,0px))}
+#preview-pill{position:fixed;top:calc(var(--ruimte-1) + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:var(--z-label);background:var(--accent);color:var(--op-kleur);font-size:var(--fs-xs);font-weight:var(--gewicht-zwaar);letter-spacing:var(--spatie-label);border-radius:var(--r-rond);padding:var(--ruimte-1) var(--ruimte-3);text-align:center;white-space:nowrap;width:max-content}
+/* De titelregel houdt rechts plek vrij voor het menu, dat vast staat (zie .tabs) */
+.toprow{display:flex;align-items:center;gap:var(--ruimte-3);min-height:var(--menu-hoogte);padding-right:calc(var(--menu-breedte) + var(--ruimte-3))}
 .toprow > div:first-child{flex:1;min-width:0}
 #title{overflow-wrap:normal}
 /* Acties van de pagina (+, Nieuw, potlood, vinkje): volle crème knop onderin het midden */
@@ -119,16 +135,28 @@ body.preview header.top{padding-top:calc(var(--ruimte-6) + var(--ruimte-1) + env
 #topextra > *{background:var(--primary);color:var(--primary-ink)}
 #topextra .round{width:var(--actie-hoogte);height:var(--actie-hoogte)}
 #topextra .btn{min-height:var(--actie-hoogte);border-radius:var(--r-rond);padding:0 var(--ruimte-4)}
-header.top h1{margin:0;font-size:var(--fs-titel);font-weight:var(--gewicht-zwaar);letter-spacing:-0.02em;line-height:1.05}
+header.top h1{margin:0;font-size:var(--fs-titel);font-weight:var(--gewicht-zwaar);letter-spacing:var(--spatie-titel);line-height:1.05}
 #headerextra:empty{display:none}
 #headerextra .stores{margin-top:var(--ruimte-3)}
 .toevoeg-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
+.bewerk-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
 #lijst{padding-top:0}
 #headerextra .kopzoek{margin:var(--ruimte-3) 0 0;min-height:var(--tik)}
-.bewerk-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
-.titel-invoer{display:block;width:calc(100% + var(--ruimte-3) + 1px);margin-left:calc((var(--ruimte-3) + 1px) * -1);font:inherit;color:inherit;letter-spacing:inherit;line-height:1.1;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-1) var(--ruimte-3);min-height:var(--tik);resize:none;overflow:hidden;font-weight:var(--gewicht-zwaar)}
-.titel-invoer:focus{outline:2px solid var(--primary);outline-offset:0}
-.kaal-select{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);color:var(--ink);padding:var(--ruimte-3) calc(var(--ruimte-6) + var(--ruimte-3)) var(--ruimte-3) var(--ruimte-4);min-height:var(--h-m);-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 22px) 54%,calc(100% - 17px) 54%;background-size:5px 5px;background-repeat:no-repeat}
+/* Zoekbalk met een knop ernaast (Nieuw bij Recepten): de gewone rij veld + knop (.add) */
+#headerextra .add{margin-bottom:0}
+#headerextra .add .kopzoek{margin:0}
+.titel-invoer{display:block;width:calc(100% + var(--ruimte-3) + var(--lijn));margin-left:calc((var(--ruimte-3) + var(--lijn)) * -1);font:inherit;color:inherit;letter-spacing:inherit;line-height:1.1;background:var(--surface);border:var(--lijn) solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-1) var(--ruimte-3);min-height:var(--tik);resize:none;overflow:hidden;font-weight:var(--gewicht-zwaar)}
+.titel-invoer:focus{outline:var(--lijn-dik) solid var(--primary);outline-offset:0}
+/* Receptpagina: rondje met de emoji (of de beginletter) links naast de titel.
+   Alleen in de bewerkmodus is het rondje een veld waarin je elke emoji kunt kiezen. */
+#title.met-lead{display:flex;align-items:center;gap:var(--ruimte-4)}
+#title.met-lead .titel-tekst{min-width:0}
+#title.met-lead .titel-invoer{flex:1;width:auto}
+.titel-lead{flex:none;width:var(--tik);height:var(--tik);border-radius:var(--r-rond);display:grid;place-items:center;padding:0;border:0;background:color-mix(in srgb,var(--primary) 14%,transparent);color:var(--primary);font:inherit;font-size:var(--fs-xl);font-weight:var(--gewicht-zwaar);letter-spacing:0;line-height:1;text-align:center}
+input.titel-lead{border:var(--lijn) solid var(--line);caret-color:transparent}
+input.titel-lead::placeholder{color:var(--primary);opacity:1}
+input.titel-lead:focus{outline:var(--lijn-dik) solid var(--primary);outline-offset:0}
+.kaal-select{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);color:var(--ink);padding:var(--ruimte-3) calc(var(--ruimte-6) + var(--ruimte-3)) var(--ruimte-3) var(--ruimte-4);min-height:var(--h-m);-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - var(--keuzepijl-rand) - var(--lijn-dik) - var(--keuzepijl)) 54%,calc(100% - var(--keuzepijl-rand) - var(--lijn-dik)) 54%;background-size:var(--keuzepijl) var(--keuzepijl);background-repeat:no-repeat}
 .check.staprij,.check.stapweergave{grid-template-columns:var(--rondje) 1fr var(--rondje);align-items:start;min-height:var(--h-m)}
 .check.staprij{grid-template-columns:var(--rondje) 1fr var(--rondje) calc(var(--tik) - var(--ruimte-1) * 2);padding-right:var(--ruimte-2)}
 .staprij .greep{margin:calc((var(--rondje) - var(--tik)) / 2) calc(var(--ruimte-1) * -1)}
@@ -138,35 +166,34 @@ header.top h1{margin:0;font-size:var(--fs-titel);font-weight:var(--gewicht-zwaar
 .stap-invoer{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);line-height:1.45;color:var(--ink);resize:none;overflow:hidden;padding:var(--ruimte-0) 0;margin:0;outline:none}
 .stap-invoer::placeholder{color:var(--muted)}
 .staprij:focus-within{background:color-mix(in srgb,var(--primary) 6%,transparent)}
-.rb-stap-plus{display:block;width:100%;text-align:left;border-top:1px solid var(--scheiding)}
+.rb-stap-plus{display:block;width:100%;text-align:left;border-top:var(--lijn) solid var(--scheiding)}
 .rb-stap-plus .pmeta{font-size:var(--fs-basis);margin:0}
-.check.bewerkrij{grid-template-columns:var(--rondje) 1fr 104px;min-height:var(--h-m)}
+.check.bewerkrij{grid-template-columns:var(--rondje) 1fr var(--aantal-breedte);min-height:var(--h-m)}
 .minrond{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);background:var(--ontkoppel);color:var(--op-kleur);display:grid;place-items:center}
 .minrond svg{width:var(--icoon-s);height:var(--icoon-s)}
-.aantal-invoer{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:var(--r-s);padding:var(--ruimte-2) var(--ruimte-2);font:inherit;font-size:var(--fs-basis);text-align:right;color:var(--ink)}
+.aantal-invoer{width:100%;min-width:0;border:var(--lijn) solid var(--line);background:var(--bg);border-radius:var(--r-s);padding:var(--ruimte-2) var(--ruimte-2);font:inherit;font-size:var(--fs-basis);text-align:right;color:var(--ink)}
 .rb-toevoeg .bewerkrij{grid-template-columns:var(--rondje) 1fr}
 .rb-toevoeg input{width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);color:var(--ink);padding:var(--ruimte-2) 0;outline:none}
 .rb-toevoeg input::placeholder{color:var(--muted)}
 .rb-wrap{position:relative}
-.kaal-select:focus{outline:2px solid var(--primary);outline-offset:-2px;border-radius:var(--r-blok)}
+.kaal-select:focus{outline:var(--lijn-dik) solid var(--primary);outline-offset:calc(var(--lijn-dik) * -1);border-radius:var(--r-blok)}
 .check.detailrij{grid-template-columns:1fr auto auto;min-height:var(--h-m)}
 .rz-rij{width:100%;text-align:left}
 .rz-rij .chevr{justify-self:end;margin-right:var(--ruimte-1)}
 .pick[hidden],.koppel-groep[hidden]{display:none}
-#koppel-zoek{margin:0 0 var(--ruimte-1)}
+#koppel-rij{margin:0 0 var(--ruimte-1)}
 #koppel h3.cat:first-child{margin-top:var(--ruimte-3)}
 header.top p{margin:var(--ruimte-1) 0 0;color:var(--muted);font-size:var(--fs-m)}
-#headerextra #w-tabs{margin-bottom:0}
 /* Algemene velden en knoppen */
-.field{display:block;width:100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--tik);-webkit-appearance:none;appearance:none}
+.field{display:block;width:100%;min-width:0;background:var(--surface);border:var(--lijn) solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--tik);-webkit-appearance:none;appearance:none}
 .field::placeholder{color:var(--muted)}
 /* Zoekvelden in menustijl: een ronde pil in de menukleur, zonder rand */
 input[type=search].field{border:0;border-radius:var(--r-rond);background:var(--menu-vlak);padding:0 var(--ruimte-4)}
-select.field{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 54%,calc(100% - 15px) 54%;background-size:5px 5px;background-repeat:no-repeat;padding-right:calc(var(--ruimte-6) + var(--ruimte-2))}
+select.field{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - var(--keuzepijl-rand) - var(--keuzepijl)) 54%,calc(100% - var(--keuzepijl-rand)) 54%;background-size:var(--keuzepijl) var(--keuzepijl);background-repeat:no-repeat;padding-right:calc(var(--ruimte-6) + var(--ruimte-2))}
 textarea.field{resize:vertical;min-height:var(--h-tekstvak)}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--ruimte-1);background:var(--primary);color:var(--primary-ink);border-radius:var(--r-rond);padding:0 var(--ruimte-4);font-weight:var(--gewicht-vet);min-height:var(--tik);white-space:nowrap;text-align:center}
 .btn.soft{background:var(--primary-soft);color:var(--ink)}
-.btn.danger{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn.danger{background:transparent;color:var(--accent);border:var(--lijn-dik) solid var(--accent)}
 .btn.wide{width:100%}
 .add{display:flex;gap:var(--ruimte-2);margin:var(--ruimte-3) 0 var(--ruimte-1)}
 .add .field{flex:1}
@@ -177,18 +204,18 @@ textarea.field{resize:vertical;min-height:var(--h-tekstvak)}
 .sheet.zoeken #sheet-inhoud{flex:1;min-height:0;display:flex;flex-direction:column}
 .sheet.zoeken #add-form{margin:0}
 #ac{position:static;flex:0 1 auto;min-height:0;max-height:none;margin-top:var(--ruimte-3);box-shadow:none}
-.ac-lijst{position:absolute;left:0;right:0;top:calc(100% + var(--ruimte-1));z-index:var(--z-keuzelijst);max-height:calc(100vh - 290px - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);border:0;border-radius:var(--r-blok);touch-action:pan-y;box-shadow:var(--schaduw-lijst)}
-.ac-item{display:grid;grid-template-columns:auto 1fr auto;gap:var(--ruimte-3);align-items:center;width:100%;padding:0 var(--ruimte-3) 0 0;min-height:var(--h-m);border-top:1px solid var(--scheiding)}
+.ac-lijst{position:absolute;left:0;right:0;top:calc(100% + var(--ruimte-1));z-index:var(--z-keuzelijst);max-height:calc(100vh - var(--keuzelijst-marge) - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);border:0;border-radius:var(--r-blok);touch-action:pan-y;box-shadow:var(--schaduw-lijst)}
+.ac-item{display:grid;grid-template-columns:auto 1fr auto;gap:var(--ruimte-3);align-items:center;width:100%;padding:0 var(--ruimte-3) 0 0;min-height:var(--h-m);border-top:var(--lijn) solid var(--scheiding)}
 .ac-item:first-child{border-top:0}
 .wis-knop{display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);width:100%;margin-top:var(--ruimte-2);min-height:var(--h-m);border-radius:var(--r-rond);background:var(--surface);border:0;color:var(--ontkoppel);font-weight:var(--gewicht-vet);text-align:center}
-.wis-knop svg{width:var(--icoon-s);height:var(--icoon-s)}
+.wis-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
 .wis-knop:active{background:color-mix(in srgb,var(--ontkoppel) 10%,var(--surface))}
-.ac-kop{position:sticky;top:0;z-index:var(--z-binnen);display:flex;justify-content:space-between;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-1);background:var(--surface);font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);border-top:1px solid var(--scheiding)}
+.ac-kop{position:sticky;top:0;z-index:var(--z-binnen);display:flex;justify-content:space-between;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-1);background:var(--surface);font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);border-top:var(--lijn) solid var(--scheiding)}
 .ac-kop:first-child{border-top:0}
 .ac-kop + .ac-item{border-top:0}
 #ac .swipe{margin:0}
 #ac .swipe > .ac-item{border-top:0;background:var(--surface)}
-#ac .swipe + .swipe{border-top:1px solid var(--scheiding)}
+#ac .swipe + .swipe{border-top:var(--lijn) solid var(--scheiding)}
 #ac .swipe-weg{border-radius:0}
 .ac-plus{align-self:stretch;display:grid;place-items:center;padding:0 0 0 var(--ruimte-3)}
 .ac-naam{align-self:stretch;display:flex;align-items:center;min-width:0;padding:var(--ruimte-3) 0}
@@ -199,15 +226,15 @@ textarea.field{resize:vertical;min-height:var(--h-tekstvak)}
 .ac-item .pname b{font-weight:var(--gewicht-zwaar)}
 .ac-item .status{font-size:var(--fs-s);color:var(--muted);white-space:nowrap}
 .ac-nieuw{color:var(--primary);font-weight:var(--gewicht-vet)}
-.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r-blok);padding:var(--ruimte-5) var(--ruimte-4);color:var(--muted);margin-top:var(--ruimte-4)}
+.empty{background:var(--surface);border:var(--lijn) dashed var(--line);border-radius:var(--r-blok);padding:var(--ruimte-5) var(--ruimte-4);color:var(--muted);margin-top:var(--ruimte-4)}
 .empty strong{display:block;color:var(--ink);font-size:var(--fs-l);margin-bottom:var(--ruimte-1)}
 .empty .btn{margin-top:var(--ruimte-3)}
 /* Vinkje */
-.tick{width:var(--vinkje);height:var(--vinkje);border-radius:var(--r-rond);border:2px solid var(--line);display:grid;place-items:center;transition:background var(--duur-snel),border-color var(--duur-snel),transform var(--duur-snel);flex:0 0 var(--vinkje)}
+.tick{width:var(--vinkje);height:var(--vinkje);border-radius:var(--r-rond);border:var(--lijn-dik) solid var(--line);display:grid;place-items:center;transition:background var(--duur-snel),border-color var(--duur-snel),transform var(--duur-snel);flex:0 0 var(--vinkje)}
 .on .tick{background:var(--primary);border-color:var(--primary)}
-.on .tick::after,.item.done .tick::after{content:"";width:10px;height:6px;border-left:2.5px solid var(--primary-ink);border-bottom:2.5px solid var(--primary-ink);transform:translateY(-1px) rotate(-45deg)}
+.on .tick::after,.item.done .tick::after{content:"";width:var(--vink-b);height:var(--vink-h);border-left:var(--vink-dik) solid var(--primary-ink);border-bottom:var(--vink-dik) solid var(--primary-ink);transform:translateY(-1px) rotate(-45deg)}
 /* Op-de-lijst-knop: plus wordt een tasje, zodat het niet lijkt op afvinken */
-.addbtn{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);border:2px solid color-mix(in srgb,var(--muted) 55%,transparent);display:grid;place-items:center;color:var(--muted);transition:background-color var(--duur-snel),border-color var(--duur-snel),color var(--duur-snel),transform var(--duur-snel)}
+.addbtn{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);border:var(--lijn-dik) solid color-mix(in srgb,var(--muted) 55%,transparent);display:grid;place-items:center;color:var(--muted);transition:background-color var(--duur-snel),border-color var(--duur-snel),color var(--duur-snel),transform var(--duur-snel)}
 .addbtn svg{grid-area:1/1;width:var(--icoon-s);height:var(--icoon-s)}
 .addbtn .bag{display:none}
 .on .addbtn{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
@@ -238,14 +265,14 @@ h3.dagkop.leeg{opacity:.75}
 .swipe-wk{background:var(--c)}
 .swipe-weg svg,.swipe-wk svg{width:var(--icoon-l);height:var(--icoon-l)}
 .items .swipe{margin:0}
-.items .swipe + .swipe{border-top:1px solid var(--scheiding)}
+.items .swipe + .swipe{border-top:var(--lijn) solid var(--scheiding)}
 .items .swipe-weg{border-radius:0}
 .items .item{background:var(--surface)}
 .swipe > .item{border-top:0}
 /* Recepten van één dag samen in één blok, net als de boodschappenlijst */
 .dag-groep{background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden;margin-bottom:0}
 .dag-groep .swipe{margin:0}
-.dag-groep .swipe + .swipe{border-top:1px solid var(--scheiding)}
+.dag-groep .swipe + .swipe{border-top:var(--lijn) solid var(--scheiding)}
 .dag-groep .recipe{border:0;border-radius:0;margin:0}
 .dag-groep .swipe-weg{border-radius:0}
 .recipe-head{display:grid;grid-template-columns:var(--rondje) 1fr auto;align-items:center;gap:var(--ruimte-3);width:100%;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-3) var(--ruimte-3);min-height:var(--rij)}
@@ -256,15 +283,18 @@ h3.dagkop.leeg{opacity:.75}
 .weekpijl svg{width:var(--icoon-m);height:var(--icoon-m)}
 .weekbalk .weeklabel{padding:0 var(--ruimte-4);color:var(--ink)}
 .weekbalk .weeklabel.active{background:var(--actief);color:var(--op-kleur)}
-.dagkop.vandaag{color:var(--primary)}
+/* Vandaag: kop in de gewone tekstkleur met direct achter de datum een volle crème chip "Vandaag" */
+.dagkop.vandaag{color:var(--ink)}
+.dagkop.vandaag > span{display:inline-flex;align-items:center;gap:var(--ruimte-2)}
+.chip.vandaag-chip{background:var(--primary);color:var(--primary-ink)}
 .dag-plus-rij{display:flex;align-items:center;justify-content:center;width:100%;min-height:var(--tik);padding:var(--ruimte-2) var(--ruimte-3);text-align:center}
 .dag-plus-rij .addbtn{width:var(--rondje);height:var(--rondje)}
 .dag-plus-rij .pmeta{margin:0;font-size:var(--fs-basis)}
-.dag-groep .swipe + .dag-plus-rij{border-top:1px solid var(--scheiding)}
+.dag-groep .swipe + .dag-plus-rij{border-top:var(--lijn) solid var(--scheiding)}
 .dag-plus-rij:active{background:var(--primary-soft)}
-.recipe .ings{padding:0;margin:0;border-top:1px solid var(--scheiding);background:color-mix(in srgb,var(--bg) 55%,var(--surface))}
-.ings li + li .ing,.ings li + li.leeg-ing{border-top:1px solid var(--scheiding)}
-.chev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:calc(var(--ruimte-1) * -1) var(--ruimte-1) 0 0;transition:transform var(--duur-snel)}
+.recipe .ings{padding:0;margin:0;border-top:var(--lijn) solid var(--scheiding);background:color-mix(in srgb,var(--bg) 55%,var(--surface))}
+.ings li + li .ing,.ings li + li.leeg-ing{border-top:var(--lijn) solid var(--scheiding)}
+.chev{width:var(--pijl-l);height:var(--pijl-l);border-right:var(--lijn-dik) solid var(--muted);border-bottom:var(--lijn-dik) solid var(--muted);transform:rotate(45deg);margin:calc(var(--ruimte-1) * -1) var(--ruimte-1) 0 0;transition:transform var(--duur-snel)}
 [aria-expanded=true] .chev{transform:rotate(-135deg);margin-top:var(--ruimte-1)}
 .ings{list-style:none;margin:0;padding:0 var(--ruimte-2) var(--ruimte-2)}
 .ing{display:grid;grid-template-columns:var(--rondje) 1fr auto auto;align-items:center;gap:var(--ruimte-3);width:100%;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-3) var(--ruimte-3);border-radius:0;min-height:var(--h-m)}
@@ -276,7 +306,7 @@ h3.dagkop.leeg{opacity:.75}
 /* Boodschappen */
 .stores{display:flex;width:fit-content;max-width:100%;gap:0;margin-top:var(--ruimte-1);padding:var(--ruimte-1);overflow-x:auto;scrollbar-width:none;border-radius:var(--r-rond);background:var(--menu-vlak)}
 .stores::-webkit-scrollbar{display:none}
-.storetab{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);padding:var(--ruimte-2) var(--ruimte-3);border-radius:var(--r-m);border:2px solid transparent;background:var(--tint);font-weight:var(--gewicht-vet);min-height:var(--tik)}
+.storetab{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);padding:var(--ruimte-2) var(--ruimte-3);border-radius:var(--r-m);border:var(--lijn-dik) solid transparent;background:var(--tint);font-weight:var(--gewicht-vet);min-height:var(--tik)}
 .storetab .n{font-variant-numeric:tabular-nums;font-size:var(--fs-s);background:var(--tint);border-radius:var(--r-rond);padding:var(--ruimte-0) var(--ruimte-2);color:var(--muted)}
 .storetab.active{border-color:var(--c);background:var(--c);color:var(--op-kleur)}
 .storetab.active .n{background:var(--op-kleur-zacht);color:var(--op-kleur)}
@@ -287,7 +317,7 @@ h3.dagkop.leeg{opacity:.75}
 .stores .storetab.active{background:var(--c);color:var(--op-kleur)}
 h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);margin:var(--ruimte-5) var(--ruimte-1) var(--ruimte-1);display:flex;justify-content:space-between}
 .items{background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden}
-.item{display:grid;grid-template-columns:1fr;align-items:stretch;border-top:1px solid var(--scheiding)}
+.item{display:grid;grid-template-columns:1fr;align-items:stretch;border-top:var(--lijn) solid var(--scheiding)}
 .item:first-child{border-top:0}
 .check{display:grid;grid-template-columns:var(--rondje) 1fr;gap:var(--ruimte-3);align-items:center;padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--rij)}
 .vinkknop{width:var(--tik);height:var(--tik);margin:calc((var(--rondje) - var(--tik)) / 2);display:grid;place-items:center;border-radius:var(--r-rond)}
@@ -306,6 +336,8 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .sheet-wrap .sheet-bg{-webkit-backdrop-filter:blur(var(--waas-m));backdrop-filter:blur(var(--waas-m));background:var(--overlay)}
 .snelkeuze button{flex:none;padding:0 var(--ruimte-3);border-radius:var(--r-rond);background:transparent;border:0;color:var(--muted);font-weight:var(--gewicht-vet);min-height:var(--icoonknop)}
 .snelkeuze button.gekozen{background:var(--primary);color:var(--primary-ink)}
+/* Kleur van een winkel kiezen: dezelfde pil, met rondjes in de winkelkleuren; de gekozen kleur staat in een crème vulling */
+.kleurkeuze button{display:grid;place-items:center;padding:0 var(--ruimte-0)}
 .check.metchip{grid-template-columns:var(--rondje) 1fr auto}
 .chip{display:inline-flex;align-items:center;font-size:var(--fs-xs);font-weight:var(--gewicht-vet);line-height:1;color:color-mix(in srgb,var(--c) var(--chip-tint),var(--chip-meng));background:color-mix(in srgb,var(--c) var(--chip-vlak),transparent);border-radius:var(--r-rond);padding:var(--ruimte-1) var(--ruimte-2);white-space:nowrap}
 .check .tick{border-color:var(--muted)}
@@ -319,31 +351,32 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 /* Winkels */
 .note{color:var(--muted);font-size:var(--fs-m);margin:var(--ruimte-3) 0 var(--ruimte-2)}
 .order{list-style:none;margin:0;padding:0;background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden}
-.order li{display:grid;grid-template-columns:calc(var(--rondje) + var(--ruimte-2)) 1fr var(--tik);align-items:center;gap:var(--ruimte-1);padding:var(--ruimte-1) var(--ruimte-2) var(--ruimte-1) var(--ruimte-3);border-top:1px solid var(--scheiding);min-height:var(--h-m)}
+.order li{display:grid;grid-template-columns:calc(var(--rondje) + var(--ruimte-2)) 1fr var(--tik);align-items:center;gap:var(--ruimte-1);padding:var(--ruimte-1) var(--ruimte-2) var(--ruimte-1) var(--ruimte-3);border-top:var(--lijn) solid var(--scheiding);min-height:var(--h-m)}
 .order li:first-child{border-top:0}
 .check.greeprij{grid-template-columns:1fr var(--tik);padding:0 var(--ruimte-2) 0 0}
 .greeprij-hoofd{display:flex;align-items:center;gap:var(--ruimte-3);padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--h-m);text-align:left;width:100%}
 .items .sleept{border-radius:var(--r-l)}
 .greep{display:grid;place-items:center;width:var(--tik);height:var(--tik);margin-right:calc(var(--ruimte-1) * -1);color:var(--muted);touch-action:none;cursor:grab}
 .greep svg{width:var(--icoon-m);height:var(--icoon-m)}
-.sleept{position:fixed;z-index:var(--z-boven);margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);box-shadow:var(--schaduw-sleep);transform:scale(1.02);pointer-events:none}
-.plek{background:var(--primary-soft);border-top:1px solid var(--scheiding);min-height:var(--h-m)}
+.sleept{position:fixed;z-index:var(--z-boven);margin:0;background:var(--surface);border:var(--lijn) solid var(--line);border-radius:var(--r-l);box-shadow:var(--schaduw-sleep);transform:scale(1.02);pointer-events:none}
+.plek{background:var(--primary-soft);border-top:var(--lijn) solid var(--scheiding);min-height:var(--h-m)}
 .plek + *{border-top:0 !important}
 .pos{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);display:grid;place-items:center;font-weight:var(--gewicht-zwaar);font-size:var(--fs-s);color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);font-variant-numeric:tabular-nums}
 .lead{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);display:grid;place-items:center;font-weight:var(--gewicht-zwaar);font-size:var(--fs-s);color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
 .lead.vol{background:var(--c);color:var(--op-kleur)}
-.chevr{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);opacity:.6;margin-right:var(--ruimte-1)}
+.lead.emoji{font-size:var(--fs-basis);font-weight:normal}
+.chevr{width:var(--pijl);height:var(--pijl);border-right:var(--lijn-dik) solid var(--muted);border-top:var(--lijn-dik) solid var(--muted);transform:rotate(45deg);opacity:.6;margin-right:var(--ruimte-1)}
 /* Instellingen */
 .back{display:inline-flex;align-items:center;gap:var(--ruimte-0);color:var(--primary);font-weight:var(--gewicht-vet);font-size:var(--fs-basis);padding:var(--ruimte-1) 0 var(--ruimte-1);margin-left:calc(var(--ruimte-1) * -1)}
 .back svg{width:var(--icoon-m);height:var(--icoon-m)}
 .group{background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden;margin-top:var(--ruimte-3)}
 .nav-row{display:grid;grid-template-columns:var(--ico) 1fr auto var(--ruimte-3);align-items:center;gap:var(--ruimte-3);width:100%;padding:0 var(--ruimte-4) 0 var(--ruimte-3);min-height:var(--rij);position:relative}
-.nav-row + .nav-row::before{content:"";position:absolute;top:0;left:calc(var(--ruimte-3) + var(--ico) + var(--ruimte-3));right:0;border-top:1px solid var(--scheiding)}
+.nav-row + .nav-row::before{content:"";position:absolute;top:0;left:calc(var(--ruimte-3) + var(--ico) + var(--ruimte-3));right:0;border-top:var(--lijn) solid var(--scheiding)}
 .nav-row:active{background:var(--primary-soft)}
 .ico{width:var(--ico);height:var(--ico);border-radius:var(--r-rond);display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c)}
 .ico svg{width:var(--icoon-s);height:var(--icoon-s)}
 .nav-row .lbltxt{font-weight:var(--gewicht-naam);font-size:var(--fs-l)}
-.nav-row .chev2{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);opacity:.7}
+.nav-row .chev2{width:var(--pijl);height:var(--pijl);border-right:var(--lijn-dik) solid var(--muted);border-top:var(--lijn-dik) solid var(--muted);transform:rotate(45deg);opacity:.7}
 .foot{color:var(--muted);font-size:var(--fs-s);margin:var(--ruimte-3) var(--ruimte-4) 0}
 /* Telling op het tasje in het menu */
 .badge{position:relative;display:inline-flex}
@@ -355,14 +388,14 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .sheet-bg{position:absolute;inset:0;background:var(--overlay)}
 .sheet{position:relative;background:var(--bg);width:100%;max-width:var(--breedte);max-height:min(90vh,calc(100% - var(--ruimte-5)));overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r-xl) var(--r-xl) 0 0;padding:var(--ruimte-5) var(--ruimte-4) calc(var(--ruimte-4) + env(safe-area-inset-bottom,0px));animation:up var(--duur) ease-out}
 .sheet:focus{outline:none}
-.sheet h4{margin:0 calc(var(--h-s) + var(--ruimte-2)) var(--ruimte-3) 0;font-size:var(--fs-xl);font-weight:var(--gewicht-zwaar);letter-spacing:-0.01em;line-height:1.1}
+.sheet h4{margin:0 calc(var(--h-s) + var(--ruimte-2)) var(--ruimte-3) 0;font-size:var(--fs-xl);font-weight:var(--gewicht-zwaar);letter-spacing:var(--spatie-kop);line-height:1.1}
 .sheet .close{position:absolute;top:var(--ruimte-2);right:var(--ruimte-2);width:var(--h-s);height:var(--h-s);display:grid;place-items:center;font-size:var(--fs-xl);color:var(--muted)}
 @keyframes up{from{transform:translateY(var(--ruimte-6));opacity:.5}}
 .lbl{display:block;margin-bottom:var(--ruimte-3)}
 .lbl>span{display:block;font-size:var(--fs-s);font-weight:var(--gewicht-vet);color:var(--muted);margin:0 var(--ruimte-1) var(--ruimte-1)}
 .acts{display:flex;gap:var(--ruimte-2);flex-wrap:wrap;margin-top:var(--ruimte-4)}
 .acts .btn{flex:1 1 auto}
-.pick{display:grid;grid-template-columns:var(--rondje) 1fr;gap:var(--ruimte-3);align-items:center;width:100%;padding:var(--ruimte-3) var(--ruimte-3);border-top:1px solid var(--scheiding);min-height:var(--h-m)}
+.pick{display:grid;grid-template-columns:var(--rondje) 1fr;gap:var(--ruimte-3);align-items:center;width:100%;padding:var(--ruimte-3) var(--ruimte-3);border-top:var(--lijn) solid var(--scheiding);min-height:var(--h-m)}
 .pick:first-child{border-top:0}
 /* Favorieten: ster rechts in de zoekbalk */
 #add-form .zoekveld{position:relative;flex:1}
@@ -374,13 +407,13 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .zoekster.aan .leeg{display:none}
 .zoekster.aan .vol{display:block}
 .ac-leeg{margin:0;padding:var(--ruimte-4);color:var(--muted);font-size:var(--fs-m)}
-.ster{display:inline-grid;vertical-align:1px;margin-left:var(--ruimte-1);color:var(--primary)}
+.ster{display:inline-grid;vertical-align:var(--lijn);margin-left:var(--ruimte-1);color:var(--primary)}
 .ster svg{width:var(--icoon-s);height:var(--icoon-s)}
 .schakel{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:0;border-radius:var(--r-m);padding:var(--ruimte-2) var(--ruimte-3);min-height:var(--h-m);margin-bottom:var(--ruimte-3);font-size:var(--fs-basis)}
-.schakel input{appearance:none;-webkit-appearance:none;width:51px;height:31px;border-radius:var(--r-rond);background:var(--line);position:relative;transition:background var(--duur);margin:0;cursor:pointer}
-.schakel input::after{content:"";position:absolute;top:var(--ruimte-0);left:var(--ruimte-0);width:27px;height:27px;border-radius:var(--r-rond);background:var(--op-kleur);box-shadow:var(--schaduw-knop);transition:transform var(--duur)}
+.schakel input{appearance:none;-webkit-appearance:none;width:var(--schakel-b);height:var(--schakel-h);border-radius:var(--r-rond);background:var(--line);position:relative;transition:background var(--duur);margin:0;cursor:pointer}
+.schakel input::after{content:"";position:absolute;top:var(--ruimte-0);left:var(--ruimte-0);width:var(--schakel-knop);height:var(--schakel-knop);border-radius:var(--r-rond);background:var(--op-kleur);box-shadow:var(--schaduw-knop);transition:transform var(--duur)}
 .schakel input:checked{background:var(--primary)}
-.schakel input:checked::after{transform:translateX(20px)}
+.schakel input:checked::after{transform:translateX(calc(var(--schakel-b) - var(--schakel-knop) - var(--ruimte-0) * 2))}
 /* Codescherm (eerste keer openen op een telefoon) */
 #code-scherm{position:fixed;inset:0;z-index:var(--z-code);background:var(--bg);display:grid;place-items:center;padding:var(--ruimte-5)}
 .code-kaart{width:100%;max-width:var(--breedte-code);display:grid;gap:var(--ruimte-3);text-align:center}
@@ -408,12 +441,13 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 @keyframes skelet{to{opacity:.4}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 /* Kleine correcties */
-#w-tabs{margin-bottom:var(--ruimte-3)}
 #terug[hidden]{display:none}
 /* ================= Menu rechtsboven, in de titelregel =================
    Dicht: een lichte pil met links ⋮ en rechts een volle cirkel met het icoon van de huidige tab.
    Open: de puntjes vervagen en dezelfde pil wordt smal en groeit naar beneden tot alle tabs erin passen. */
-.tabs{position:relative;flex:none;z-index:var(--z-tabs);width:calc(var(--menu-knop) + var(--menu-puntjes) + var(--ruimte-1) * 2);height:calc(var(--menu-knop) + var(--ruimte-1) * 2)}
+/* Vaste plek, op elke pagina gelijk (ook bij een lange titel of een terugknop): bovenin de kop, onder de veilige zone
+   plus --ruimte-5 (vrij van de vervaagde rand van Safari), rechts tegen de rand van de inhoud */
+.tabs{position:fixed;top:calc(var(--ruimte-5) + env(safe-area-inset-top,0px));right:max(var(--rand),(100vw - var(--breedte)) / 2 + var(--rand));z-index:var(--z-tabs);width:var(--menu-breedte);height:var(--menu-hoogte)}
 .tabs::before{content:"";position:absolute;top:0;right:0;width:100%;height:100%;border-radius:var(--r-rond);background:var(--menu-vlak);transition:width var(--duur-traag) var(--veer),height var(--duur-traag) var(--veer)}
 .tabs:not(.ingeklapt)::before{width:calc(var(--menu-knop) + var(--ruimte-1) * 2);height:calc(var(--menu-knop) * var(--tab-aantal) + var(--ruimte-1) * (var(--tab-aantal) + 1))}
 .tabs .inner{position:absolute;top:var(--ruimte-1);right:var(--ruimte-1);display:flex;flex-direction:column;gap:var(--ruimte-1);width:var(--menu-knop)}
@@ -426,7 +460,7 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .tabs.ingeklapt button:not([aria-current=page]){height:0;opacity:0;pointer-events:none}
 .tabs.ingeklapt button:not([aria-current=page]) > *{transform:scale(.2)}
 /* Dicht, op een andere tab, en er staat iets op de boodschappenlijst: rood stipje op de cirkel */
-.tabs.ingeklapt .inner:has(button:not([aria-current=page]) #badge:not([hidden]))::after{content:"";position:absolute;top:0;right:0;width:var(--ruimte-3);height:var(--ruimte-3);border-radius:var(--r-rond);background:var(--accent);border:2px solid var(--bg)}
+.tabs.ingeklapt .inner:has(button:not([aria-current=page]) #badge:not([hidden]))::after{content:"";position:absolute;top:0;right:0;width:var(--ruimte-3);height:var(--ruimte-3);border-radius:var(--r-rond);background:var(--accent);border:var(--lijn-dik) solid var(--bg)}
 /* ⋮ links in de pil; vervaagt als het menu open is */
 .menu-teken{position:absolute;top:0;bottom:0;left:0;width:calc(var(--ruimte-1) + var(--menu-puntjes));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--ruimte-0);pointer-events:none;transition:opacity var(--duur)}
 .menu-teken i{width:var(--ruimte-1);height:var(--ruimte-1);border-radius:var(--r-rond);background:var(--tab-icoon)}
@@ -571,6 +605,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbw5coGQ3021Tyjm19Ky7-_P
         ingredienten: [i('zalm','2 stuks'), i('spinazie','400 g'), i('rijst','200 g'), i('knoflook','2 tenen')] }
     ];
     ['pasta', 'rijst', 'vlees', 'vlees'].forEach((c, k) => { recepten[k].categorie = c; });
+    ['🍝', '🍛', '🌯'].forEach((e, k) => { recepten[k].emoji = e; });
     const receptcategorieen = [['pasta', 'Pasta'], ['rijst', 'Rijst & wereld'], ['vlees', 'Vlees & vis'], ['vega', 'Vegetarisch'], ['soep', 'Soep & salade'], ['oven', 'Ovenschotels'], ['snel', 'Snel & makkelijk'], ['baby', 'Baby'], ['overig', 'Overig']].map(([id, naam], k) => ({ id, naam, positie: k + 1 }));
     const ma = new Date(); ma.setHours(0, 0, 0, 0); ma.setDate(ma.getDate() - ((ma.getDay() + 6) % 7));
     const dag = k => { const d = new Date(ma); d.setDate(ma.getDate() + k); return iso(d); };
@@ -641,7 +676,6 @@ const ICONEN = {
   'greep': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg>',
   'potlood': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.2 4.3a2.5 2.5 0 0 1 3.5 0l1 1a2.5 2.5 0 0 1 0 3.5L9.4 19.1 4 20l.9-5.4z"/></svg>',
   'winkel': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5.2 3h13.6a1.5 1.5 0 0 1 1.4 1l1.6 4.6a3 3 0 0 1-2.8 4 3 3 0 0 1-2.5-1.3 3 3 0 0 1-5 0 3 3 0 0 1-5 0 3 3 0 0 1-2.5 1.3 3 3 0 0 1-2.8-4L3.8 4a1.5 1.5 0 0 1 1.4-1z"/><path d="M4.5 14.3a4.6 4.6 0 0 0 3-.6 4.7 4.7 0 0 0 4.5.4 4.7 4.7 0 0 0 4.5-.4 4.6 4.6 0 0 0 3 .6V19a2 2 0 0 1-2 2H15v-4.5H9V21H6.5a2 2 0 0 1-2-2z"/></svg>',
-  'route': '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5.5" r="2.3"/><rect x="9.5" y="4" width="11.5" height="3" rx="1.5"/><circle cx="5" cy="12" r="2.3"/><rect x="9.5" y="10.5" width="11.5" height="3" rx="1.5"/><circle cx="5" cy="18.5" r="2.3"/><rect x="9.5" y="17" width="11.5" height="3" rx="1.5"/></svg>',
   'label': '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h5.4a2.5 2.5 0 0 1 1.8.7l8 8a2.5 2.5 0 0 1 0 3.6l-5.4 5.4a2.5 2.5 0 0 1-3.6 0l-8-8a2.5 2.5 0 0 1-.7-1.8zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>',
   'vakjes': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2.4"/><rect x="13" y="3" width="8" height="8" rx="2.4"/><rect x="3" y="13" width="8" height="8" rx="2.4"/><rect x="13" y="13" width="8" height="8" rx="2.4"/></svg>'
 };
@@ -650,8 +684,8 @@ const ico = (naam, attrs = '') => attrs ? ICONEN[naam].replace('<svg ', `<svg ${
 document.querySelectorAll('svg[data-icoon]').forEach(el => { el.outerHTML = ico(el.dataset.icoon, el.hasAttribute('aria-hidden') ? 'aria-hidden="true"' : ''); });
 const DAGEN = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
-/** Winkelkleuren voor nieuwe winkels komen uit de tokens --winkel-1 t/m --winkel-7. */
-const WINKELKLEUREN = [1, 2, 3, 4, 5, 6, 7].map(i => 'winkel-' + i);
+/** Winkelkleuren komen uit de tokens --winkel-1 t/m --winkel-8. */
+const WINKELKLEUREN = [1, 2, 3, 4, 5, 6, 7, 8].map(i => 'winkel-' + i);
 /** Kleur van een winkel als CSS-waarde. Nieuwe winkels bewaren de tokennaam ('winkel-1');
     oudere winkels met een hexkleur die gelijk is aan een token krijgen ook het token. */
 function kleurVan(w) {
@@ -675,7 +709,7 @@ function zetWinkelkleurenOm() {
   if (patches.length) bewaar('winkels', patches);
 }
 
-const S = { data:null, tab:'lijst', winkel:null, routeWinkel:null, instSub:null, week:0, open:new Set(), zoekR:'', zoekP:'' };
+const S = { data:null, tab:'lijst', winkel:null, instSub:null, week:0, open:new Set(), zoekR:'', zoekP:'', zoekI:'' };
 let bezig = 0, teller = 0;
 
 const $ = (s, el=document) => el.querySelector(s);
@@ -683,6 +717,15 @@ const $$ = (s, el=document) => [...el.querySelectorAll(s)];
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nieuwId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : s;
+/** Uit wat er in het emojiveld getypt is: alleen de laatst gekozen emoji (letters en tekens tellen niet). */
+function laatsteEmoji(t) {
+  const delen = window.Intl && Intl.Segmenter ? [...new Intl.Segmenter().segment(t)].map(x => x.segment) : Array.from(t);
+  return delen.filter(x => /\p{Extended_Pictographic}|\p{Regional_Indicator}/u.test(x)).pop() || '';
+}
+/** Rondje vooraan een recept: de gekozen emoji, anders de beginletter. */
+const receptLead = r => r.emoji
+  ? `<span class="lead emoji" style="--c:var(--primary)" aria-hidden="true">${esc(r.emoji)}</span>`
+  : `<span class="lead" style="--c:var(--primary)">${esc(r.naam.charAt(0).toUpperCase())}</span>`;
 const klein = s => s ? s.charAt(0).toLowerCase() + s.slice(1) : s;
 const opNaam = (a, b) => a.naam.localeCompare(b.naam, 'nl');
 const aantal = (n, een, veel) => n + ' ' + (n === 1 ? een : veel);
@@ -865,6 +908,7 @@ const VIEWS = {
 function wissel(tab) {
   S.tab = tab;
   $$('.tabs button').forEach(b => b.dataset.tab === tab ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'));
+  $('#title').classList.remove('met-lead');
   $('#title').textContent = VIEWS[tab].titel;
   $('#topextra').innerHTML = '';
   $('#headerextra').innerHTML = '';
@@ -882,7 +926,8 @@ function pasTitelAan() {
   h.style.fontSize = '';
   if ($('#titel-invoer')) return;
   let px = parseFloat(getComputedStyle(h).fontSize);
-  while (h.scrollWidth > h.clientWidth + 1 && px > 22) { px -= 1; h.style.fontSize = px + 'px'; }
+  const min = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs-xl'));
+  while (h.scrollWidth > h.clientWidth + 1 && px > min) { px -= 1; h.style.fontSize = px + 'px'; }
 }
 function teken() {
   if (!S.data) return;
@@ -924,7 +969,7 @@ function tekenWeek() {
     const plan = D().mealplan.find(m => m.id === datum);
     const rs = ((plan && plan.recepten) || []).map(recept).filter(Boolean);
     const nu = datum === vandaag;
-    return `<h3 class="cat dagkop${nu ? ' vandaag' : ''}${rs.length ? '' : ' leeg'}"><span>${cap(DAGEN[d.getDay()])} ${kort(d)}</span></h3>
+    return `<h3 class="cat dagkop${nu ? ' vandaag' : ''}${rs.length ? '' : ' leeg'}"><span>${cap(DAGEN[d.getDay()])} ${kort(d)}${nu ? '<span class="chip vandaag-chip">Vandaag</span>' : ''}</span></h3>
       <div class="items dag-groep">${rs.map(r => receptKaart(r, datum)).join('')}${rs.length ? '' : `<button type="button" class="dag-plus-rij" data-act="koppel" data-datum="${datum}" aria-label="Recept toevoegen aan ${DAGEN[d.getDay()]} ${kort(d)}"><span class="addbtn" aria-hidden="true">${ico('plus', 'class="plus"')}</span></button>`}</div>`;
   }).join('');
 }
@@ -937,7 +982,7 @@ function receptKaart(r, datum) {
     <div class="swipe-acties"><button type="button" class="swipe-wk" style="--c:var(--veeg-open)" data-act="recept-van-week" data-id="${esc(r.id)}" aria-label="Recept ${esc(r.naam)} bekijken">${ico('kookpan')}</button><button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="koppel" data-datum="${datum}" aria-label="Recepten van deze dag wijzigen">${PEN_ICON}</button><button type="button" class="swipe-wk" style="--c:var(--ontkoppel)" data-act="dag-ontkoppel" aria-label="${esc(r.naam)} van deze dag halen">${ONTKOPPEL_ICON}</button></div>
     <article class="recipe swipe-kaart">
     <button type="button" class="recipe-head" data-act="klap" data-key="${esc(key)}" aria-expanded="${open}">
-      <span class="lead" style="--c:var(--primary)">${esc(r.naam.charAt(0).toUpperCase())}</span>
+      ${receptLead(r)}
       <span><span class="pname">${esc(r.naam)}</span></span>
       <span class="chev"></span></button>`;
   if (open) {
@@ -1076,7 +1121,7 @@ function openKoppel(datum) {
       <div class="acts"><button type="button" class="btn" data-act="naar-recepten">Naar recepten</button></div>`);
   }
   openSheet(`<h4>${cap(DAGEN[d.getDay()])} ${kort(d)}</h4>
-    <input type="search" class="field" id="koppel-zoek" placeholder="Zoek een recept" autocomplete="off" aria-label="Recept zoeken">
+    <div class="add" id="koppel-rij"><input type="search" class="field" id="koppel-zoek" placeholder="Zoek een recept" autocomplete="off" aria-label="Recept zoeken"><button type="button" class="btn" data-act="recept-nieuw-dag" data-datum="${datum}">Nieuw</button></div>
     <div id="koppel">${perReceptCat(rs).map(g => `<section class="koppel-groep"><h3 class="cat"><span>${esc(g.naam)}</span></h3><div class="items">${g.rs.map(r => `<button type="button" class="pick${gekozen.has(r.id) ? ' on' : ''}" data-id="${esc(r.id)}" data-naam="${esc(r.naam.toLowerCase())}" aria-pressed="${gekozen.has(r.id)}">
       <span class="tick"></span><span class="pname">${esc(r.naam)}</span></button>`).join('')}</div></section>`).join('')}</div>
     <p class="note" id="koppel-leeg" hidden>Geen recept gevonden.</p>`);
@@ -1149,6 +1194,7 @@ function tekenLijst() {
     const n = D().producten.filter(p => nodig(p) && winkelVan(p) === s.id).length;
     return `<button type="button" class="storetab${s.id === S.winkel ? ' active' : ''}" style="--c:${kleurVan(s)}" data-act="winkel" data-id="${esc(s.id)}">${esc(s.naam)} <span class="n">${n}</span></button>`;
   }).join('');
+  toonGekozenWinkel();
 
   const items = D().producten.filter(p => p.opLijst && (alles || winkelVan(p) === S.winkel));
   const open = items.filter(p => !p.afgevinkt), klaar = items.filter(p => p.afgevinkt).sort(opNaam);
@@ -1163,9 +1209,17 @@ function tekenLijst() {
   if (klaar.length) {
     h += `<section class="basket"><h3 class="cat"><span>Gekocht</span></h3>
       <div class="items">${klaar.map(itemRij).join('')}</div>
-      <button type="button" class="wis-knop" data-act="mandje-leeg">${ONTKOPPEL_ICON}Gekochte van de lijst halen</button></section>`;
+      <button type="button" class="wis-knop" data-act="mandje-leeg">${ONTKOPPEL_ICON}Leeg maken</button></section>`;
   }
   $('#lijst').innerHTML = h;
+}
+/** De winkelpil scrolt opzij: staat de gekozen winkel buiten beeld, schuif hem dan naar het midden. De volgorde blijft gelijk. */
+function toonGekozenWinkel() {
+  const pil = $('#stores'), a = pil && $('.storetab.active', pil);
+  if (!a) return;
+  const p = pil.getBoundingClientRect(), r = a.getBoundingClientRect();
+  if (r.left >= p.left && r.right <= p.right) return;
+  pil.scrollLeft += r.left - p.left - (p.width - r.width) / 2;
 }
 function itemRij(p) {
   const meta = [p.lijstHoeveelheid, p.lijstVoor ? 'voor ' + voorTekst(p.lijstVoor) : ''].filter(Boolean).join(', ');
@@ -1203,7 +1257,9 @@ function voegToeAanLijst() {
   } else {
     const n = { id: nieuwId(), naam: cap(naam), categorie: 'overig', winkel: S.winkel === ALLES ? winkels()[0].id : S.winkel, opLijst: true, afgevinkt: false, lijstHoeveelheid: '', lijstWinkel: '', lijstVoor: '' };
     bewaar('producten', [n]);
-    melding(`${n.naam} is nieuw en staat onder Overig.`, 'Categorie kiezen', () => openProduct(n.id));
+    // Nieuw product: meteen door naar Product wijzigen, om categorie en winkel te kiezen
+    openProduct(n.id);
+    return;
   }
   tekenAc();
 }
@@ -1283,20 +1339,20 @@ function skeletRecepten() {
     $('#terug').hidden = false;
     $('#terug').dataset.act = bewerk ? 'recept-annuleer' : 'recept-terug';
     $('#terug-tekst').textContent = bewerk ? 'Annuleer' : S.receptTerug === 'week' ? 'Weekmenu' : 'Recepten';
-    $('#topextra').innerHTML = bewerk
-      ? `<button type="button" class="round bewerk-knop actief" data-act="recept-opslaan" aria-label="Opslaan">${ico('vinkje')}</button>`
-      : `<button type="button" class="round bewerk-knop" data-act="recept-bewerkmodus" aria-label="Recept bewerken">${PEN_ICON}</button>`;
+    // Bewerken: veeg een product of stap naar links (potlood). In de bewerkmodus is de actieknop onderin het vinkje (opslaan).
+    $('#topextra').innerHTML = bewerk ? `<button type="button" class="round bewerk-knop" data-act="recept-opslaan" aria-label="Opslaan">${ico('vinkje')}</button>` : '';
     if (bewerk) {
-      $('#title').innerHTML = `<textarea id="titel-invoer" class="titel-invoer" rows="1" placeholder="Naam van het recept" autocomplete="off" aria-label="Naam van het recept">${esc(S.receptBewerk.naam)}</textarea>`;
+      $('#title').classList.add('met-lead');
+      $('#title').innerHTML = `<input id="emoji-invoer" class="titel-lead" value="${esc(S.receptBewerk.emoji || '')}" placeholder="${esc((S.receptBewerk.naam || '').charAt(0).toUpperCase())}" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Emoji van het recept"><textarea id="titel-invoer" class="titel-invoer" rows="1" placeholder="Naam van het recept" autocomplete="off" aria-label="Naam van het recept">${esc(S.receptBewerk.naam)}</textarea>`;
       requestAnimationFrame(() => { groeiTitel(); groeiStappen(); });
       return `<div id="recept-detail">${bewerkHtml()}</div>`;
     }
-    $('#title').textContent = recept(S.receptOpen).naam;
+    receptTitel(recept(S.receptOpen));
     return '<div id="recept-detail"></div>';
   }
   S.receptOpen = null;
-  $('#topextra').innerHTML = '<button type="button" class="btn" data-act="recept-nieuw">Nieuw</button>';
-  $('#headerextra').innerHTML = `<input type="search" class="field kopzoek" id="zoek-r" placeholder="Zoek op recept of product" value="${esc(S.zoekR)}" autocomplete="off" aria-label="Recepten zoeken">`;
+  // Nieuw staat naast de zoekbalk, dus geen actieknop onderin
+  $('#headerextra').innerHTML = `<div class="add"><input type="search" class="field kopzoek" id="zoek-r" placeholder="Zoek op recept of product" value="${esc(S.zoekR)}" autocomplete="off" aria-label="Recepten zoeken"><button type="button" class="btn" data-act="recept-nieuw">Nieuw</button></div>`;
   return '<div id="recepten"></div>';
 }
 /* ---------- Recept bewerken op de pagina zelf ---------- */
@@ -1335,6 +1391,7 @@ function groeiTitel() { const t = $('#titel-invoer'); if (!t) return; t.style.he
 function syncBewerk() {
   const d = S.receptBewerk; if (!d) return;
   const t = $('#titel-invoer'); if (t) d.naam = t.value;
+  const em = $('#emoji-invoer'); if (em) d.emoji = em.value;
   const c = $('#rb-cat'); if (c) d.categorie = c.value;
   $$('.aantal-invoer').forEach(inp => { const i = d.ingredienten[Number(inp.dataset.i)]; if (i) i.hoeveelheid = inp.value; });
   $$('.stap-invoer').forEach(t => { d.stappen[Number(t.dataset.k)] = t.value; });
@@ -1353,15 +1410,16 @@ function tekenBewerk(focusZoek) {
 function startBewerk(id) {
   const r = id ? recept(id) : null;
   S.receptBewerk = r
-    ? { id: r.id, naam: r.naam, categorie: r.categorie || 'overig', stappen: naarStappen(r.uitleg).concat(naarStappen(r.uitleg).length ? [] : ['']), ingredienten: (r.ingredienten || []).map(i => ({ product: i.product, hoeveelheid: i.hoeveelheid || '' })) }
-    : { id: nieuwId(), naam: '', categorie: 'overig', stappen: [''], ingredienten: [], nieuw: true };
-  S.rbNieuw = [];
+    ? { id: r.id, naam: r.naam, emoji: r.emoji || '', categorie: r.categorie || 'overig', stappen: naarStappen(r.uitleg).concat(naarStappen(r.uitleg).length ? [] : ['']), ingredienten: (r.ingredienten || []).map(i => ({ product: i.product, hoeveelheid: i.hoeveelheid || '' })) }
+    : { id: nieuwId(), naam: '', emoji: '', categorie: 'overig', stappen: [''], ingredienten: [], nieuw: true };
+  S.rbNieuw = []; S.nieuwVoorDag = null;
   S.rbGewijzigd = false;
   S.receptOpen = S.receptBewerk.id;
   wissel('recepten');
   if (!r) $('#titel-invoer').focus();
 }
 function stopBewerk(naarLijst) {
+  S.nieuwVoorDag = null;
   S.receptBewerk = null; S.rbNieuw = []; S.rbGewijzigd = false;
   if (naarLijst) { S.receptOpen = null; S.receptTerug = null; }
   wissel('recepten');
@@ -1382,16 +1440,25 @@ function tekenRbAc() {
   box.innerHTML = h;
   box.hidden = false;
 }
+/** Titel van de receptpagina: links het rondje met de emoji (of beginletter). Aanpassen kan alleen in de bewerkmodus. */
+function receptTitel(r) {
+  $('#title').classList.add('met-lead');
+  $('#title').innerHTML = `<span class="titel-lead" aria-hidden="true">${esc(r.emoji || r.naam.charAt(0).toUpperCase())}</span><span class="titel-tekst">${esc(r.naam)}</span>`;
+}
 function tekenReceptDetail() {
   if (S.receptBewerk) return; // tijdens het bewerken niet opnieuw tekenen, anders verlies je wat je typt
   const r = recept(S.receptOpen);
   if (!r) { S.receptOpen = null; wissel('recepten'); return; }
-  $('#title').textContent = r.naam;
+  receptTitel(r);
   const ingr = (r.ingredienten || []).map(i => ({ p: prod(i.product), a: i.hoeveelheid })).filter(i => i.p);
+  // Elke rij veegt naar links naar een potlood; dat opent de bewerkmodus van het hele recept
+  const veeg = (key, label, rij) => `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--n:1">
+    <div class="swipe-acties"><button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="recept-bewerkmodus" aria-label="${esc(label)} wijzigen">${PEN_ICON}</button></div>
+    <div class="item swipe-kaart">${rij}</div></div>`;
   $('#recept-detail').innerHTML = `<h3 class="cat"><span>Producten</span></h3>
-    ${ingr.length ? `<div class="items">${ingr.map(i => `<div class="item"><div class="check detailrij"><span class="pname">${esc(i.p.naam)}</span><span class="iamt">${esc(i.a || '')}</span>${winkelChip(winkel(i.p.winkel))}</div></div>`).join('')}</div>`
-      : '<div class="empty">Nog geen producten.</div>'}
-    ${naarStappen(r.uitleg).length ? `<h3 class="cat"><span>Bereiding</span></h3><div class="items">${naarStappen(r.uitleg).map((t, k) => `<div class="item"><div class="check stapweergave"><span class="pos" style="--c:var(--primary)">${k + 1}</span><span class="staptekst">${linkify(esc(t))}</span></div></div>`).join('')}</div>` : ''}`;
+    ${ingr.length ? `<div class="items">${ingr.map((i, k) => veeg('rp:' + k, i.p.naam, `<div class="check detailrij"><span class="pname">${esc(i.p.naam)}</span><span class="iamt">${esc(i.a || '')}</span>${winkelChip(winkel(i.p.winkel))}</div>`)).join('')}</div>`
+      : '<div class="empty">Nog geen producten.<br><button type="button" class="btn" data-act="recept-bewerkmodus">Recept aanvullen</button></div>'}
+    ${naarStappen(r.uitleg).length ? `<h3 class="cat"><span>Bereiding</span></h3><div class="items">${naarStappen(r.uitleg).map((t, k) => veeg('rs:' + k, 'Stap ' + (k + 1), `<div class="check stapweergave"><span class="pos" style="--c:var(--primary)">${k + 1}</span><span class="staptekst">${linkify(esc(t))}</span></div>`)).join('')}</div>` : ''}`;
 }
 function tekenRecepten() {
   const alle = D().recepten;
@@ -1404,13 +1471,13 @@ function tekenRecepten() {
     ? '<div class="empty"><strong>Het receptenboek is nog leeg</strong>Voeg een recept toe met de producten die erin gaan en een korte uitleg.<br><button type="button" class="btn" data-act="recept-nieuw">Eerste recept maken</button></div>'
     : !rs.length ? `<div class="empty">Geen recept gevonden met “${esc(S.zoekR.trim())}”.</div>`
     : perReceptCat(rs).map(g => `<h3 class="cat"><span>${esc(g.naam)}</span></h3><div class="items">${g.rs.map(r => veegRij('r:' + r.id,
-          `<button type="button" class="check metchip" data-act="recept-pagina" data-id="${esc(r.id)}"><span class="lead" style="--c:var(--primary)">${esc(r.naam.charAt(0).toUpperCase())}</span>
+          `<button type="button" class="check metchip" data-act="recept-pagina" data-id="${esc(r.id)}">${receptLead(r)}
             <span><span class="pname">${esc(r.naam)}</span></span><span class="chevr"></span></button>`,
           [{ act: 'recept-weg', id: r.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: r.naam + ' verwijderen' }])).join('')}</div>`).join('');
 }
-/* ---------- Winkelroute: afdelingen verslepen ---------- */
+/* ---------- Slepen: volgorde van rijen aanpassen ---------- */
 let sleep = null;
-// Werkt voor elke lijst met data-sorteer: de winkelroute, de categorieën en de receptcategorieën
+// Werkt voor elke lijst met data-sorteer: de looproute (in het venster Winkel wijzigen), de categorieën, de receptcategorieën en bereidingsstappen
 document.addEventListener('pointerdown', e => {
   const g = e.target.closest('.greep'); if (!g) return;
   const el = g.closest('[data-sid]'), lijst = el && el.parentElement;
@@ -1445,10 +1512,12 @@ document.addEventListener('pointermove', e => {
 /** Scrolt automatisch mee als je bij de boven- of onderrand van het scherm sleept. */
 function sleepScroll() {
   if (!sleep) return;
-  const kop = $('header.top').getBoundingClientRect().bottom;
+  const venster = sleep.lijst.closest('.sheet');
+  const kop = venster ? venster.getBoundingClientRect().top : $('header.top').getBoundingClientRect().bottom;
+  const onder = venster ? venster.getBoundingClientRect().bottom : innerHeight;
   const y = sleep.y;
-  const stap = y > innerHeight - 120 ? 10 : y < kop + 40 ? -10 : 0;
-  if (stap) { $('#scroller').scrollBy(0, stap); sleepVolg(y); }
+  const stap = y > onder - 120 ? 10 : y < kop + 40 ? -10 : 0;
+  if (stap) { (venster || $('#scroller')).scrollBy(0, stap); sleepVolg(y); }
   requestAnimationFrame(sleepScroll);
 }
 function sleepKlaar(e) {
@@ -1461,7 +1530,6 @@ function sleepKlaar(e) {
   klikOnderdrukken = true; setTimeout(() => { klikOnderdrukken = false; }, 60);
   const ids = [...lijst.children].map(x => x.dataset.sid).filter(Boolean);
   const soort = lijst.dataset.sorteer;
-  if (soort === 'route') bewaar('winkels', [{ id: S.routeWinkel, route: ids }]);
   if (soort === 'cats') bewaar('categorieen', ids.map((id, k) => ({ id, positie: k + 1 })));
   if (soort === 'rcats') bewaar('receptcategorieen', ids.map((id, k) => ({ id, positie: k + 1 })));
   // Bereidingsstappen in de bewerkmodus: alleen lokaal herschikken, opslaan gebeurt met het vinkje
@@ -1559,7 +1627,6 @@ function openProduct(id, voorgevuld) {
 /* ---------- Instellingen ---------- */
 const ICO = {
   winkels: ico('winkel'),
-  route: ico('route'),
   rcats: ico('kookpan'),
   producten: ico('label'),
   cats: ico('vakjes')
@@ -1568,56 +1635,55 @@ const INST = {
   producten: { titel: 'Producten' },
   rcats: { titel: 'Receptcategorieën' },
   winkels: { titel: 'Winkels' },
-  route:   { titel: 'Winkelroute' },
-  cats:    { titel: 'Categorieën' }
+  cats:    { titel: 'Productcategorieën' }
 };
 function skeletInst() {
   const pagina = S.instSub;
   if (!pagina) return '<div id="inst"></div>';
   $('#terug').hidden = false;
   $('#title').textContent = INST[pagina].titel;
-  // Zelfde opbouw als de hoofdpagina's: actie rechtsboven, balk onder de titel, daaronder de lijst
-  const PLUS = ico('plus');
-  const plusKnop = (act, label) => `<button type="button" class="round toevoeg-knop" data-act="${act}" aria-label="${label}" aria-expanded="false">${PLUS}</button>`;
+  // Zelfde opbouw als Recepten: zoekbalk met Nieuw ernaast onder de titel, daaronder de lijst
+  const zoekNieuw = (id, waarde, plek, act) => `<div class="add"><input type="search" class="field kopzoek" id="${id}" placeholder="${plek}" value="${esc(waarde)}" autocomplete="off" aria-label="${plek}"><button type="button" class="btn" data-act="${act}">Nieuw</button></div>`;
   if (pagina === 'winkels') {
-    $('#topextra').innerHTML = plusKnop('nieuw-venster', 'Winkel toevoegen');
+    $('#headerextra').innerHTML = zoekNieuw('zoek-i', S.zoekI, 'Zoek een winkel', 'nieuw-venster');
     return '<div id="w-lijst"></div>';
   }
-  if (pagina === 'route') {
-    $('#headerextra').innerHTML = '<div class="stores" id="w-tabs"></div>';
-    return '<div id="w-route"></div>';
-  }
   if (pagina === 'rcats') {
-    $('#topextra').innerHTML = plusKnop('nieuw-venster', 'Receptcategorie toevoegen');
+    $('#headerextra').innerHTML = zoekNieuw('zoek-i', S.zoekI, 'Zoek een receptcategorie', 'nieuw-venster');
     return '<div id="r-cats"></div>';
   }
   if (pagina === 'producten') {
-    $('#topextra').innerHTML = plusKnop('product-nieuw', 'Nieuw product');
-    $('#headerextra').innerHTML = `<input type="search" class="field kopzoek" id="zoek-p" placeholder="Zoek een product" value="${esc(S.zoekP)}" autocomplete="off" aria-label="Producten zoeken">`;
+    $('#headerextra').innerHTML = zoekNieuw('zoek-p', S.zoekP, 'Zoek een product', 'product-nieuw');
     return '<div id="producten"></div>';
   }
-  $('#topextra').innerHTML = plusKnop('nieuw-venster', 'Categorie toevoegen');
+  $('#headerextra').innerHTML = zoekNieuw('zoek-i', S.zoekI, 'Zoek een productcategorie', 'nieuw-venster');
   return '<div id="w-cats"></div>';
 }
+/** Zoeken in een instellingenlijst: filtert op naam. Tijdens het zoeken kun je niet slepen. */
+const instZoek = () => S.zoekI.trim().toLowerCase();
+const instFilter = lijst => { const q = instZoek(); return q ? lijst.filter(x => x.naam.toLowerCase().includes(q)) : lijst; };
+const instLeeg = soort => `<div class="empty">Geen ${soort} gevonden met “${esc(S.zoekI.trim())}”.</div>`;
 function tekenInst() {
   const pagina = S.instSub;
   if (pagina === 'producten') { tekenProducten(); return; }
   if (pagina === 'rcats') {
     sub('');
-    $('#r-cats').innerHTML = `<h3 class="cat"><span>Volgorde</span></h3><div class="items" data-sorteer="rcats">${rcats().map(c => {
-      const vast = c.id === 'overig';
+    const lijst = instFilter(rcats()), zoekt = !!instZoek();
+    if (!lijst.length) { $('#r-cats').innerHTML = instLeeg('receptcategorie'); return; }
+    $('#r-cats').innerHTML = `<h3 class="cat"><span>Volgorde</span></h3><div class="items"${zoekt ? '' : ' data-sorteer="rcats"'}>${lijst.map(c => {
+      const vast = c.id === 'overig', geenGreep = vast || zoekt;
       return veegRij('rc:' + c.id,
         `<div class="check greeprij"><div class="greeprij-hoofd"><span class="lead" style="--c:var(--primary)">${esc(c.naam.charAt(0).toUpperCase())}</span>
-          <span class="pname">${esc(c.naam)}</span></div>${vast ? '<span></span>' : `<span class="greep" aria-label="${esc(c.naam)} verslepen">${GREEP_ICON}</span>`}</div>`,
+          <span class="pname">${esc(c.naam)}</span></div>${geenGreep ? '<span></span>' : `<span class="greep" aria-label="${esc(c.naam)} verslepen">${GREEP_ICON}</span>`}</div>`,
         vast ? [] : [WIJZIG('rcat-hernoem', c), { act: 'rcat-weg', id: c.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: c.naam + ' verwijderen' }],
-        vast ? '' : ` data-sid="${esc(c.id)}"`);
+        geenGreep ? '' : ` data-sid="${esc(c.id)}"`);
     }).join('')}</div>`;
     return;
   }
   const ws = winkels();
   if (!pagina) {
     sub('');
-    $('#inst').innerHTML = `<div class="group">${['winkels', 'route', 'cats', 'producten', 'rcats'].map(id =>
+    $('#inst').innerHTML = `<div class="group">${['winkels', 'cats', 'producten', 'rcats'].map(id =>
       `<button type="button" class="nav-row" data-act="inst-ga" data-sub="${id}"><span class="ico" style="--c:var(--primary)">${ICO[id]}</span>
         <span class="lbltxt">${INST[id].titel}</span><span></span><span class="chev2"></span></button>`).join('')}</div>
       ${D().gebruiker ? `<p class="foot">Ingelogd als ${esc(D().gebruiker)}. Alle gegevens staan in jullie Google Sheet.</p>` : ''}`;
@@ -1626,7 +1692,9 @@ function tekenInst() {
   sub('');
 
   if (pagina === 'winkels') {
-    $('#w-lijst').innerHTML = `<h3 class="cat"><span>Je winkels</span></h3><div class="items">${ws.map(w => {
+    const lijst = instFilter(ws);
+    if (!lijst.length) { $('#w-lijst').innerHTML = instLeeg('winkel'); return; }
+    $('#w-lijst').innerHTML = `<h3 class="cat"><span>Je winkels</span></h3><div class="items">${lijst.map(w => {
       return veegRij('w:' + w.id,
         `<div class="check"><span class="lead vol" style="--c:${kleurVan(w)}">${esc(w.naam.charAt(0).toUpperCase())}</span>
           <span><span class="pname">${esc(w.naam)}</span></span></div>`,
@@ -1635,29 +1703,49 @@ function tekenInst() {
   }
 
 
-  if (pagina === 'route') {
-    if (!ws.some(w => w.id === S.routeWinkel)) S.routeWinkel = ws.length ? ws[0].id : null;
-    $('#w-tabs').innerHTML = ws.map(w => `<button type="button" class="storetab${w.id === S.routeWinkel ? ' active' : ''}" style="--c:${kleurVan(w)}" data-act="route-winkel" data-id="${esc(w.id)}">${esc(w.naam)}</button>`).join('');
-    if (!S.routeWinkel) { $('#w-route').innerHTML = '<div class="empty"><strong>Nog geen winkels</strong>Voeg eerst een winkel toe bij Winkels.</div>'; return; }
-    const w = winkel(S.routeWinkel), r = volgorde(w.id);
-    $('#w-route').innerHTML = `<ol class="order" id="route-lijst" data-sorteer="route">${r.map((c, k) => `<li data-sid="${esc(c)}" style="--c:${kleurVan(w)}"><span class="pos">${k + 1}</span><span>${esc(catNaam(c))}</span>
-        <span class="greep" aria-label="${esc(catNaam(c))} verslepen">${GREEP_ICON}</span></li>`).join('')}</ol>`;
-  }
 
   if (pagina === 'cats') {
-    $('#w-cats').innerHTML = `<h3 class="cat"><span>Standaardvolgorde</span></h3><div class="items" data-sorteer="cats">${cats().map(c => {
-      const vast = c.id === 'overig';
+    const lijst = instFilter(cats()), zoekt = !!instZoek();
+    if (!lijst.length) { $('#w-cats').innerHTML = instLeeg('productcategorie'); return; }
+    $('#w-cats').innerHTML = `<h3 class="cat"><span>Standaardvolgorde</span></h3><div class="items"${zoekt ? '' : ' data-sorteer="cats"'}>${lijst.map(c => {
+      const vast = c.id === 'overig', geenGreep = vast || zoekt;
       return veegRij('c:' + c.id,
         `<div class="check greeprij"><div class="greeprij-hoofd"><span class="lead" style="--c:var(--primary)">${esc(c.naam.charAt(0).toUpperCase())}</span>
-          <span class="pname">${esc(c.naam)}</span></div>${vast ? '<span></span>' : `<span class="greep" aria-label="${esc(c.naam)} verslepen">${GREEP_ICON}</span>`}</div>`,
+          <span class="pname">${esc(c.naam)}</span></div>${geenGreep ? '<span></span>' : `<span class="greep" aria-label="${esc(c.naam)} verslepen">${GREEP_ICON}</span>`}</div>`,
         vast ? [] : [WIJZIG('cat-hernoem', c), { act: 'cat-weg', id: c.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: c.naam + ' verwijderen' }],
-        vast ? '' : ` data-sid="${esc(c.id)}"`);
+        geenGreep ? '' : ` data-sid="${esc(c.id)}"`);
     }).join('')}</div>`;
   }
 
 }
+/** Winkel wijzigen: naam en looproute (afdelingen verslepen) in één venster; Opslaan bewaart beide. */
+function openWinkel(id) {
+  const w = winkel(id); if (!w) return;
+  openSheet(`<h4>Winkel wijzigen</h4><form id="winkel-wijzig">
+    <label class="lbl"><span>Naam</span><input class="field" name="naam" value="${esc(w.naam)}" autocomplete="off" enterkeyhint="done" required></label>
+    <div class="lbl"><span>Kleur</span><div class="snelkeuze kleurkeuze" role="radiogroup" aria-label="Kleur">${WINKELKLEUREN.map(k => `<button type="button" class="${w.kleur === k ? 'gekozen' : ''}" data-kleur="${k}" role="radio" aria-checked="${w.kleur === k}" aria-label="Kleur ${k.split('-')[1]}"><span class="lead vol" style="--c:var(--${k})"></span></button>`).join('')}</div></div>
+    <h3 class="cat"><span>Looproute</span></h3>
+    <ol class="order" data-sorteer="route">${volgorde(w.id).map((c, k) => `<li data-sid="${esc(c)}" style="--c:${kleurVan(w)}"><span class="pos">${k + 1}</span><span>${esc(catNaam(c))}</span>
+      <span class="greep" aria-label="${esc(catNaam(c))} verslepen">${GREEP_ICON}</span></li>`).join('')}</ol>
+    <div class="acts"><button class="btn wide">Opslaan</button></div></form>`);
+  $('#winkel-wijzig .kleurkeuze').onclick = e => {
+    const b = e.target.closest('[data-kleur]'); if (!b) return;
+    $$('#winkel-wijzig .kleurkeuze button').forEach(x => { const aan = x === b; x.classList.toggle('gekozen', aan); x.setAttribute('aria-checked', aan); });
+  };
+  $('#winkel-wijzig').onsubmit = e => {
+    e.preventDefault();
+    const naam = new FormData(e.target).get('naam').trim();
+    if (!naam) return;
+    if (D().winkels.some(x => x.id !== id && x.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} staat er al tussen.`);
+    const route = $$('#winkel-wijzig .order li').map(li => li.dataset.sid);
+    const gekozen = $('#winkel-wijzig .kleurkeuze .gekozen');
+    sluitSheet();
+    bewaar('winkels', [Object.assign({ id, naam, route }, gekozen ? { kleur: gekozen.dataset.kleur } : {})]);
+    melding(`${naam} opgeslagen.`);
+  };
+}
 function naarInst(pagina) {
-  S.instSub = pagina;
+  S.instSub = pagina; S.zoekI = '';
   wissel('instellingen');
 }
 
@@ -1770,13 +1858,14 @@ const ACTIES = {
   winkel: (b, id) => { S.winkel = id; tekenLijst(); },
   'nieuw-venster': () => {
     const soort = { winkels: ['Nieuwe winkel', 'winkel-form', 'winkel-invoer', 'Winkel', 'Bijvoorbeeld Lidl'],
-      cats: ['Nieuwe categorie', 'cat-form', 'cat-invoer', 'Categorie', 'Bijvoorbeeld Chips en zoutjes'],
+      cats: ['Nieuwe productcategorie', 'cat-form', 'cat-invoer', 'Productcategorie', 'Bijvoorbeeld Chips en zoutjes'],
       rcats: ['Nieuwe receptcategorie', 'rcat-form', 'rcat-invoer', 'Receptcategorie', 'Bijvoorbeeld Feestdagen'] }[S.instSub];
     if (!soort) return;
     const [titel, formId, inputId, label, voorbeeld] = soort;
     openSheet(`<h4>${titel}</h4><form id="${formId}">
       <label class="lbl"><span>${label}</span><input class="field" id="${inputId}" placeholder="${voorbeeld}" autocomplete="off" enterkeyhint="done"></label>
       <div class="acts"><button class="btn wide">Toevoegen</button></div></form>`);
+    if (S.zoekI.trim()) $('#' + inputId).value = cap(S.zoekI.trim());
     $('#' + inputId).focus();
   },
   'toevoeg-open': () => openZoeken(),
@@ -1823,15 +1912,24 @@ const ACTIES = {
   },
 
   'recept-nieuw': () => startBewerk(null),
-  'recept-bewerkmodus': () => startBewerk(S.receptOpen),
+  // Nieuw recept vanuit het weekmenu: na opslaan staat het meteen op die dag
+  'recept-nieuw-dag': b => { sluitSheet(); startBewerk(null); S.nieuwVoorDag = b.dataset.datum; },
+  'recept-bewerkmodus': () => { sluitVeeg(); startBewerk(S.receptOpen); },
   'recept-opslaan': () => {
     syncBewerk();
     const d = S.receptBewerk; if (!d) return;
     if (!d.naam.trim()) { melding('Geef het recept een naam.'); $('#titel-invoer').focus(); return; }
     const nieuwe = (S.rbNieuw || []).filter(p => d.ingredienten.some(i => i.product === p.id));
     if (nieuwe.length) bewaar('producten', nieuwe);
-    bewaar('recepten', [{ id: d.id, naam: cap(d.naam.trim()), categorie: d.categorie || 'overig', uitleg: d.stappen.map(x => x.trim().replace(/\s*\n\s*/g, ' ')).filter(Boolean).join('\n'),
+    bewaar('recepten', [{ id: d.id, naam: cap(d.naam.trim()), emoji: d.emoji || '', categorie: d.categorie || 'overig', uitleg: d.stappen.map(x => x.trim().replace(/\s*\n\s*/g, ' ')).filter(Boolean).join('\n'),
       ingredienten: d.ingredienten.map(i => ({ product: i.product, hoeveelheid: (i.hoeveelheid || '').trim() })) }]);
+    const dag = d.nieuw && S.nieuwVoorDag; S.nieuwVoorDag = null;
+    if (dag) {
+      const plan = D().mealplan.find(m => m.id === dag);
+      bewaar('mealplan', [{ id: dag, datum: dag, recepten: [...((plan && plan.recepten) || []), d.id] }]);
+      stopBewerk(true); wissel('week');
+      return melding(`${cap(d.naam.trim())} staat op ${DAGEN[vanIso(dag).getDay()]} ${kort(vanIso(dag))}.`);
+    }
     stopBewerk(false);
     melding(nieuwe.length ? `Recept opgeslagen. ${aantal(nieuwe.length, 'nieuw product staat', 'nieuwe producten staan')} onder Overig.` : 'Recept opgeslagen.');
   },
@@ -1898,12 +1996,7 @@ const ACTIES = {
     melding(`${p.naam} verwijderd.`);
   },
 
-  'route-winkel': (b, id) => { S.routeWinkel = id; tekenInst(); },
-  'winkel-hernoem': async (b, id) => {
-    sluitVeeg();
-    const w = winkel(id), n = await vraagTekst('Nieuwe naam voor ' + w.naam, w.naam);
-    if (n && n.trim()) bewaar('winkels', [{ id, naam: n.trim() }]);
-  },
+  'winkel-hernoem': (b, id) => { sluitVeeg(); openWinkel(id); },
   'winkel-weg': async (b, id) => {
     sluitVeeg();
     const w = winkel(id), ander = winkels().find(x => x.id !== id);
@@ -1994,7 +2087,7 @@ document.addEventListener('keydown', e => {
     }
   }
   if (e.key === 'Enter' && e.target.id === 'rb-zoek') { e.preventDefault(); const eerste = $('#rb-ac .ac-item'); if (eerste) eerste.click(); return; }
-  if (e.key === 'Enter' && e.target.id === 'titel-invoer') { e.preventDefault(); e.target.blur(); return; }
+  if (e.key === 'Enter' && (e.target.id === 'titel-invoer' || e.target.id === 'emoji-invoer')) { e.preventDefault(); e.target.blur(); return; }
   if (e.key !== 'Enter' || e.isComposing) return;
   const el = e.target;
   if (el.tagName !== 'INPUT' || !el.form) return;
@@ -2014,9 +2107,8 @@ document.addEventListener('submit', e => {
     const w = { id: 'w' + nieuwId(), naam, kleur, positie: Math.max(0, ...D().winkels.map(x => x.positie)) + 1, route: [] };
     inp.value = '';
     sluitSheet();
-    S.routeWinkel = w.id;
     bewaar('winkels', [w]);
-    melding(`${naam} toegevoegd.`, 'Route instellen', () => naarInst('route'));
+    melding(`${naam} toegevoegd.`, 'Route instellen', () => openWinkel(w.id));
   }
   if (id === 'rcat-form') {
     e.preventDefault();
@@ -2043,11 +2135,13 @@ document.addEventListener('submit', e => {
 document.addEventListener('input', e => {
   if (S.receptBewerk && (e.target.closest('#recept-detail') || e.target.id === 'titel-invoer')) S.rbGewijzigd = true;
   if (e.target.id === 'rb-zoek') tekenRbAc();
-  if (e.target.id === 'titel-invoer') groeiTitel();
+  if (e.target.id === 'titel-invoer') { groeiTitel(); const em = $('#emoji-invoer'); if (em) em.placeholder = e.target.value.charAt(0).toUpperCase(); }
+  if (e.target.id === 'emoji-invoer') { e.target.value = laatsteEmoji(e.target.value); S.rbGewijzigd = true; }
   if (e.target.classList && e.target.classList.contains('stap-invoer')) { e.target.style.height = 'auto'; e.target.style.height = e.target.scrollHeight + 'px'; }
   if (e.target.id === 'add-zoek') tekenAc();
   if (e.target.id === 'zoek-r') { S.zoekR = e.target.value; tekenRecepten(); }
   if (e.target.id === 'zoek-p') { S.zoekP = e.target.value; tekenProducten(); }
+  if (e.target.id === 'zoek-i') { S.zoekI = e.target.value; tekenInst(); }
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheet-wrap').hidden) sluitSheet(); });
 
