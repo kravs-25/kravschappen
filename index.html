@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="nl" data-theme="dark">
+<html lang="nl">
 <head>
 <base target="_top">
 <meta charset="utf-8">
@@ -9,7 +9,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Kravschappen">
-<meta name="theme-color" content="#0F1612">
+<meta name="theme-color" content="">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -18,43 +18,66 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#EEF3E8; --surface:#FFFFFF; --ink:#17251C; --muted:#5B6A60; --line:#D6E0CE;
-  --primary:#2D6A4C; --primary-ink:#FFFFFF; --primary-soft:#D9EADD;
-  --accent:#A8344F; --done:#8C988F;
-  /* vaste kleuren (gelijk in licht en donker) */
-  --op-kleur:#FFFFFF; --op-kleur-zacht:rgba(255,255,255,.25);
-  --merk:#2D6A4C; --actief:#3E5146;
-  /* ontkoppelen (iets van een lijst, dag of recept halen); zelfde rood als verwijderen, ander icoon */
-  --ontkoppel:#A8344F;
-  /* veegknoppen: groen in twee tinten, zodat knoppen naast elkaar te onderscheiden zijn */
-  --veeg-open:#2D6A4C; --wijzig:#4E8F68; --veeg-favoriet:#2D6A4C;
-  /* winkelkleuren voor nieuwe winkels */
-  --winkel-1:#2F6FA6; --winkel-2:#C2452D; --winkel-3:#7A4FB5; --winkel-4:#1F8A70; --winkel-5:#C2417F; --winkel-6:#4A6378; --winkel-7:#5E8C2F;
-  /* transparant: waas achter vensters, schaduwen, glazen tabbalk */
-  --overlay:rgba(18,44,30,.18); --schaduw:rgba(18,44,30,.16); --schaduw-klein:rgba(0,0,0,.2);
-  --tab-glas:rgba(255,255,255,.72); --tab-glans:rgba(255,255,255,.55); --tab-rand:rgba(255,255,255,.7);
-  --tab-actief:rgba(255,255,255,.7); --tab-licht:rgba(255,255,255,.9); --tab-schaduw:rgba(18,44,30,.14);
-  color-scheme:light;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0F1612; --surface:#18221C; --ink:#E4ECE3; --muted:#97A69B; --line:#2A3830;
-    --primary:#7DC49C; --primary-ink:#0D1A12; --primary-soft:#21372A;
-    --accent:#A8344F; --done:#66746A;
-    --overlay:rgba(0,0,0,.4); --schaduw:rgba(0,0,0,.45);
-    --tab-glas:rgba(30,42,35,.72); --tab-glans:rgba(255,255,255,.12); --tab-rand:rgba(255,255,255,.12);
-    --tab-actief:rgba(255,255,255,.12); --tab-licht:rgba(255,255,255,.18); --tab-schaduw:rgba(0,0,0,.45);
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
+  /* ---------- Kleur (alleen donker) ---------- */
   --bg:#0F1612; --surface:#18221C; --ink:#E4ECE3; --muted:#97A69B; --line:#2A3830;
+  --merk:#2D6A4C; --actief:#3E5146; --op-kleur:#FFFFFF; --op-kleur-zacht:rgba(255,255,255,.25);
   --primary:#7DC49C; --primary-ink:#0D1A12; --primary-soft:#21372A;
   --accent:#A8344F; --done:#66746A;
-  color-scheme:dark;
-  --overlay:rgba(0,0,0,.4); --schaduw:rgba(0,0,0,.45);
+  /* ontkoppelen (iets van een lijst, dag of recept halen); zelfde rood als verwijderen, ander icoon */
+  --ontkoppel:var(--accent);
+  /* veegknoppen: groen in twee tinten, zodat knoppen naast elkaar te onderscheiden zijn */
+  --veeg-open:var(--merk); --wijzig:#4E8F68; --veeg-favoriet:var(--merk);
+  /* winkelkleuren; een winkel bewaart de naam van het token ('winkel-1'), niet de kleur */
+  --winkel-1:#2F6FA6; --winkel-2:#C2452D; --winkel-3:#7A4FB5; --winkel-4:#1F8A70; --winkel-5:#C2417F; --winkel-6:#4A6378; --winkel-7:#5E8C2F;
+  /* chips: tekst = --c gemengd met --chip-meng; vlak = --c met --chip-vlak dekking */
+  --chip-meng:var(--op-kleur); --chip-tint:55%; --chip-vlak:28%;
+  /* transparant: waas achter vensters, schaduwen, glazen tabbalk */
+  --overlay:rgba(0,0,0,.4); --schaduw:rgba(0,0,0,.45); --schaduw-klein:rgba(0,0,0,.2);
   --tab-glas:rgba(30,42,35,.72); --tab-glans:rgba(255,255,255,.12); --tab-rand:rgba(255,255,255,.12);
   --tab-actief:rgba(255,255,255,.12); --tab-licht:rgba(255,255,255,.18); --tab-schaduw:rgba(0,0,0,.45);
+
+  /* ---------- Tekst ---------- */
+  --font:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --fs-xs:12px; --fs-s:14px; --fs-m:15px; --fs-basis:17px; --fs-l:18px; --fs-xl:24px; --fs-titel:34px;
+  --gewicht-naam:500; --gewicht-vet:700; --gewicht-zwaar:800;
+
+  /* ---------- Vorm ---------- */
+  --r-s:10px; --r-m:14px; --r-l:18px; --r-xl:24px; --r-rond:999px;
+  --schaduw-lijst:0 14px 34px var(--schaduw); --schaduw-sleep:0 12px 30px var(--schaduw);
+  --schaduw-knop:0 2px 4px var(--schaduw-klein); --schaduw-tabs:0 10px 30px var(--tab-schaduw);
+  --glans:inset 0 1px 0 var(--tab-licht);
+  --waas-s:6px; --waas-m:10px; --waas-l:30px;
+
+  /* ---------- Maten ---------- */
+  /* ---------- Ruimte ---------- */
+  --ruimte-0:2px;  /* alleen voor fijnafstelling */
+  --ruimte-1:4px; --ruimte-2:8px; --ruimte-3:12px; --ruimte-4:16px; --ruimte-5:20px; --ruimte-6:28px;
+
+  /* ---------- Maten ---------- */
+  --breedte:560px; --breedte-bevestig:440px; --breedte-code:360px; --rand:var(--ruimte-4);
+  --h-s:44px;       /* kleine knop, pil, ronde knop */
+  --tik:48px;       /* knoppen, velden, tabs */
+  --h-m:54px;       /* rij in een venster of keuzelijst */
+  --rij:58px;       /* gewone rij */
+  --h-tekstvak:110px;
+  --rondje:28px;    /* rondje vooraan een rij */
+  --vinkje:24px;    /* het vinkje binnen dat rondje */
+  --ico:32px;       /* icoon in een menurij */
+  --icoonknop:36px; /* knop binnen een veld */
+  --icoon-s:16px; --icoon-m:22px; --icoon-l:28px;
+  --veegknop:72px;
+  --tabbalk-hoogte:64px; --tabbalk-breedte:400px; --tabbalk-afstand:var(--ruimte-3);
+  /* ruimte onder de inhoud, zodat niets achter de tabbalk verdwijnt */
+  --tabbalk-ruimte:calc(var(--tabbalk-afstand) + var(--tabbalk-hoogte) + var(--ruimte-6));
+
+  /* ---------- Beweging ---------- */
+  --duur-snel:.15s; --duur:.2s; --duur-traag:.25s; --duur-lus:1.2s; /* lus: herhalende animatie (skelet) */
+  --veer:cubic-bezier(.2,.9,.3,1); --veer-tab:cubic-bezier(.3,1.4,.5,1);
+
+  /* ---------- Lagen ---------- */
+  --z-binnen:1; --z-kop:5; --z-keuzelijst:7; --z-tabs:8; --z-label:9; --z-venster:20; --z-boven:30; --z-bevestig:40; --z-code:50;
+
+  color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
@@ -65,13 +88,12 @@ html,body{overflow:hidden;overscroll-behavior:none}
    waardoor alles wat onderaan vastzit iets hoger komt te staan. Daarom is de pagina altijd
    schermhoog plus de statusbalk; omdat hij niet scrolt, heeft dat verder geen gevolgen. */
 html{height:calc(100% + env(safe-area-inset-top,0px))}
-#scroller{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-gutter:stable;padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
-body.toetsenbord #scroller{padding-bottom:calc(var(--kb,0px) + 24px)}
+#scroller{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-gutter:stable;padding-bottom:calc(var(--tabbalk-ruimte) + env(safe-area-inset-bottom,0px))}
+body.toetsenbord #scroller{padding-bottom:calc(var(--kb,0px) + var(--ruimte-5))}
 body{
   height:100%;margin:0;background:var(--bg);color:var(--ink);
-  font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  font-size:17px;line-height:1.4;
-  padding-bottom:calc(84px + env(safe-area-inset-bottom,0px));
+  font-family:var(--font);
+  font-size:var(--fs-basis);line-height:1.4;
   -webkit-tap-highlight-color:transparent;
 }
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
@@ -79,107 +101,106 @@ button:disabled{opacity:.35;cursor:default}
 input,select,textarea{font:inherit;color:var(--ink)}
 :focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 a{color:var(--primary)}
-.wrap{max-width:560px;margin:0 auto;padding:0 16px}
-header.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:calc(14px + env(safe-area-inset-top,0px)) 0 10px}
-body.preview header.top{padding-top:calc(34px + env(safe-area-inset-top,0px))}
-#preview-pill{position:fixed;top:calc(6px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:9;background:var(--accent);color:var(--op-kleur);font-size:12px;font-weight:800;letter-spacing:.04em;border-radius:20px;padding:4px 12px;text-align:center;white-space:nowrap;width:max-content}
-.toprow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px}
+.wrap{max-width:var(--breedte);margin:0 auto;padding:0 var(--rand)}
+header.top{position:sticky;top:0;z-index:var(--z-kop);background:var(--bg);padding:calc(var(--ruimte-3) + env(safe-area-inset-top,0px)) 0 var(--ruimte-2)}
+body.preview header.top{padding-top:calc(var(--ruimte-6) + var(--ruimte-1) + env(safe-area-inset-top,0px))}
+#preview-pill{position:fixed;top:calc(var(--ruimte-1) + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:var(--z-label);background:var(--accent);color:var(--op-kleur);font-size:var(--fs-xs);font-weight:var(--gewicht-zwaar);letter-spacing:.04em;border-radius:var(--r-rond);padding:var(--ruimte-1) var(--ruimte-3);text-align:center;white-space:nowrap;width:max-content}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:var(--ruimte-3);min-height:var(--tik)}
 .toprow > div:first-child{flex:1;min-width:0}
 #title{overflow-wrap:normal}
 #topextra:empty{display:none}
-header.top h1{margin:0;font-size:34px;font-weight:800;letter-spacing:-0.02em;line-height:1.05}
+header.top h1{margin:0;font-size:var(--fs-titel);font-weight:var(--gewicht-zwaar);letter-spacing:-0.02em;line-height:1.05}
 #headerextra:empty{display:none}
-#headerextra .stores{margin-top:12px}
-#headerextra #add-form{margin:10px 0 0}
+#headerextra .stores{margin-top:var(--ruimte-3)}
+#headerextra #add-form{margin:var(--ruimte-2) 0 0}
 #add-form[hidden]{display:none}
 .toevoeg-knop{color:var(--primary)}
-.toevoeg-knop svg{width:22px;height:22px;transition:transform .2s}
+.toevoeg-knop svg{width:var(--icoon-m);height:var(--icoon-m);transition:transform var(--duur)}
 .toevoeg-knop.open{background:var(--primary);color:var(--primary-ink);border-color:var(--primary)}
 .toevoeg-knop.open svg{transform:rotate(45deg)}
 #lijst{padding-top:0}
-#headerextra .kopzoek{margin:12px 0 0;min-height:48px}
-#topextra .btn{min-height:44px;padding:0 18px}
+#headerextra .kopzoek{margin:var(--ruimte-3) 0 0;min-height:var(--tik)}
+#topextra .btn{min-height:var(--h-s);padding:0 var(--ruimte-4)}
 .bewerk-knop{color:var(--primary)}
-.bewerk-knop svg{width:20px;height:20px}
+.bewerk-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
 .bewerk-knop.actief{background:var(--primary);color:var(--primary-ink);border-color:var(--primary)}
-.bewerk-knop.actief svg{width:22px;height:22px}
-.titel-invoer{display:block;width:calc(100% + 12px);margin-left:-12px;font:inherit;color:inherit;letter-spacing:inherit;line-height:1.1;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px 11px;min-height:46px;resize:none;overflow:hidden;font-weight:800}
+.bewerk-knop.actief svg{width:var(--icoon-m);height:var(--icoon-m)}
+.titel-invoer{display:block;width:calc(100% + var(--ruimte-3) + 1px);margin-left:calc((var(--ruimte-3) + 1px) * -1);font:inherit;color:inherit;letter-spacing:inherit;line-height:1.1;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-1) var(--ruimte-3);min-height:var(--tik);resize:none;overflow:hidden;font-weight:var(--gewicht-zwaar)}
 .titel-invoer:focus{outline:2px solid var(--primary);outline-offset:0}
-.kaal-select{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:17px;color:var(--ink);padding:14px 40px 14px 16px;min-height:52px;-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 22px) 54%,calc(100% - 17px) 54%;background-size:5px 5px;background-repeat:no-repeat}
-.check.staprij,.check.stapweergave{grid-template-columns:28px 1fr 28px;align-items:start;min-height:54px}
-.check.staprij{grid-template-columns:28px 1fr 28px 38px;padding-right:8px}
-.staprij .greep{margin:-10px -6px -10px -4px}
-.check.stapweergave{grid-template-columns:28px 1fr}
-.staprij .pos,.stapweergave .pos{margin-top:1px}
-.staptekst{font-size:17px;line-height:1.45;padding-top:3px;overflow-wrap:anywhere}
-.stap-invoer{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:17px;line-height:1.45;color:var(--ink);resize:none;overflow:hidden;padding:3px 0;margin:0;outline:none}
+.kaal-select{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);color:var(--ink);padding:var(--ruimte-3) calc(var(--ruimte-6) + var(--ruimte-3)) var(--ruimte-3) var(--ruimte-4);min-height:var(--h-m);-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 22px) 54%,calc(100% - 17px) 54%;background-size:5px 5px;background-repeat:no-repeat}
+.check.staprij,.check.stapweergave{grid-template-columns:var(--rondje) 1fr var(--rondje);align-items:start;min-height:var(--h-m)}
+.check.staprij{grid-template-columns:var(--rondje) 1fr var(--rondje) calc(var(--tik) - var(--ruimte-1) * 2);padding-right:var(--ruimte-2)}
+.staprij .greep{margin:calc((var(--rondje) - var(--tik)) / 2) calc(var(--ruimte-1) * -1)}
+.check.stapweergave{grid-template-columns:var(--rondje) 1fr}
+.staprij .pos,.stapweergave .pos{margin-top:var(--ruimte-0)}
+.staptekst{font-size:var(--fs-basis);line-height:1.45;padding-top:var(--ruimte-0);overflow-wrap:anywhere}
+.stap-invoer{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);line-height:1.45;color:var(--ink);resize:none;overflow:hidden;padding:var(--ruimte-0) 0;margin:0;outline:none}
 .stap-invoer::placeholder{color:var(--muted)}
 .staprij:focus-within{background:color-mix(in srgb,var(--primary) 6%,transparent)}
 .rb-stap-plus{display:block;width:100%;text-align:left;border-top:1px solid var(--line)}
-.rb-stap-plus .pmeta{font-size:17px;margin:0}
-.check.bewerkrij{grid-template-columns:28px 1fr 104px;min-height:54px}
-.minrond{width:26px;height:26px;border-radius:50%;background:var(--ontkoppel);color:var(--op-kleur);display:grid;place-items:center}
-.minrond svg{width:14px;height:14px}
-.aantal-invoer{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:10px;padding:8px 10px;font:inherit;font-size:16px;text-align:right;color:var(--ink)}
-.rb-toevoeg .bewerkrij{grid-template-columns:28px 1fr}
-.rb-toevoeg input{width:100%;border:0;background:transparent;font:inherit;font-size:17px;color:var(--ink);padding:8px 0;outline:none}
+.rb-stap-plus .pmeta{font-size:var(--fs-basis);margin:0}
+.check.bewerkrij{grid-template-columns:var(--rondje) 1fr 104px;min-height:var(--h-m)}
+.minrond{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);background:var(--ontkoppel);color:var(--op-kleur);display:grid;place-items:center}
+.minrond svg{width:var(--icoon-s);height:var(--icoon-s)}
+.aantal-invoer{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:var(--r-s);padding:var(--ruimte-2) var(--ruimte-2);font:inherit;font-size:var(--fs-basis);text-align:right;color:var(--ink)}
+.rb-toevoeg .bewerkrij{grid-template-columns:var(--rondje) 1fr}
+.rb-toevoeg input{width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);color:var(--ink);padding:var(--ruimte-2) 0;outline:none}
 .rb-toevoeg input::placeholder{color:var(--muted)}
 .rb-wrap{position:relative}
-.kaal-select:focus{outline:2px solid var(--primary);outline-offset:-2px;border-radius:18px}
-.check.detailrij{grid-template-columns:1fr auto auto;min-height:52px}
+.kaal-select:focus{outline:2px solid var(--primary);outline-offset:-2px;border-radius:var(--r-l)}
+.check.detailrij{grid-template-columns:1fr auto auto;min-height:var(--h-m)}
 .rz-rij{width:100%;text-align:left}
-.rz-rij .chevr{justify-self:end;margin-right:4px}
+.rz-rij .chevr{justify-self:end;margin-right:var(--ruimte-1)}
 .pick[hidden],.koppel-groep[hidden]{display:none}
-#koppel-zoek{margin:0 0 4px}
-#koppel h3.cat:first-child{margin-top:14px}
-header.top p{margin:4px 0 0;color:var(--muted);font-size:15px}
+#koppel-zoek{margin:0 0 var(--ruimte-1)}
+#koppel h3.cat:first-child{margin-top:var(--ruimte-3)}
+header.top p{margin:var(--ruimte-1) 0 0;color:var(--muted);font-size:var(--fs-m)}
 #headerextra #w-tabs{margin-bottom:0}
 /* Algemene velden en knoppen */
-.field{display:block;width:100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:48px;-webkit-appearance:none;appearance:none}
+.field{display:block;width:100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--tik);-webkit-appearance:none;appearance:none}
 .field::placeholder{color:var(--muted)}
-select.field{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 54%,calc(100% - 15px) 54%;background-size:5px 5px;background-repeat:no-repeat;padding-right:36px}
-textarea.field{resize:vertical;min-height:110px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--primary);color:var(--primary-ink);border-radius:14px;padding:0 18px;font-weight:700;min-height:48px;white-space:nowrap;text-align:center}
+select.field{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 54%,calc(100% - 15px) 54%;background-size:5px 5px;background-repeat:no-repeat;padding-right:calc(var(--ruimte-6) + var(--ruimte-2))}
+textarea.field{resize:vertical;min-height:var(--h-tekstvak)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--ruimte-1);background:var(--primary);color:var(--primary-ink);border-radius:var(--r-m);padding:0 var(--ruimte-4);font-weight:var(--gewicht-vet);min-height:var(--tik);white-space:nowrap;text-align:center}
 .btn.soft{background:var(--primary-soft);color:var(--ink)}
 .btn.danger{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
 .btn.wide{width:100%}
-.add{display:flex;gap:8px;margin:14px 0 4px}
+.add{display:flex;gap:var(--ruimte-2);margin:var(--ruimte-3) 0 var(--ruimte-1)}
 .add .field{flex:1}
 #add-form{position:relative}
-#add-form .aantal{flex:0 0 92px}
-.ac-lijst{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:7;max-height:calc(100vh - 290px - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);border:1px solid var(--line);border-radius:18px;touch-action:pan-y;box-shadow:0 14px 34px var(--schaduw)}
-.ac-item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;width:100%;padding:0 14px 0 0;min-height:54px;border-top:1px solid var(--line)}
+.ac-lijst{position:absolute;left:0;right:0;top:calc(100% + var(--ruimte-1));z-index:var(--z-keuzelijst);max-height:calc(100vh - 290px - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);touch-action:pan-y;box-shadow:var(--schaduw-lijst)}
+.ac-item{display:grid;grid-template-columns:auto 1fr auto;gap:var(--ruimte-3);align-items:center;width:100%;padding:0 var(--ruimte-3) 0 0;min-height:var(--h-m);border-top:1px solid var(--line)}
 .ac-item:first-child{border-top:0}
-.wis-knop{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:10px;min-height:52px;border-radius:18px;background:var(--surface);border:1px solid var(--line);color:var(--ontkoppel);font-weight:700;text-align:center}
-.wis-knop svg{width:19px;height:19px}
+.wis-knop{display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);width:100%;margin-top:var(--ruimte-2);min-height:var(--h-m);border-radius:var(--r-l);background:var(--surface);border:1px solid var(--line);color:var(--ontkoppel);font-weight:var(--gewicht-vet);text-align:center}
+.wis-knop svg{width:var(--icoon-s);height:var(--icoon-s)}
 .wis-knop:active{background:color-mix(in srgb,var(--ontkoppel) 10%,var(--surface))}
-.ac-kop{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;padding:14px 16px 6px;background:var(--surface);font-size:15px;font-weight:700;color:var(--muted);border-top:1px solid var(--line)}
+.ac-kop{position:sticky;top:0;z-index:var(--z-binnen);display:flex;justify-content:space-between;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-1);background:var(--surface);font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);border-top:1px solid var(--line)}
 .ac-kop:first-child{border-top:0}
 .ac-kop + .ac-item{border-top:0}
 #ac .swipe{margin:0}
 #ac .swipe > .ac-item{border-top:0;background:var(--surface)}
 #ac .swipe + .swipe{border-top:1px solid var(--line)}
 #ac .swipe-weg{border-radius:0}
-.ac-plus{align-self:stretch;display:grid;place-items:center;padding:0 0 0 14px}
-.ac-naam{align-self:stretch;display:flex;align-items:center;min-width:0;padding:12px 0}
+.ac-plus{align-self:stretch;display:grid;place-items:center;padding:0 0 0 var(--ruimte-3)}
+.ac-naam{align-self:stretch;display:flex;align-items:center;min-width:0;padding:var(--ruimte-3) 0}
 .ac-naam:active{opacity:.6}
 .ac-item > .chip,.ac-item > .status{justify-self:end}
 /* Rest van de pagina vervaagt zolang de keuzelijst open is */
-#stores,#lijst{transition:filter .2s,opacity .2s}
-body.ac-open #lijst{filter:blur(6px);opacity:.45;pointer-events:none}
-.ac-item .pname b{font-weight:800}
-.ac-item .status{font-size:14px;color:var(--muted);white-space:nowrap}
-.ac-nieuw{color:var(--primary);font-weight:700}
-.empty{background:var(--surface);border:1px dashed var(--line);border-radius:18px;padding:22px 18px;color:var(--muted);margin-top:16px}
-.empty strong{display:block;color:var(--ink);font-size:18px;margin-bottom:4px}
-.empty .btn{margin-top:12px}
+#stores,#lijst{transition:filter var(--duur),opacity var(--duur)}
+body.ac-open #lijst{filter:blur(var(--waas-s));opacity:.45;pointer-events:none}
+.ac-item .pname b{font-weight:var(--gewicht-zwaar)}
+.ac-item .status{font-size:var(--fs-s);color:var(--muted);white-space:nowrap}
+.ac-nieuw{color:var(--primary);font-weight:var(--gewicht-vet)}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r-l);padding:var(--ruimte-5) var(--ruimte-4);color:var(--muted);margin-top:var(--ruimte-4)}
+.empty strong{display:block;color:var(--ink);font-size:var(--fs-l);margin-bottom:var(--ruimte-1)}
+.empty .btn{margin-top:var(--ruimte-3)}
 /* Vinkje */
-.tick{width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;transition:background .15s,border-color .15s,transform .12s;flex:0 0 24px}
+.tick{width:var(--vinkje);height:var(--vinkje);border-radius:var(--r-rond);border:2px solid var(--line);display:grid;place-items:center;transition:background var(--duur-snel),border-color var(--duur-snel),transform var(--duur-snel);flex:0 0 var(--vinkje)}
 .on .tick{background:var(--primary);border-color:var(--primary)}
 .on .tick::after,.item.done .tick::after{content:"";width:10px;height:6px;border-left:2.5px solid var(--primary-ink);border-bottom:2.5px solid var(--primary-ink);transform:translateY(-1px) rotate(-45deg)}
 /* Op-de-lijst-knop: plus wordt een tasje, zodat het niet lijkt op afvinken */
-.addbtn{width:28px;height:28px;border-radius:50%;border:2px solid color-mix(in srgb,var(--muted) 55%,transparent);display:grid;place-items:center;color:var(--muted);transition:background-color .15s,border-color .15s,color .15s,transform .12s}
-.addbtn svg{grid-area:1/1;width:16px;height:16px}
+.addbtn{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);border:2px solid color-mix(in srgb,var(--muted) 55%,transparent);display:grid;place-items:center;color:var(--muted);transition:background-color var(--duur-snel),border-color var(--duur-snel),color var(--duur-snel),transform var(--duur-snel)}
+.addbtn svg{grid-area:1/1;width:var(--icoon-s);height:var(--icoon-s)}
 .addbtn .bag{display:none}
 .on .addbtn{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
 .on .addbtn .plus{display:none}
@@ -188,205 +209,209 @@ body.ac-open #lijst{filter:blur(6px);opacity:.45;pointer-events:none}
 .elders .addbtn{border-color:var(--primary);color:var(--primary);background:transparent}
 .elders .addbtn .plus{display:none}
 .elders .addbtn .bag{display:block}
-.samen-uitleg{margin:0 4px 16px;color:var(--muted);font-size:16px}
+.samen-uitleg{margin:0 var(--ruimte-1) var(--ruimte-4);color:var(--muted);font-size:var(--fs-basis)}
 .samen-uitleg b{color:var(--ink)}
-.samen-knoppen{display:grid;gap:8px}
-.samen-knoppen .btn{white-space:normal;text-align:center;padding:12px 16px}
+.samen-knoppen{display:grid;gap:var(--ruimte-2)}
+.samen-knoppen .btn{white-space:normal;text-align:center;padding:var(--ruimte-3) var(--ruimte-4)}
 h3.dagkop{align-items:center}
 h3.dagkop.leeg{opacity:.75}
-.round{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
-.recipe{background:var(--surface);border:1px solid var(--line);border-radius:18px;margin-bottom:10px;overflow:hidden}
+.round{width:var(--h-s);height:var(--h-s);border-radius:var(--r-rond);border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.recipe{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);margin-bottom:var(--ruimte-2);overflow:hidden}
 /* Vegen in het weekmenu */
-.swipe{position:relative;margin-bottom:10px;touch-action:pan-y;-webkit-user-select:none;user-select:none}
-.swipe .swipe-kaart{position:relative;margin:0;transition:transform .28s cubic-bezier(.2,.9,.3,1)}
-.swipe.open .swipe-kaart{transform:translateX(calc(var(--bw,72px) * -1))}
+.swipe{position:relative;margin-bottom:var(--ruimte-2);touch-action:pan-y;-webkit-user-select:none;user-select:none}
+.swipe .swipe-kaart{position:relative;margin:0;transition:transform var(--duur-traag) var(--veer)}
+.swipe{--bw:calc(var(--n,1) * var(--veegknop))}   /* --n = aantal veegknoppen */
+.swipe.open .swipe-kaart{transform:translateX(calc(var(--bw) * -1))}
 .swipe-acties{position:absolute;inset:0;display:flex;justify-content:flex-end;visibility:hidden}
 .swipe.open .swipe-acties,.swipe.bezig .swipe-acties{visibility:visible}
 /* Veegknoppen tonen alleen een icoon; de tekst (font-size 0) is er alleen voor de schermlezer */
-.swipe-weg,.swipe-wk{width:72px;height:100%;color:var(--op-kleur);font-size:0;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.swipe-weg{border-radius:18px;background:var(--accent)}
+.swipe-weg,.swipe-wk{width:var(--veegknop);height:100%;color:var(--op-kleur);font-size:0;font-weight:var(--gewicht-vet);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.swipe-weg{border-radius:var(--r-l);background:var(--accent)}
 .swipe-wk{background:var(--c)}
-.swipe-weg svg,.swipe-wk svg{width:28px;height:28px}
+.swipe-weg svg,.swipe-wk svg{width:var(--icoon-l);height:var(--icoon-l)}
 .items .swipe{margin:0}
 .items .swipe + .swipe{border-top:1px solid var(--line)}
 .items .swipe-weg{border-radius:0}
 .items .item{background:var(--surface)}
 .swipe > .item{border-top:0}
 /* Recepten van één dag samen in één blok, net als de boodschappenlijst */
-.dag-groep{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:0}
+.dag-groep{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden;margin-bottom:0}
 .dag-groep .swipe{margin:0}
 .dag-groep .swipe + .swipe{border-top:1px solid var(--line)}
 .dag-groep .recipe{border:0;border-radius:0;margin:0}
 .dag-groep .swipe-weg{border-radius:0}
-.recipe-head{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:12px;width:100%;padding:12px 16px 12px 14px;min-height:58px}
-.pmeta.has{color:var(--primary);font-weight:600}
-.weekbalk{display:grid;grid-template-columns:52px 1fr 52px;gap:8px;margin-top:12px;padding-bottom:2px}
+.recipe-head{display:grid;grid-template-columns:var(--rondje) 1fr auto;align-items:center;gap:var(--ruimte-3);width:100%;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-3) var(--ruimte-3);min-height:var(--rij)}
+.weekbalk{display:grid;grid-template-columns:var(--h-m) 1fr var(--h-m);gap:var(--ruimte-2);margin-top:var(--ruimte-3);padding-bottom:var(--ruimte-0)}
 .weekpijl{flex:none;padding:0;justify-content:center}
-.weekpijl svg{width:22px;height:22px}
-.weeklabel{padding:6px 12px}
+.weekpijl svg{width:var(--icoon-m);height:var(--icoon-m)}
+.weeklabel{padding:var(--ruimte-1) var(--ruimte-3)}
 .weeklabel.active{--c:var(--actief)}
 .dagkop.vandaag{color:var(--primary)}
-.dag-plus-rij{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;padding:8px 14px;text-align:center}
-.dag-plus-rij .addbtn{width:26px;height:26px}
-.dag-plus-rij .pmeta{margin:0;font-size:17px}
+.dag-plus-rij{display:flex;align-items:center;justify-content:center;width:100%;min-height:var(--tik);padding:var(--ruimte-2) var(--ruimte-3);text-align:center}
+.dag-plus-rij .addbtn{width:var(--rondje);height:var(--rondje)}
+.dag-plus-rij .pmeta{margin:0;font-size:var(--fs-basis)}
 .dag-groep .swipe + .dag-plus-rij{border-top:1px solid var(--line)}
 .dag-plus-rij:active{background:var(--primary-soft)}
 .recipe .ings{padding:0;margin:0;border-top:1px solid var(--line);background:color-mix(in srgb,var(--bg) 55%,var(--surface))}
 .ings li + li .ing,.ings li + li.leeg-ing{border-top:1px solid var(--line)}
-.chev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:-4px 4px 0 0;transition:transform .15s}
-[aria-expanded=true] .chev{transform:rotate(-135deg);margin-top:4px}
-.ings{list-style:none;margin:0;padding:0 8px 8px}
-.ing{display:grid;grid-template-columns:28px 1fr auto auto;align-items:center;gap:12px;width:100%;padding:11px 16px 11px 14px;border-radius:0;min-height:52px}
+.chev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:calc(var(--ruimte-1) * -1) var(--ruimte-1) 0 0;transition:transform var(--duur-snel)}
+[aria-expanded=true] .chev{transform:rotate(-135deg);margin-top:var(--ruimte-1)}
+.ings{list-style:none;margin:0;padding:0 var(--ruimte-2) var(--ruimte-2)}
+.ing{display:grid;grid-template-columns:var(--rondje) 1fr auto auto;align-items:center;gap:var(--ruimte-3);width:100%;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-3) var(--ruimte-3);border-radius:0;min-height:var(--h-m)}
 .ing:active{background:none}
-.ingknop{width:48px;height:48px;margin:-10px;display:grid;place-items:center;border-radius:50%}
+.ingknop{width:var(--tik);height:var(--tik);margin:calc((var(--rondje) - var(--tik)) / 2);display:grid;place-items:center;border-radius:var(--r-rond)}
 .ingknop:active .addbtn{transform:scale(.88)}
-.iamt{color:var(--muted);font-size:15px;white-space:nowrap}
-.uitleg{color:var(--muted);font-size:15px;margin:0 16px 14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.iamt{color:var(--muted);font-size:var(--fs-m);white-space:nowrap}
+.uitleg{color:var(--muted);font-size:var(--fs-m);margin:0 var(--ruimte-4) var(--ruimte-3);white-space:pre-wrap;overflow-wrap:anywhere}
 /* Boodschappen */
-.stores{display:flex;gap:8px;margin-top:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.stores{display:flex;gap:var(--ruimte-2);margin-top:var(--ruimte-1);overflow-x:auto;scrollbar-width:none;padding-bottom:var(--ruimte-0)}
 .stores::-webkit-scrollbar{display:none}
-.storetab{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;border-radius:14px;border:2px solid var(--line);background:var(--surface);font-weight:700;min-height:48px}
-.storetab .n{font-variant-numeric:tabular-nums;font-size:14px;background:var(--bg);border-radius:20px;padding:1px 8px;color:var(--muted)}
+.storetab{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);padding:var(--ruimte-2) var(--ruimte-3);border-radius:var(--r-m);border:2px solid var(--line);background:var(--surface);font-weight:var(--gewicht-vet);min-height:var(--tik)}
+.storetab .n{font-variant-numeric:tabular-nums;font-size:var(--fs-s);background:var(--bg);border-radius:var(--r-rond);padding:var(--ruimte-0) var(--ruimte-2);color:var(--muted)}
 .storetab.active{border-color:var(--c);background:var(--c);color:var(--op-kleur)}
 .storetab.active .n{background:var(--op-kleur-zacht);color:var(--op-kleur)}
-.storetab.plus{flex:0 0 auto;color:var(--muted);font-size:22px;padding:0 16px}
-h3.cat{font-size:15px;font-weight:700;color:var(--muted);margin:20px 4px 6px;display:flex;justify-content:space-between}
-.items{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.storetab.plus{flex:0 0 auto;color:var(--muted);font-size:var(--fs-xl);padding:0 var(--ruimte-4)}
+h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);margin:var(--ruimte-5) var(--ruimte-1) var(--ruimte-1);display:flex;justify-content:space-between}
+.items{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden}
 .item{display:grid;grid-template-columns:1fr;align-items:stretch;border-top:1px solid var(--line)}
 .item:first-child{border-top:0}
-.check{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:center;padding:12px 14px;min-height:58px}
-.vinkknop{width:48px;height:48px;margin:-10px;display:grid;place-items:center;border-radius:50%}
+.check{display:grid;grid-template-columns:var(--rondje) 1fr;gap:var(--ruimte-3);align-items:center;padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--rij)}
+.vinkknop{width:var(--tik);height:var(--tik);margin:calc((var(--rondje) - var(--tik)) / 2);display:grid;place-items:center;border-radius:var(--r-rond)}
 .vinkknop:active .tick{transform:scale(.88)}
 /* Aantal aanpassen */
-.stepper{display:grid;grid-template-columns:60px 1fr 60px;gap:10px;align-items:center;margin:0 0 14px}
-.step{height:60px;border-radius:18px;background:var(--primary-soft);color:var(--primary);display:grid;place-items:center}
-.step svg{width:26px;height:26px}
+.stepper{display:grid;grid-template-columns:var(--rij) 1fr var(--rij);gap:var(--ruimte-2);align-items:center;margin:0 0 var(--ruimte-3)}
+.step{height:var(--rij);border-radius:var(--r-l);background:var(--primary-soft);color:var(--primary);display:grid;place-items:center}
+.step svg{width:var(--icoon-l);height:var(--icoon-l)}
 .step:active{transform:scale(.94)}
-.stepval{text-align:center;font-size:22px;font-weight:700;min-height:60px}
-.snelkeuze{display:flex;flex-wrap:wrap;gap:8px}
-.sheet h3.cat{margin:6px 4px 8px}
-.sheet h3.cat ~ h3.cat{margin-top:20px}
+.stepval{text-align:center;font-size:var(--fs-xl);font-weight:var(--gewicht-vet);min-height:var(--rij)}
+.snelkeuze{display:flex;flex-wrap:wrap;gap:var(--ruimte-2)}
+.sheet h3.cat{margin:var(--ruimte-1) var(--ruimte-1) var(--ruimte-2)}
+.sheet h3.cat ~ h3.cat{margin-top:var(--ruimte-5)}
 .item-winkels{margin:0}
-#sheet-wrap .sheet-bg{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:var(--overlay)}
-.snelkeuze button{padding:9px 16px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:700;min-height:40px}
+.sheet-wrap .sheet-bg{-webkit-backdrop-filter:blur(var(--waas-m));backdrop-filter:blur(var(--waas-m));background:var(--overlay)}
+.snelkeuze button{padding:var(--ruimte-2) var(--ruimte-4);border-radius:var(--r-rond);background:var(--surface);border:1px solid var(--line);font-weight:var(--gewicht-vet);min-height:var(--h-s)}
 .snelkeuze button.gekozen{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
-.check.metchip{grid-template-columns:28px 1fr auto}
-.chip{display:inline-flex;align-items:center;font-size:13px;font-weight:700;line-height:1;color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent);border-radius:999px;padding:6px 10px;white-space:nowrap}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip{color:color-mix(in srgb,var(--c) 55%,white);background:color-mix(in srgb,var(--c) 28%,transparent)}}
-:root[data-theme="dark"] .chip{color:color-mix(in srgb,var(--c) 55%,white);background:color-mix(in srgb,var(--c) 28%,transparent)}
+.check.metchip{grid-template-columns:var(--rondje) 1fr auto}
+.chip{display:inline-flex;align-items:center;font-size:var(--fs-xs);font-weight:var(--gewicht-vet);line-height:1;color:color-mix(in srgb,var(--c) var(--chip-tint),var(--chip-meng));background:color-mix(in srgb,var(--c) var(--chip-vlak),transparent);border-radius:var(--r-rond);padding:var(--ruimte-1) var(--ruimte-2);white-space:nowrap}
 .check .tick{border-color:var(--muted)}
 .item.done .tick{background:var(--done);border-color:var(--done)}
 .item.done .tick::after{border-color:var(--surface)}
-.pname{font-weight:500;font-size:18px;line-height:1.2}
+.pname{font-weight:var(--gewicht-naam);font-size:var(--fs-l);line-height:1.2}
 .item.done .pname{text-decoration:line-through;color:var(--done)}
-.pmeta{display:block;font-size:14px;color:var(--muted);margin-top:2px}
-.basket{margin-top:28px}
+.pmeta{display:block;font-size:var(--fs-s);color:var(--muted);margin-top:var(--ruimte-0)}
+.basket{margin-top:var(--ruimte-6)}
 /* Recepten en producten */
 /* Winkels */
-.note{color:var(--muted);font-size:15px;margin:12px 0 10px}
-.order{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
-.order li{display:grid;grid-template-columns:36px 1fr 48px;align-items:center;gap:6px;padding:4px 8px 4px 14px;border-top:1px solid var(--line);min-height:52px}
+.note{color:var(--muted);font-size:var(--fs-m);margin:var(--ruimte-3) 0 var(--ruimte-2)}
+.order{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden}
+.order li{display:grid;grid-template-columns:calc(var(--rondje) + var(--ruimte-2)) 1fr var(--tik);align-items:center;gap:var(--ruimte-1);padding:var(--ruimte-1) var(--ruimte-2) var(--ruimte-1) var(--ruimte-3);border-top:1px solid var(--line);min-height:var(--h-m)}
 .order li:first-child{border-top:0}
-.check.greeprij{grid-template-columns:1fr 48px;padding:0 8px 0 0}
-.greeprij-hoofd{display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:52px;text-align:left;width:100%}
-.items .sleept{border-radius:16px}
-.greep{display:grid;place-items:center;width:48px;height:48px;margin-right:-6px;color:var(--muted);touch-action:none;cursor:grab}
-.greep svg{width:22px;height:22px}
-.sleept{position:fixed;z-index:30;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 30px var(--schaduw);transform:scale(1.02);pointer-events:none}
-.plek{background:var(--primary-soft);border-top:1px solid var(--line);min-height:52px}
+.check.greeprij{grid-template-columns:1fr var(--tik);padding:0 var(--ruimte-2) 0 0}
+.greeprij-hoofd{display:flex;align-items:center;gap:var(--ruimte-3);padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--h-m);text-align:left;width:100%}
+.items .sleept{border-radius:var(--r-l)}
+.greep{display:grid;place-items:center;width:var(--tik);height:var(--tik);margin-right:calc(var(--ruimte-1) * -1);color:var(--muted);touch-action:none;cursor:grab}
+.greep svg{width:var(--icoon-m);height:var(--icoon-m)}
+.sleept{position:fixed;z-index:var(--z-boven);margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);box-shadow:var(--schaduw-sleep);transform:scale(1.02);pointer-events:none}
+.plek{background:var(--primary-soft);border-top:1px solid var(--line);min-height:var(--h-m)}
 .plek + *{border-top:0 !important}
-.pos{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);font-variant-numeric:tabular-nums}
-.lead{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
+.pos{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);display:grid;place-items:center;font-weight:var(--gewicht-zwaar);font-size:var(--fs-s);color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);font-variant-numeric:tabular-nums}
+.lead{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);display:grid;place-items:center;font-weight:var(--gewicht-zwaar);font-size:var(--fs-s);color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
 .lead.vol{background:var(--c);color:var(--op-kleur)}
-.chevr{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);opacity:.6;margin-right:4px}
+.chevr{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);opacity:.6;margin-right:var(--ruimte-1)}
 /* Instellingen */
-.back{display:inline-flex;align-items:center;gap:2px;color:var(--primary);font-weight:700;font-size:16px;padding:4px 0 6px;margin-left:-4px}
-.back svg{width:22px;height:22px}
-.group{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:12px}
-.nav-row{display:grid;grid-template-columns:32px 1fr auto 12px;align-items:center;gap:12px;width:100%;padding:0 16px 0 14px;min-height:56px;position:relative}
-.nav-row + .nav-row::before{content:"";position:absolute;top:0;left:60px;right:0;border-top:1px solid var(--line)}
+.back{display:inline-flex;align-items:center;gap:var(--ruimte-0);color:var(--primary);font-weight:var(--gewicht-vet);font-size:var(--fs-basis);padding:var(--ruimte-1) 0 var(--ruimte-1);margin-left:calc(var(--ruimte-1) * -1)}
+.back svg{width:var(--icoon-m);height:var(--icoon-m)}
+.group{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden;margin-top:var(--ruimte-3)}
+.nav-row{display:grid;grid-template-columns:var(--ico) 1fr auto var(--ruimte-3);align-items:center;gap:var(--ruimte-3);width:100%;padding:0 var(--ruimte-4) 0 var(--ruimte-3);min-height:var(--rij);position:relative}
+.nav-row + .nav-row::before{content:"";position:absolute;top:0;left:calc(var(--ruimte-3) + var(--ico) + var(--ruimte-3));right:0;border-top:1px solid var(--line)}
 .nav-row:active{background:var(--primary-soft)}
-.ico{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c)}
-.ico svg{width:18px;height:18px}
-.nav-row .lbltxt{font-weight:500;font-size:18px}
+.ico{width:var(--ico);height:var(--ico);border-radius:var(--r-rond);display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c)}
+.ico svg{width:var(--icoon-s);height:var(--icoon-s)}
+.nav-row .lbltxt{font-weight:var(--gewicht-naam);font-size:var(--fs-l)}
 .nav-row .chev2{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);opacity:.7}
-.foot{color:var(--muted);font-size:14px;margin:14px 16px 0}
+.foot{color:var(--muted);font-size:var(--fs-s);margin:var(--ruimte-3) var(--ruimte-4) 0}
 /* Onderbalk */
 .badge{position:relative;display:inline-flex}
-#badge{position:absolute;top:-5px;right:-9px;background:var(--accent);color:var(--op-kleur);font-size:11px;font-weight:800;border-radius:20px;padding:1px 6px;font-variant-numeric:tabular-nums}
+.badge > span{position:absolute;top:calc(var(--ruimte-1) * -1);right:calc(var(--ruimte-2) * -1);background:var(--accent);color:var(--op-kleur);font-size:var(--fs-xs);font-weight:var(--gewicht-zwaar);border-radius:var(--r-rond);padding:var(--ruimte-0) var(--ruimte-1);font-variant-numeric:tabular-nums}
 /* Sheet */
 /* --kb is de hoogte van het toetsenbord (gemeten in pasToetsenbordAan), zodat vensters erboven blijven */
-#sheet-wrap{position:fixed;inset:0 0 var(--kb,0px) 0;z-index:20;display:flex;align-items:flex-end;justify-content:center}
-#sheet-wrap[hidden]{display:none}
+.sheet-wrap{position:fixed;inset:0 0 var(--kb,0px) 0;z-index:var(--z-venster);display:flex;align-items:flex-end;justify-content:center}
+.sheet-wrap[hidden]{display:none}
 .sheet-bg{position:absolute;inset:0;background:var(--overlay)}
-.sheet{position:relative;background:var(--bg);width:100%;max-width:560px;max-height:min(90vh,calc(100% - 24px));overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:24px 24px 0 0;padding:20px 16px calc(18px + env(safe-area-inset-bottom,0px));animation:up .2s ease-out}
+.sheet{position:relative;background:var(--bg);width:100%;max-width:var(--breedte);max-height:min(90vh,calc(100% - var(--ruimte-5)));overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r-xl) var(--r-xl) 0 0;padding:var(--ruimte-5) var(--ruimte-4) calc(var(--ruimte-4) + env(safe-area-inset-bottom,0px));animation:up var(--duur) ease-out}
 .sheet:focus{outline:none}
-.sheet h4{margin:0 52px 14px 0;font-size:24px;font-weight:800;letter-spacing:-0.01em;line-height:1.1}
-.sheet .close{position:absolute;top:10px;right:8px;width:44px;height:44px;display:grid;place-items:center;font-size:26px;color:var(--muted)}
-@keyframes up{from{transform:translateY(28px);opacity:.5}}
-.lbl{display:block;margin-bottom:14px}
-.lbl>span{display:block;font-size:14px;font-weight:700;color:var(--muted);margin:0 4px 5px}
-.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.sheet h4{margin:0 calc(var(--h-s) + var(--ruimte-2)) var(--ruimte-3) 0;font-size:var(--fs-xl);font-weight:var(--gewicht-zwaar);letter-spacing:-0.01em;line-height:1.1}
+.sheet .close{position:absolute;top:var(--ruimte-2);right:var(--ruimte-2);width:var(--h-s);height:var(--h-s);display:grid;place-items:center;font-size:var(--fs-xl);color:var(--muted)}
+@keyframes up{from{transform:translateY(var(--ruimte-6));opacity:.5}}
+.lbl{display:block;margin-bottom:var(--ruimte-3)}
+.lbl>span{display:block;font-size:var(--fs-s);font-weight:var(--gewicht-vet);color:var(--muted);margin:0 var(--ruimte-1) var(--ruimte-1)}
+.acts{display:flex;gap:var(--ruimte-2);flex-wrap:wrap;margin-top:var(--ruimte-4)}
 .acts .btn{flex:1 1 auto}
-.pick{display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:center;width:100%;padding:12px 14px;border-top:1px solid var(--line);min-height:54px}
+.pick{display:grid;grid-template-columns:var(--rondje) 1fr;gap:var(--ruimte-3);align-items:center;width:100%;padding:var(--ruimte-3) var(--ruimte-3);border-top:1px solid var(--line);min-height:var(--h-m)}
 .pick:first-child{border-top:0}
 /* Favorieten: ster rechts in de zoekbalk */
 #add-form .zoekveld{position:relative;flex:1}
-#add-form .zoekveld .field{padding-right:52px}
+#add-form .zoekveld .field{padding-right:calc(var(--icoonknop) + var(--ruimte-2) * 2)}
 #add-zoek::-webkit-search-cancel-button,#add-zoek::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
-.zoekster{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:36px;height:36px;display:grid;place-items:center;background:none;border:0;color:var(--primary)}
-.zoekster svg{width:26px;height:26px}
+.zoekster{position:absolute;right:var(--ruimte-2);top:50%;transform:translateY(-50%);width:var(--icoonknop);height:var(--icoonknop);display:grid;place-items:center;background:none;border:0;color:var(--primary)}
+.zoekster svg{width:var(--icoon-l);height:var(--icoon-l)}
 .zoekster .vol{display:none}
 .zoekster.aan .leeg{display:none}
 .zoekster.aan .vol{display:block}
-.ac-leeg{margin:0;padding:16px;color:var(--muted);font-size:15px}
-.ster{display:inline-grid;vertical-align:1px;margin-left:6px;color:var(--primary)}
-.ster svg{width:13px;height:13px}
-.schakel{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px 14px;min-height:52px;margin-bottom:14px;font-size:17px}
-.schakel input{appearance:none;-webkit-appearance:none;width:51px;height:31px;border-radius:999px;background:var(--line);position:relative;transition:background .2s;margin:0;cursor:pointer}
-.schakel input::after{content:"";position:absolute;top:2px;left:2px;width:27px;height:27px;border-radius:50%;background:var(--op-kleur);box-shadow:0 2px 4px var(--schaduw-klein);transition:transform .2s}
+.ac-leeg{margin:0;padding:var(--ruimte-4);color:var(--muted);font-size:var(--fs-m)}
+.ster{display:inline-grid;vertical-align:1px;margin-left:var(--ruimte-1);color:var(--primary)}
+.ster svg{width:var(--icoon-s);height:var(--icoon-s)}
+.schakel{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-2) var(--ruimte-3);min-height:var(--h-m);margin-bottom:var(--ruimte-3);font-size:var(--fs-basis)}
+.schakel input{appearance:none;-webkit-appearance:none;width:51px;height:31px;border-radius:var(--r-rond);background:var(--line);position:relative;transition:background var(--duur);margin:0;cursor:pointer}
+.schakel input::after{content:"";position:absolute;top:var(--ruimte-0);left:var(--ruimte-0);width:27px;height:27px;border-radius:var(--r-rond);background:var(--op-kleur);box-shadow:var(--schaduw-knop);transition:transform var(--duur)}
 .schakel input:checked{background:var(--primary)}
 .schakel input:checked::after{transform:translateX(20px)}
 /* Codescherm (eerste keer openen op een telefoon) */
-#code-scherm{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;padding:24px}
-.code-kaart{width:100%;max-width:360px;display:grid;gap:12px;text-align:center}
-.code-kaart img{justify-self:center;border-radius:18px}
-.code-kaart h2{margin:6px 0 0;font-size:28px;font-weight:800}
-.code-kaart p{margin:0 0 8px;color:var(--muted)}
+#code-scherm{position:fixed;inset:0;z-index:var(--z-code);background:var(--bg);display:grid;place-items:center;padding:var(--ruimte-5)}
+.code-kaart{width:100%;max-width:var(--breedte-code);display:grid;gap:var(--ruimte-3);text-align:center}
+.code-kaart img{justify-self:center;border-radius:var(--r-l)}
+.code-kaart h2{margin:var(--ruimte-1) 0 0;font-size:var(--fs-xl);font-weight:var(--gewicht-zwaar)}
+.code-kaart p{margin:0 0 var(--ruimte-2);color:var(--muted)}
 /* Bevestigen */
-#bevestig{position:fixed;inset:0 0 var(--kb,0px) 0;z-index:40;display:flex;align-items:flex-end;justify-content:center}
-#bevestig[hidden]{display:none}
-.bv-bg{position:absolute;inset:0;background:var(--overlay);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.bv-kaart{position:relative;width:calc(100% - 16px);max-width:440px;margin:0 8px calc(8px + env(safe-area-inset-bottom,0px));background:var(--bg);border-radius:24px;padding:18px 16px 16px;display:grid;gap:8px;animation:up .2s ease-out}
-.bv-kaart p{margin:2px 6px 10px;font-size:17px;text-align:center;line-height:1.35}
-.bv-kaart .bv-gevaar{background:var(--accent);color:var(--op-kleur)}
-.bv-kaart .bv-ontkoppel,.samen-knoppen .ontkoppel-knop{background:var(--ontkoppel);color:var(--op-kleur)}
-.bv-kaart .field{margin-bottom:6px}
+#bevestig{z-index:var(--z-bevestig)}
+.bv-kaart{position:relative;width:calc(100% - var(--ruimte-2) * 2);max-width:var(--breedte-bevestig);margin:0 var(--ruimte-2) calc(var(--ruimte-2) + env(safe-area-inset-bottom,0px));background:var(--bg);border-radius:var(--r-xl);padding:var(--ruimte-4) var(--ruimte-4) var(--ruimte-4);display:grid;gap:var(--ruimte-2);animation:up var(--duur) ease-out}
+.bv-kaart p{margin:var(--ruimte-0) var(--ruimte-1) var(--ruimte-2);font-size:var(--fs-basis);text-align:center;line-height:1.35}
+.btn.gevaar{background:var(--accent);color:var(--op-kleur)}
+.btn.ontkoppel{background:var(--ontkoppel);color:var(--op-kleur)}
+.bv-kaart .field{margin-bottom:var(--ruimte-1)}
 /* Melding */
-.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:30;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:14px;width:max-content;max-width:calc(100% - 32px);transition:opacity .2s,transform .2s;font-size:15px}
+.toast{position:fixed;left:50%;bottom:calc(var(--tabbalk-afstand) + var(--tabbalk-hoogte) + var(--ruimte-3) + env(safe-area-inset-bottom,0px));transform:translate(-50%,var(--ruimte-5));opacity:0;pointer-events:none;z-index:var(--z-boven);background:var(--ink);color:var(--bg);border-radius:var(--r-m);padding:var(--ruimte-3) var(--ruimte-3);display:flex;align-items:center;gap:var(--ruimte-3);width:max-content;max-width:calc(100% - var(--rand) * 2);transition:opacity var(--duur),transform var(--duur);font-size:var(--fs-m)}
 .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-.toast button{color:var(--bg);font-weight:800;text-decoration:underline;white-space:nowrap}
+.toast button{color:var(--bg);font-weight:var(--gewicht-zwaar);text-decoration:underline;white-space:nowrap}
+/* Laadstaat: grijze vlakken op de plek van de rijen, alleen bij de allereerste keer openen */
+.skelet{display:block;background:var(--line);border-radius:var(--r-s);animation:skelet var(--duur-lus) ease-in-out infinite alternate}
+.skelet-kop{width:30%;height:var(--ruimte-3)}
+.skelet-rond{width:var(--vinkje);height:var(--vinkje);border-radius:var(--r-rond)}
+.skelet-tekst{width:60%;height:var(--ruimte-4)}
+.item:nth-child(3n+2) .skelet-tekst{width:45%}
+.item:nth-child(3n) .skelet-tekst{width:70%}
+@keyframes skelet{to{opacity:.4}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 /* Kleine correcties */
-#w-tabs{margin-bottom:14px}
+#w-tabs{margin-bottom:var(--ruimte-3)}
 #terug[hidden]{display:none}
 /* ================= Tabbalk: zwevend glas, alleen iconen ================= */
 
-.tabs{position:fixed;left:0;right:0;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:8;padding:0 20px;background:none;border:0}
+.tabs{position:fixed;left:0;right:0;bottom:calc(var(--tabbalk-afstand) + env(safe-area-inset-bottom,0px));z-index:var(--z-tabs);padding:0 var(--ruimte-5);background:none;border:0}
 .tabs .inner{
-  display:grid;grid-template-columns:repeat(4,1fr);margin:0 auto;max-width:400px;height:64px;padding:6px;gap:4px;border-radius:999px;
+  display:grid;grid-template-columns:repeat(4,1fr);margin:0 auto;max-width:var(--tabbalk-breedte);height:var(--tabbalk-hoogte);padding:var(--ruimte-1);gap:var(--ruimte-1);border-radius:var(--r-rond);
   background:linear-gradient(165deg,var(--tab-glans),transparent 50%),var(--tab-glas);
-  -webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(var(--waas-l)) saturate(180%);backdrop-filter:blur(var(--waas-l)) saturate(180%);
   border:1px solid var(--tab-rand);
-  box-shadow:inset 0 1px 0 var(--tab-licht),0 10px 30px var(--tab-schaduw);
+  box-shadow:var(--glans),var(--schaduw-tabs);
 }
-.tabs button{display:grid;place-items:center;padding:0;border-radius:999px;font-size:12px;font-weight:700;text-align:center;color:var(--muted);transition:background-color .25s,color .25s,transform .18s cubic-bezier(.3,1.4,.5,1)}
-.tabs button svg{width:26px;height:26px}
+.tabs button{display:grid;place-items:center;padding:0;border-radius:var(--r-rond);font-size:var(--fs-xs);font-weight:var(--gewicht-vet);text-align:center;color:var(--muted);transition:background-color var(--duur-traag),color var(--duur-traag),transform var(--duur-snel) var(--veer-tab)}
+.tabs button svg{width:var(--icoon-l);height:var(--icoon-l)}
 .tabs button:active{transform:scale(.9)}
 .tabs button[aria-current=page]{
   color:var(--primary);
   background:var(--tab-actief);
-  box-shadow:inset 0 1px 0 var(--tab-licht);
+  box-shadow:var(--glans);
 }
 
 @media (prefers-reduced-transparency: reduce){
@@ -399,31 +424,31 @@ h3.cat{font-size:15px;font-weight:700;color:var(--muted);margin:20px 4px 6px;dis
 </head>
 <body>
 <div id="scroller"><div class="wrap">
-  <header class="top"><button type="button" id="terug" class="back" data-act="inst-terug" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span id="terug-tekst">Instellingen</span></button><div class="toprow"><div><h1 id="title">Boodschappen</h1><p id="subtitle">Even ophalen…</p></div><div id="topextra"></div></div><div id="headerextra"></div></header>
+  <header class="top"><button type="button" id="terug" class="back" data-act="inst-terug" hidden><svg data-icoon="pijl-links"></svg><span id="terug-tekst">Instellingen</span></button><div class="toprow"><div><h1 id="title">Boodschappen</h1><p id="subtitle">Even ophalen…</p></div><div id="topextra"></div></div><div id="headerextra"></div></header>
   <main id="main"></main>
 </div></div>
 
 <nav class="tabs" aria-label="Onderdelen">
   <div class="inner">
     <button type="button" data-act="tab" data-tab="lijst" aria-label="Boodschappenlijst">
-      <span class="badge"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.5 9V7a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M4.6 8h14.8a1 1 0 0 1 1 1.1l-1.1 10.1a2 2 0 0 1-2 1.8H6.7a2 2 0 0 1-2-1.8L3.6 9.1a1 1 0 0 1 1-1.1z"/></svg><span id="badge" hidden></span></span></button>
+      <span class="badge"><svg data-icoon="tas" aria-hidden="true"></svg><span id="badge" hidden></span></span></button>
     <button type="button" data-act="tab" data-tab="week" aria-label="Weekmenu">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4.5"/><rect x="6.5" y="2" width="3" height="6" rx="1.5"/><rect x="14.5" y="2" width="3" height="6" rx="1.5"/></svg></button>
+      <svg data-icoon="kalender" aria-hidden="true"></svg></button>
     <button type="button" data-act="tab" data-tab="recepten" aria-label="Recepten">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg></button>
+      <svg data-icoon="kookpan" aria-hidden="true"></svg></button>
     <button type="button" data-act="tab" data-tab="instellingen" aria-label="Instellingen">
-      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="6" width="18" height="2.6" rx="1.3"/><circle cx="15.5" cy="7.3" r="3.3"/><rect x="3" y="15.4" width="18" height="2.6" rx="1.3"/><circle cx="8.5" cy="16.7" r="3.3"/></svg></button>
+      <svg data-icoon="schuifjes" aria-hidden="true"></svg></button>
   </div>
 </nav>
 
-<div id="sheet-wrap" hidden>
+<div id="sheet-wrap" class="sheet-wrap" hidden>
   <div class="sheet-bg" data-act="sluit"></div>
   <div class="sheet" role="dialog" aria-modal="true" tabindex="-1">
     <button type="button" class="close" data-act="sluit" aria-label="Sluiten">×</button>
     <div id="sheet-inhoud"></div>
   </div>
 </div>
-<div id="bevestig" hidden></div>
+<div id="bevestig" class="sheet-wrap" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-text"></span><button type="button" id="toast-btn" hidden></button></div>
 
 <script>
@@ -540,8 +565,8 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbw5coGQ3021Tyjm19Ky7-_P
     const mealplan = [[0, ['r1']], [1, ['r2']], [3, ['r3']], [5, ['r4']]].map(([k, r]) => ({ id: dag(k), datum: dag(k), recepten: r }));
     return {
       winkels: [
-        { id: 'ah', naam: 'AH', kleur: '#2F6FA6', positie: 1, route: ['groente','brood','vlees','kaas','zuivel','pasta','conserven','kruiden','ontbijt','snoep','drinken','diepvries','baby','drogisterij','huishouden','overig'] },
-        { id: 'dirk', naam: 'Dirk', kleur: '#C2452D', positie: 2, route: ['brood','groente','zuivel','kaas','vlees','conserven','pasta','kruiden','ontbijt','snoep','drinken','baby','diepvries','drogisterij','huishouden','overig'] }
+        { id: 'ah', naam: 'AH', kleur: 'winkel-1', positie: 1, route: ['groente','brood','vlees','kaas','zuivel','pasta','conserven','kruiden','ontbijt','snoep','drinken','diepvries','baby','drogisterij','huishouden','overig'] },
+        { id: 'dirk', naam: 'Dirk', kleur: 'winkel-2', positie: 2, route: ['brood','groente','zuivel','kaas','vlees','conserven','pasta','kruiden','ontbijt','snoep','drinken','baby','diepvries','drogisterij','huishouden','overig'] }
       ],
       categorieen: C.map(([id, naam], k) => ({ id, naam, positie: k + 1 })),
       producten, recepten, mealplan, receptcategorieen
@@ -583,10 +608,60 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbw5coGQ3021Tyjm19Ky7-_P
 </script>
 <script>
 /* ================= Basis ================= */
+/** Kleur van de statusbalk volgt het token --bg. */
+document.querySelector('meta[name=theme-color]').content = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+/** Alle iconen op één plek: gevuld, 24x24, kleur via currentColor. Gebruik ico('naam'). */
+const ICONEN = {
+  'tas': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 9V7a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M4.6 8h14.8a1 1 0 0 1 1 1.1l-1.1 10.1a2 2 0 0 1-2 1.8H6.7a2 2 0 0 1-2-1.8L3.6 9.1a1 1 0 0 1 1-1.1z"/></svg>',
+  'kalender': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="5" width="18" height="16" rx="4.5"/><rect x="6.5" y="2" width="3" height="6" rx="1.5"/><rect x="14.5" y="2" width="3" height="6" rx="1.5"/></svg>',
+  'kookpan': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg>',
+  'schuifjes': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="6" width="18" height="2.6" rx="1.3"/><circle cx="15.5" cy="7.3" r="3.3"/><rect x="3" y="15.4" width="18" height="2.6" rx="1.3"/><circle cx="8.5" cy="16.7" r="3.3"/></svg>',
+  'pijl-links': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>',
+  'pijl-rechts': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
+  'ster': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 16.7l-5.4 2.9 1.1-6.1-4.5-4.3 6.1-.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
+  'ontkoppel': '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2.5a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19zM7.4 10.7a1.3 1.3 0 0 0 0 2.6h9.2a1.3 1.3 0 0 0 0-2.6z"/></svg>',
+  'min': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+  'prullenbak': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="2.6" rx="1.3"/><rect x="9" y="2.5" width="6" height="3" rx="1.2"/><path d="M6 9h12l-1 10.2a2 2 0 0 1-2 1.8H9a2 2 0 0 1-2-1.8z"/></svg>',
+  'plus': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  'ster-leeg': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>',
+  'ster-vol': '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>',
+  'vinkje': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  'greep': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg>',
+  'potlood': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.2 4.3a2.5 2.5 0 0 1 3.5 0l1 1a2.5 2.5 0 0 1 0 3.5L9.4 19.1 4 20l.9-5.4z"/></svg>',
+  'winkel': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5.2 3h13.6a1.5 1.5 0 0 1 1.4 1l1.6 4.6a3 3 0 0 1-2.8 4 3 3 0 0 1-2.5-1.3 3 3 0 0 1-5 0 3 3 0 0 1-5 0 3 3 0 0 1-2.5 1.3 3 3 0 0 1-2.8-4L3.8 4a1.5 1.5 0 0 1 1.4-1z"/><path d="M4.5 14.3a4.6 4.6 0 0 0 3-.6 4.7 4.7 0 0 0 4.5.4 4.7 4.7 0 0 0 4.5-.4 4.6 4.6 0 0 0 3 .6V19a2 2 0 0 1-2 2H15v-4.5H9V21H6.5a2 2 0 0 1-2-2z"/></svg>',
+  'route': '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5.5" r="2.3"/><rect x="9.5" y="4" width="11.5" height="3" rx="1.5"/><circle cx="5" cy="12" r="2.3"/><rect x="9.5" y="10.5" width="11.5" height="3" rx="1.5"/><circle cx="5" cy="18.5" r="2.3"/><rect x="9.5" y="17" width="11.5" height="3" rx="1.5"/></svg>',
+  'label': '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h5.4a2.5 2.5 0 0 1 1.8.7l8 8a2.5 2.5 0 0 1 0 3.6l-5.4 5.4a2.5 2.5 0 0 1-3.6 0l-8-8a2.5 2.5 0 0 1-.7-1.8zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>',
+  'vakjes': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2.4"/><rect x="13" y="3" width="8" height="8" rx="2.4"/><rect x="3" y="13" width="8" height="8" rx="2.4"/><rect x="13" y="13" width="8" height="8" rx="2.4"/></svg>'
+};
+const ico = (naam, attrs = '') => attrs ? ICONEN[naam].replace('<svg ', `<svg ${attrs} `) : ICONEN[naam];
+/* Iconen in de vaste HTML (tabbalk, terugknop) */
+document.querySelectorAll('svg[data-icoon]').forEach(el => { el.outerHTML = ico(el.dataset.icoon, el.hasAttribute('aria-hidden') ? 'aria-hidden="true"' : ''); });
 const DAGEN = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
 /** Winkelkleuren voor nieuwe winkels komen uit de tokens --winkel-1 t/m --winkel-7. */
-const PALET = () => [1, 2, 3, 4, 5, 6, 7].map(i => getComputedStyle(document.documentElement).getPropertyValue('--winkel-' + i).trim());
+const WINKELKLEUREN = [1, 2, 3, 4, 5, 6, 7].map(i => 'winkel-' + i);
+/** Kleur van een winkel als CSS-waarde. Nieuwe winkels bewaren de tokennaam ('winkel-1');
+    oudere winkels met een hexkleur die gelijk is aan een token krijgen ook het token. */
+function kleurVan(w) {
+  const k = String((w && w.kleur) || '');
+  if (WINKELKLEUREN.includes(k)) return `var(--${k})`;
+  if (!(k in kleurVan.oud)) {
+    const cs = getComputedStyle(document.documentElement);
+    const t = WINKELKLEUREN.find(n => cs.getPropertyValue('--' + n).trim().toUpperCase() === k.toUpperCase());
+    kleurVan.oud[k] = t ? `var(--${t})` : k;
+  }
+  return kleurVan.oud[k];
+}
+kleurVan.oud = {};
+/** Eenmalig per opstart: winkels die nog een hexkleur hebben die gelijk is aan een token,
+    krijgen in de Sheet de tokennaam ('#2F6FA6' wordt 'winkel-1'). Andere kleuren blijven staan. */
+function zetWinkelkleurenOm() {
+  const patches = D().winkels.filter(w => !WINKELKLEUREN.includes(w.kleur)).map(w => {
+    const m = kleurVan(w).match(/^var\(--(winkel-\d+)\)$/);
+    return m ? { id: w.id, kleur: m[1] } : null;
+  }).filter(Boolean);
+  if (patches.length) bewaar('winkels', patches);
+}
 
 const S = { data:null, tab:'lijst', winkel:null, routeWinkel:null, instSub:null, week:0, open:new Set(), zoekR:'', zoekP:'' };
 let bezig = 0, teller = 0;
@@ -652,10 +727,16 @@ window.addEventListener('unhandledrejection', e => { try { melding('Er ging iets
 const LOKAAL = 'kravschappen-stand';
 function onthoudLokaal(s) { if (!window.API_MODUS) return; try { localStorage.setItem(LOKAAL, JSON.stringify(s)); } catch (e) {} }
 function leesLokaal() { if (!window.API_MODUS) return null; try { return JSON.parse(localStorage.getItem(LOKAAL)); } catch (e) { return null; } }
+/** Laadstaat bij de allereerste keer openen: grijze vlakken op de plek van de rijen. */
+function tekenSkelet() {
+  sub('');
+  const rij = '<div class="item"><div class="check"><span class="skelet skelet-rond"></span><span class="skelet skelet-tekst"></span></div></div>';
+  $('#main').innerHTML = [3, 2].map(n => `<h3 class="cat"><span class="skelet skelet-kop"></span></h3><div class="items">${rij.repeat(n)}</div>`).join('');
+}
 function laad() {
-  if (!S.data) { const l = leesLokaal(); if (l) { S.data = l; wissel(S.tab); } }
+  if (!S.data) { const l = leesLokaal(); if (l) { S.data = l; wissel(S.tab); } else tekenSkelet(); }
   google.script.run
-    .withSuccessHandler(s => { const eerste = !S.data; S.data = s; onthoudLokaal(s); if (eerste) wissel(S.tab); else if (!bezig) teken(); })
+    .withSuccessHandler(s => { const eerste = !S.data; S.data = s; onthoudLokaal(s); if (eerste) wissel(S.tab); else if (!bezig) teken(); if (!S.omgezet) { S.omgezet = true; zetWinkelkleurenOm(); } })
     .withFailureHandler(e => { if (!S.data) { $('#subtitle').textContent = 'Laden lukte niet: ' + e.message + '. Herlaad de pagina.'; } })
     .getState();
 }
@@ -747,7 +828,7 @@ function openSamen(p, rn, amt, hier) {
     const rest = amt ? trekAf(nu, amt) : null;
     if (rest !== null && amt) knoppen.push({ k: 'btn', t: `Aandeel van ${rn} aftrekken → ${rest || 'geen aantal'}`, f: () => bewaar('producten', [{ id: p.id, lijstHoeveelheid: rest, lijstVoor: zonder }]) });
     knoppen.push({ k: 'btn soft', t: `Alleen ${rn} weghalen, aantal blijft`, f: () => bewaar('producten', [{ id: p.id, lijstVoor: zonder }]) });
-    knoppen.push({ k: 'btn ontkoppel-knop', t: 'Helemaal van de lijst halen', f: async () => { if (await bevestig(`${p.naam} helemaal van de lijst halen?`, 'Van de lijst halen', 'ontkoppel')) haalVanLijst(p); } });
+    knoppen.push({ k: 'btn ontkoppel', t: 'Helemaal van de lijst halen', f: async () => { if (await bevestig(`${p.naam} helemaal van de lijst halen?`, 'Van de lijst halen', 'ontkoppel')) haalVanLijst(p); } });
   }
   openSheet(`<h4>${esc(p.naam)}</h4><p class="samen-uitleg">${uitleg}</p>
     <div class="samen-knoppen">${knoppen.map((k, i) => `<button type="button" class="${k.k} wide" data-keuze="${i}">${esc(k.t)}</button>`).join('')}</div>`);
@@ -803,8 +884,8 @@ function teken() {
 const sub = t => { $('#subtitle').textContent = t; $('#subtitle').hidden = !t; };
 
 /* ---------- Weekmenu ---------- */
-const PIJL_LINKS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
-const PIJL_RECHTS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+const PIJL_LINKS = ico('pijl-links');
+const PIJL_RECHTS = ico('pijl-rechts');
 function skeletWeek() {
   // Vaste balk onder de titel, net als de winkeltabs op de boodschappenlijst
   $('#headerextra').innerHTML = `<div class="weekbalk">
@@ -829,7 +910,7 @@ function tekenWeek() {
     const rs = ((plan && plan.recepten) || []).map(recept).filter(Boolean);
     const nu = datum === vandaag;
     return `<h3 class="cat dagkop${nu ? ' vandaag' : ''}${rs.length ? '' : ' leeg'}"><span>${cap(DAGEN[d.getDay()])} ${kort(d)}</span></h3>
-      <div class="items dag-groep">${rs.map(r => receptKaart(r, datum)).join('')}${rs.length ? '' : `<button type="button" class="dag-plus-rij" data-act="koppel" data-datum="${datum}" aria-label="Recept toevoegen aan ${DAGEN[d.getDay()]} ${kort(d)}"><span class="addbtn" aria-hidden="true"><svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span></button>`}</div>`;
+      <div class="items dag-groep">${rs.map(r => receptKaart(r, datum)).join('')}${rs.length ? '' : `<button type="button" class="dag-plus-rij" data-act="koppel" data-datum="${datum}" aria-label="Recept toevoegen aan ${DAGEN[d.getDay()]} ${kort(d)}"><span class="addbtn" aria-hidden="true">${ico('plus', 'class="plus"')}</span></button>`}</div>`;
   }).join('');
 }
 function receptKaart(r, datum) {
@@ -837,8 +918,8 @@ function receptKaart(r, datum) {
   const open = S.open.has(key);
   const ingr = (r.ingredienten || []).filter(i => prod(i.product));
   const n = ingr.filter(i => { const p = prod(i.product); return nodig(p) && voorLijst(p.lijstVoor).includes(r.naam); }).length;
-  let h = `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" data-datum="${datum}" data-r="${esc(r.id)}" style="--bw:216px">
-    <div class="swipe-acties"><button type="button" class="swipe-wk" style="--c:var(--veeg-open)" data-act="recept-van-week" data-id="${esc(r.id)}" aria-label="Recept ${esc(r.naam)} bekijken"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg></button><button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="koppel" data-datum="${datum}" aria-label="Recepten van deze dag wijzigen">${PEN_ICON}</button><button type="button" class="swipe-wk" style="--c:var(--ontkoppel)" data-act="dag-ontkoppel" aria-label="${esc(r.naam)} van deze dag halen">${ONTKOPPEL_ICON}</button></div>
+  let h = `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" data-datum="${datum}" data-r="${esc(r.id)}" style="--n:3">
+    <div class="swipe-acties"><button type="button" class="swipe-wk" style="--c:var(--veeg-open)" data-act="recept-van-week" data-id="${esc(r.id)}" aria-label="Recept ${esc(r.naam)} bekijken">${ico('kookpan')}</button><button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="koppel" data-datum="${datum}" aria-label="Recepten van deze dag wijzigen">${PEN_ICON}</button><button type="button" class="swipe-wk" style="--c:var(--ontkoppel)" data-act="dag-ontkoppel" aria-label="${esc(r.naam)} van deze dag halen">${ONTKOPPEL_ICON}</button></div>
     <article class="recipe swipe-kaart">
     <button type="button" class="recipe-head" data-act="klap" data-key="${esc(key)}" aria-expanded="${open}">
       <span class="lead" style="--c:var(--primary)">${esc(r.naam.charAt(0).toUpperCase())}</span>
@@ -861,10 +942,11 @@ function receptKaart(r, datum) {
 }
 
 /* Vegen: kaart naar links schuiven toont de verwijderknop, ver doorvegen verwijdert meteen */
-const STER_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 16.7l-5.4 2.9 1.1-6.1-4.5-4.3 6.1-.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+const STER_ICON = ico('ster');
 const sterTje = p => p.favoriet ? '<span class="ster" aria-label="favoriet">'+STER_ICON+'</span>' : '';
-const ONTKOPPEL_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2.5a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19zM7.4 10.7a1.3 1.3 0 0 0 0 2.6h9.2a1.3 1.3 0 0 0 0-2.6z"/></svg>';
-const breedte = sw => parseFloat(sw.style.getPropertyValue('--bw')) || 72;
+const ONTKOPPEL_ICON = ico('ontkoppel');
+/** Breedte van de veegknoppen samen (aantal x --veegknop). */
+const breedte = sw => [...$('.swipe-acties', sw).children].reduce((t, b) => t + b.offsetWidth, 0) || 72;
 /** Verhoogt of verlaagt het getal vooraan een aantal; de eenheid blijft staan ("2 pakken" -> "3 pakken", "500 g" -> "600 g"). */
 function stapAantal(waarde, richting) {
   const v = String(waarde || '').trim();
@@ -882,8 +964,8 @@ function stapAantal(waarde, richting) {
 function openItem(id) {
   const p = prod(id); if (!p) return;
   const SNEL = ['1', '2', '3', '4', '6', '10'];
-  const MIN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12h14"/></svg>';
-  const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+  const MIN = ico('min');
+  const PLUS = ico('plus');
   let gekozenWinkel = winkelVan(p);
   openSheet(`<h4>${esc(p.naam)}</h4>
     <h3 class="cat"><span>Aantal</span></h3>
@@ -894,7 +976,7 @@ function openItem(id) {
     </div>
     <div class="snelkeuze">${SNEL.map(n => `<button type="button" data-snel="${n}">${n}</button>`).join('')}<button type="button" data-snel="">Geen</button></div>
     ${winkels().length > 1 ? `<h3 class="cat"><span>Winkel</span></h3>
-    <div class="stores item-winkels">${winkels().map(w => `<button type="button" class="storetab${w.id === gekozenWinkel ? ' active' : ''}" style="--c:${w.kleur}" data-winkel="${esc(w.id)}">${esc(w.naam)}</button>`).join('')}</div>` : ''}`);
+    <div class="stores item-winkels">${winkels().map(w => `<button type="button" class="storetab${w.id === gekozenWinkel ? ' active' : ''}" style="--c:${kleurVan(w)}" data-winkel="${esc(w.id)}">${esc(w.naam)}</button>`).join('')}</div>` : ''}`);
   const inp = $('#aantal-val');
   const markeer = () => $$('.snelkeuze button').forEach(b => b.classList.toggle('gekozen', b.dataset.snel === inp.value.trim() && b.dataset.snel !== ''));
   // Elke aanpassing wordt meteen opgeslagen; typen wordt na een korte pauze bewaard
@@ -915,8 +997,8 @@ function openItem(id) {
   inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); opslaan(); sluitSheet(); } };
   markeer();
 }
-const ADD_KNOP = '<span class="addbtn" aria-hidden="true"><svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><svg class="bag" viewBox="0 0 24 24" fill="currentColor"><path d="M8.5 9V7a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M4.6 8h14.8a1 1 0 0 1 1 1.1l-1.1 10.1a2 2 0 0 1-2 1.8H6.7a2 2 0 0 1-2-1.8L3.6 9.1a1 1 0 0 1 1-1.1z"/></svg></span>';
-const PRUL_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="2.6" rx="1.3"/><rect x="9" y="2.5" width="6" height="3" rx="1.2"/><path d="M6 9h12l-1 10.2a2 2 0 0 1-2 1.8H9a2 2 0 0 1-2-1.8z"/></svg>';
+const ADD_KNOP = '<span class="addbtn" aria-hidden="true">' + ico('plus', 'class="plus"') + ico('tas', 'class="bag"') + '</span>';
+const PRUL_ICON = ico('prullenbak');
 let veeg = null, klikOnderdrukken = false;
 function sluitVeeg() {
   if (!S.swipeOpen) return;
@@ -1005,13 +1087,13 @@ function openKoppel(datum) {
 /* ---------- Boodschappenlijst ---------- */
 function skeletLijst() {
   $('#topextra').innerHTML = `<button type="button" class="round toevoeg-knop" data-act="toevoeg-open" aria-label="Product toevoegen" aria-expanded="false">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>`;
+    ${ico('plus')}</button>`;
   $('#headerextra').innerHTML = `<div class="stores" id="stores"></div>
     <form class="add" id="add-form" hidden>
       <span class="zoekveld"><input class="field" type="search" id="add-zoek" name="zoekterm" inputmode="search" autocomplete="off" autocapitalize="sentences" spellcheck="false" autocorrect="off" enterkeyhint="done" placeholder="Product zoeken of toevoegen" aria-label="Product toevoegen" aria-autocomplete="list" aria-controls="ac">
         <button type="button" class="zoekster" data-act="ac-ster" aria-pressed="false" aria-label="Alleen favorieten tonen">
-          <svg class="leeg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>
-          <svg class="vol" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>
+          ${ico('ster-leeg', 'class="leeg"')}
+          ${ico('ster-vol', 'class="vol"')}
         </button></span>
       <div class="ac-lijst" id="ac" role="listbox" hidden></div>
     </form>`;
@@ -1047,7 +1129,7 @@ function tekenLijst() {
   const totaal = D().producten.filter(nodig).length;
   $('#stores').innerHTML = `<button type="button" class="storetab${alles ? ' active' : ''}" style="--c:var(--actief)" data-act="winkel" data-id="${ALLES}">Alles <span class="n">${totaal}</span></button>` + ws.map(s => {
     const n = D().producten.filter(p => nodig(p) && winkelVan(p) === s.id).length;
-    return `<button type="button" class="storetab${s.id === S.winkel ? ' active' : ''}" style="--c:${s.kleur}" data-act="winkel" data-id="${esc(s.id)}">${esc(s.naam)} <span class="n">${n}</span></button>`;
+    return `<button type="button" class="storetab${s.id === S.winkel ? ' active' : ''}" style="--c:${kleurVan(s)}" data-act="winkel" data-id="${esc(s.id)}">${esc(s.naam)} <span class="n">${n}</span></button>`;
   }).join('');
   $('#add-zoek').placeholder = alles ? 'Iets toevoegen' : 'Iets toevoegen bij ' + w.naam;
 
@@ -1080,7 +1162,7 @@ function itemRij(p) {
   </div>`;
   if (p.afgevinkt) return rij;
   const key = 'p:' + p.id;
-  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--bw:144px">
+  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--n:2">
     <div class="swipe-acties">
       <button type="button" class="swipe-wk" data-act="item-bewerk" data-id="${esc(p.id)}" style="--c:var(--wijzig)" aria-label="${esc(p.naam)} aanpassen">${PEN_ICON}</button>
       <button type="button" class="swipe-wk" style="--c:var(--ontkoppel)" data-act="lijst-weg" data-id="${esc(p.id)}" data-vol aria-label="${esc(p.naam)} van de lijst halen">${ONTKOPPEL_ICON}</button>
@@ -1122,7 +1204,7 @@ function tekenAc() {
   if (!hits.length && !q && !S.acFav) { sluitAc(); return; }
   const exact = hits.some(p => p.naam.toLowerCase() === q);
   const markeer = n => { if (!q) return esc(n); const i = n.toLowerCase().indexOf(q); return esc(n.slice(0, i)) + '<b>' + esc(n.slice(i, i + q.length)) + '</b>' + esc(n.slice(i + q.length)); };
-  const acRij = p => `<div class="swipe${S.swipeOpen === 'ac:' + p.id ? ' open' : ''}" data-key="ac:${esc(p.id)}" style="--bw:216px">${productVeegKnoppen(p)}<div class="ac-item swipe-kaart${nodig(p) ? ' on' : ''}" role="option">
+  const acRij = p => `<div class="swipe${S.swipeOpen === 'ac:' + p.id ? ' open' : ''}" data-key="ac:${esc(p.id)}" style="--n:3">${productVeegKnoppen(p)}<div class="ac-item swipe-kaart${nodig(p) ? ' on' : ''}" role="option">
       <button type="button" class="ac-plus" data-act="ac-plus" data-id="${esc(p.id)}" aria-pressed="${nodig(p)}" aria-label="${esc(p.naam)} ${nodig(p) ? 'van de lijst halen' : 'op de lijst zetten'}">${ADD_KNOP}</button>
       <button type="button" class="ac-naam pname" data-act="ac-kies" data-naam="${esc(p.naam)}">${markeer(p.naam)}${sterTje(p)}</button>
       ${winkelChip(winkel(winkelVan(p)))}</div></div>`;
@@ -1153,7 +1235,7 @@ function pasAcHoogteAan() {
   if (!box || box.hidden) return;
   const vv = window.visualViewport;
   const zicht = Math.min(window.innerHeight, vv ? vv.height + vv.offsetTop : window.innerHeight);
-  const onder = (vv && vv.height < window.innerHeight - 100) ? 12 : 96;
+  const onder = (vv && vv.height < window.innerHeight - 100) ? 12 : window.innerHeight - $('.tabs .inner').getBoundingClientRect().top + 20;
   box.style.maxHeight = Math.max(160, zicht - box.getBoundingClientRect().top - onder) + 'px';
 }
 if (window.visualViewport) { visualViewport.addEventListener('resize', pasAcHoogteAan); visualViewport.addEventListener('scroll', pasAcHoogteAan); }
@@ -1201,7 +1283,7 @@ function skeletRecepten() {
     $('#terug').dataset.act = bewerk ? 'recept-annuleer' : 'recept-terug';
     $('#terug-tekst').textContent = bewerk ? 'Annuleer' : S.receptTerug === 'week' ? 'Weekmenu' : 'Recepten';
     $('#topextra').innerHTML = bewerk
-      ? `<button type="button" class="round bewerk-knop actief" data-act="recept-opslaan" aria-label="Opslaan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>`
+      ? `<button type="button" class="round bewerk-knop actief" data-act="recept-opslaan" aria-label="Opslaan">${ico('vinkje')}</button>`
       : `<button type="button" class="round bewerk-knop" data-act="recept-bewerkmodus" aria-label="Recept bewerken">${PEN_ICON}</button>`;
     if (bewerk) {
       $('#title').innerHTML = `<textarea id="titel-invoer" class="titel-invoer" rows="1" placeholder="Naam van het recept" autocomplete="off" aria-label="Naam van het recept">${esc(S.receptBewerk.naam)}</textarea>`;
@@ -1218,8 +1300,8 @@ function skeletRecepten() {
 }
 /* ---------- Recept bewerken op de pagina zelf ---------- */
 const rbProd = id => prod(id) || (S.rbNieuw || []).find(p => p.id === id);
-const MIN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 12h12"/></svg>';
-const GREEP_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg>';
+const MIN_ICON = ico('min');
+const GREEP_ICON = ico('greep');
 function bewerkHtml() {
   const d = S.receptBewerk;
   const ingr = d.ingredienten.map((i, k) => ({ i, k, p: rbProd(i.product) })).filter(x => x.p);
@@ -1232,7 +1314,7 @@ function bewerkHtml() {
         <span class="pname">${esc(x.p.naam)}</span>
         <input class="aantal-invoer" data-i="${x.k}" value="${esc(x.i.hoeveelheid || '')}" placeholder="Aantal" autocomplete="off" aria-label="Aantal ${esc(x.p.naam)}"></div></div>`).join('')}
       <div class="item rb-toevoeg"><div class="check bewerkrij">
-        <span class="addbtn" aria-hidden="true"><svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        <span class="addbtn" aria-hidden="true">${ico('plus', 'class="plus"')}</span>
         <input id="rb-zoek" placeholder="Product toevoegen" autocomplete="off" autocorrect="off" enterkeyhint="done" aria-label="Product toevoegen"></div></div>
     </div><div class="ac-lijst" id="rb-ac" hidden></div></div>
     <h3 class="cat"><span>Bereiding</span></h3>
@@ -1243,7 +1325,7 @@ function bewerkHtml() {
         <button type="button" class="minrond" data-act="rb-stap-weg" data-k="${k}" aria-label="Stap ${k + 1} weghalen">${MIN_ICON}</button>
         <span class="greep" aria-label="Stap ${k + 1} verslepen">${GREEP_ICON}</span></div></div>`).join('')}
       <button type="button" class="item rb-stap-plus" data-act="rb-stap-plus"><span class="check bewerkrij">
-        <span class="addbtn" aria-hidden="true"><svg class="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+        <span class="addbtn" aria-hidden="true">${ico('plus', 'class="plus"')}</span>
         <span class="pmeta">Stap toevoegen</span></span></button>
     </div>`;
 }
@@ -1396,7 +1478,7 @@ document.addEventListener('pointercancel', sleepKlaar);
 /** Een rij in de vaste stijl: kaart vooraan, veegknoppen eronder. */
 function veegRij(key, kaart, acties, extra = '') {
   if (!acties.length) return `<div class="item"${extra}>${kaart}</div>`;
-  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}"${extra} style="--bw:${acties.length * 72}px">
+  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}"${extra} style="--n:${acties.length}">
     <div class="swipe-acties">${acties.map(a => `<button type="button" class="${a.weg ? 'swipe-weg' : 'swipe-wk'}"${a.weg ? '' : ` style="--c:${a.kleur || 'var(--wijzig)'}"`} data-act="${a.act}" data-id="${esc(a.id)}" aria-label="${esc(a.aria || a.label)}">${a.icon}${a.label}</button>`).join('')}</div>
     <div class="item swipe-kaart">${kaart}</div></div>`;
 }
@@ -1423,8 +1505,8 @@ function tekenProducten() {
     return `<h3 class="cat"><span>${esc(catNaam(c))}</span></h3><div class="items">${inCat.map(productRij).join('')}</div>`;
   }).join('');
 }
-const winkelChip = w => w ? `<span class="chip" style="--c:${w.kleur}">${esc(w.naam)}</span>` : '';
-const PEN_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.2 4.3a2.5 2.5 0 0 1 3.5 0l1 1a2.5 2.5 0 0 1 0 3.5L9.4 19.1 4 20l.9-5.4z"/></svg>';
+const winkelChip = w => w ? `<span class="chip" style="--c:${kleurVan(w)}">${esc(w.naam)}</span>` : '';
+const PEN_ICON = ico('potlood');
 /** Veegknoppen voor een product: favoriet, wijzigen, verwijderen (Instellingen > Producten en de keuzelijst). */
 function productVeegKnoppen(p) {
   return `<div class="swipe-acties">
@@ -1437,7 +1519,7 @@ function productRij(p) {
   const on = nodig(p), inMandje = p.opLijst && p.afgevinkt;
   const status = on ? ['Op de lijst', p.lijstHoeveelheid].filter(Boolean).join(', ') : inMandje ? 'Gekocht' : '';
   const key = 'pr:' + p.id;
-  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--bw:216px">
+  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--n:3">
     ${productVeegKnoppen(p)}
     <div class="item swipe-kaart${on ? ' on' : ''}">
       <button type="button" class="check metchip" data-act="product-vink" data-id="${esc(p.id)}" aria-pressed="${on}" aria-label="${esc(p.naam)} ${on ? 'van de lijst halen' : 'op de lijst zetten'}">
@@ -1475,11 +1557,11 @@ function openProduct(id, voorgevuld) {
 
 /* ---------- Instellingen ---------- */
 const ICO = {
-  winkels: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M5.2 3h13.6a1.5 1.5 0 0 1 1.4 1l1.6 4.6a3 3 0 0 1-2.8 4 3 3 0 0 1-2.5-1.3 3 3 0 0 1-5 0 3 3 0 0 1-5 0 3 3 0 0 1-2.5 1.3 3 3 0 0 1-2.8-4L3.8 4a1.5 1.5 0 0 1 1.4-1z"/><path d="M4.5 14.3a4.6 4.6 0 0 0 3-.6 4.7 4.7 0 0 0 4.5.4 4.7 4.7 0 0 0 4.5-.4 4.6 4.6 0 0 0 3 .6V19a2 2 0 0 1-2 2H15v-4.5H9V21H6.5a2 2 0 0 1-2-2z"/></svg>',
-  route: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5.5" r="2.3"/><rect x="9.5" y="4" width="11.5" height="3" rx="1.5"/><circle cx="5" cy="12" r="2.3"/><rect x="9.5" y="10.5" width="11.5" height="3" rx="1.5"/><circle cx="5" cy="18.5" r="2.3"/><rect x="9.5" y="17" width="11.5" height="3" rx="1.5"/></svg>',
-  rcats: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg>',
-  producten: '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h5.4a2.5 2.5 0 0 1 1.8.7l8 8a2.5 2.5 0 0 1 0 3.6l-5.4 5.4a2.5 2.5 0 0 1-3.6 0l-8-8a2.5 2.5 0 0 1-.7-1.8zM8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>',
-  cats: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2.4"/><rect x="13" y="3" width="8" height="8" rx="2.4"/><rect x="3" y="13" width="8" height="8" rx="2.4"/><rect x="13" y="13" width="8" height="8" rx="2.4"/></svg>'
+  winkels: ico('winkel'),
+  route: ico('route'),
+  rcats: ico('kookpan'),
+  producten: ico('label'),
+  cats: ico('vakjes')
 };
 const INST = {
   producten: { titel: 'Producten' },
@@ -1494,7 +1576,7 @@ function skeletInst() {
   $('#terug').hidden = false;
   $('#title').textContent = INST[pagina].titel;
   // Zelfde opbouw als de hoofdpagina's: actie rechtsboven, balk onder de titel, daaronder de lijst
-  const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+  const PLUS = ico('plus');
   const plusKnop = (act, label) => `<button type="button" class="round toevoeg-knop" data-act="${act}" aria-label="${label}" aria-expanded="false">${PLUS}</button>`;
   if (pagina === 'winkels') {
     $('#topextra').innerHTML = plusKnop('nieuw-venster', 'Winkel toevoegen');
@@ -1545,7 +1627,7 @@ function tekenInst() {
   if (pagina === 'winkels') {
     $('#w-lijst').innerHTML = `<h3 class="cat"><span>Je winkels</span></h3><div class="items">${ws.map(w => {
       return veegRij('w:' + w.id,
-        `<div class="check"><span class="lead vol" style="--c:${w.kleur}">${esc(w.naam.charAt(0).toUpperCase())}</span>
+        `<div class="check"><span class="lead vol" style="--c:${kleurVan(w)}">${esc(w.naam.charAt(0).toUpperCase())}</span>
           <span><span class="pname">${esc(w.naam)}</span></span></div>`,
         [WIJZIG('winkel-hernoem', w), ...(ws.length > 1 ? [{ act: 'winkel-weg', id: w.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: w.naam + ' verwijderen' }] : [])]);
     }).join('')}</div>`;
@@ -1554,10 +1636,10 @@ function tekenInst() {
 
   if (pagina === 'route') {
     if (!ws.some(w => w.id === S.routeWinkel)) S.routeWinkel = ws.length ? ws[0].id : null;
-    $('#w-tabs').innerHTML = ws.map(w => `<button type="button" class="storetab${w.id === S.routeWinkel ? ' active' : ''}" style="--c:${w.kleur}" data-act="route-winkel" data-id="${esc(w.id)}">${esc(w.naam)}</button>`).join('');
+    $('#w-tabs').innerHTML = ws.map(w => `<button type="button" class="storetab${w.id === S.routeWinkel ? ' active' : ''}" style="--c:${kleurVan(w)}" data-act="route-winkel" data-id="${esc(w.id)}">${esc(w.naam)}</button>`).join('');
     if (!S.routeWinkel) { $('#w-route').innerHTML = '<div class="empty"><strong>Nog geen winkels</strong>Voeg eerst een winkel toe bij Winkels.</div>'; return; }
     const w = winkel(S.routeWinkel), r = volgorde(w.id);
-    $('#w-route').innerHTML = `<ol class="order" id="route-lijst" data-sorteer="route">${r.map((c, k) => `<li data-sid="${esc(c)}" style="--c:${w.kleur}"><span class="pos">${k + 1}</span><span>${esc(catNaam(c))}</span>
+    $('#w-route').innerHTML = `<ol class="order" id="route-lijst" data-sorteer="route">${r.map((c, k) => `<li data-sid="${esc(c)}" style="--c:${kleurVan(w)}"><span class="pos">${k + 1}</span><span>${esc(catNaam(c))}</span>
         <span class="greep" aria-label="${esc(catNaam(c))} verslepen">${GREEP_ICON}</span></li>`).join('')}</ol>`;
   }
 
@@ -1584,10 +1666,10 @@ function naarInst(pagina) {
 function bevestig(tekst, knop = 'Verwijder', gevaar = true) {
   return new Promise(klaar => {
     const w = $('#bevestig');
-    w.innerHTML = `<div class="bv-bg" data-bv="0"></div>
+    w.innerHTML = `<div class="sheet-bg" data-bv="0"></div>
       <div class="bv-kaart" role="alertdialog" aria-modal="true" aria-label="${esc(tekst)}">
         <p>${esc(tekst)}</p>
-        <button type="button" class="btn wide${gevaar === 'ontkoppel' ? ' bv-ontkoppel' : gevaar ? ' bv-gevaar' : ''}" data-bv="1">${esc(knop)}</button>
+        <button type="button" class="btn wide${gevaar === 'ontkoppel' ? ' ontkoppel' : gevaar ? ' gevaar' : ''}" data-bv="1">${esc(knop)}</button>
         <button type="button" class="btn soft wide" data-bv="0">Annuleer</button>
       </div>`;
     w.hidden = false;
@@ -1599,7 +1681,7 @@ function bevestig(tekst, knop = 'Verwijder', gevaar = true) {
 function vraagTekst(titel, waarde) {
   return new Promise(klaar => {
     const w = $('#bevestig');
-    w.innerHTML = `<div class="bv-bg" data-bv="0"></div>
+    w.innerHTML = `<div class="sheet-bg" data-bv="0"></div>
       <div class="bv-kaart" role="dialog" aria-modal="true" aria-label="${esc(titel)}">
         <p>${esc(titel)}</p>
         <input class="field" id="bv-invoer" value="${esc(waarde || '')}" autocomplete="off" enterkeyhint="done">
@@ -1907,9 +1989,8 @@ document.addEventListener('submit', e => {
     const inp = $('#winkel-invoer'), naam = inp.value.trim();
     if (!naam) return;
     if (D().winkels.some(w => w.naam.toLowerCase() === naam.toLowerCase())) return melding(`${naam} staat er al tussen.`);
-    const gebruikt = D().winkels.map(w => w.kleur);
-    const palet = PALET().map(k => k.toUpperCase());
-    const kleur = palet.find(k => !gebruikt.map(g => String(g).toUpperCase()).includes(k)) || palet[D().winkels.length % palet.length];
+    const gebruikt = D().winkels.map(w => kleurVan(w));
+    const kleur = WINKELKLEUREN.find(k => !gebruikt.includes(`var(--${k})`)) || WINKELKLEUREN[D().winkels.length % WINKELKLEUREN.length];
     const w = { id: 'w' + nieuwId(), naam, kleur, positie: Math.max(0, ...D().winkels.map(x => x.positie)) + 1, route: [] };
     inp.value = '';
     sluitSheet();
