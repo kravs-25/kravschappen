@@ -18,23 +18,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
 <style>
 :root{
-  /* ---------- Kleur (alleen donker) ---------- */
-  --bg:#0F1612; --surface:#18221C; --ink:#E4ECE3; --muted:#97A69B; --line:#2A3830;
-  --merk:#2D6A4C; --actief:#3E5146; --op-kleur:#FFFFFF; --op-kleur-zacht:rgba(255,255,255,.25);
-  --primary:#7DC49C; --primary-ink:#0D1A12; --primary-soft:#21372A;
-  --accent:#A8344F; --done:#66746A;
+  /* ---------- Kleur (alleen donker: bruin en beige) ---------- */
+  --bg:#1E1611; --surface:#2A201A; --ink:#F3EADF; --muted:#B3A08E; --line:#3A2E25;
+  --merk:#5B3B26; --actief:#6B4A33; --op-kleur:#FBF6EE; --op-kleur-zacht:rgba(251,246,238,.2);
+  --primary:#E8D6C2; --primary-ink:#2A1D14; --primary-soft:#3A2C22;
+  --accent:#C2594A; --done:#7E6C5E;
   /* ontkoppelen (iets van een lijst, dag of recept halen); zelfde rood als verwijderen, ander icoon */
   --ontkoppel:var(--accent);
-  /* veegknoppen: groen in twee tinten, zodat knoppen naast elkaar te onderscheiden zijn */
-  --veeg-open:var(--merk); --wijzig:#4E8F68; --veeg-favoriet:var(--merk);
+  /* veegknoppen: bruin in twee tinten, zodat knoppen naast elkaar te onderscheiden zijn */
+  --veeg-open:var(--merk); --wijzig:#8C6E55; --veeg-favoriet:var(--merk);
   /* winkelkleuren; een winkel bewaart de naam van het token ('winkel-1'), niet de kleur */
-  --winkel-1:#2F6FA6; --winkel-2:#C2452D; --winkel-3:#7A4FB5; --winkel-4:#1F8A70; --winkel-5:#C2417F; --winkel-6:#4A6378; --winkel-7:#5E8C2F;
+  --winkel-1:#B06A48; --winkel-2:#8A8550; --winkel-3:#8B78B8; --winkel-4:#5A9585; --winkel-5:#B56A82; --winkel-6:#7D8A97; --winkel-7:#A8873F;
   /* chips: tekst = --c gemengd met --chip-meng; vlak = --c met --chip-vlak dekking */
   --chip-meng:var(--op-kleur); --chip-tint:55%; --chip-vlak:28%;
-  /* transparant: waas achter vensters, schaduwen, glazen tabbalk */
-  --overlay:rgba(0,0,0,.4); --schaduw:rgba(0,0,0,.45); --schaduw-klein:rgba(0,0,0,.2);
-  --tab-glas:rgba(30,42,35,.72); --tab-glans:rgba(255,255,255,.12); --tab-rand:rgba(255,255,255,.12);
-  --tab-actief:rgba(255,255,255,.12); --tab-licht:rgba(255,255,255,.18); --tab-schaduw:rgba(0,0,0,.45);
+  /* transparant: waas achter vensters en schaduwen */
+  --overlay:rgba(0,0,0,.45); --schaduw:rgba(0,0,0,.45); --schaduw-klein:rgba(0,0,0,.3);
+  /* half transparant, zonder blur, glans, rand of schaduw: winkeltabs, weekbalk, ronde knoppen */
+  --tint:rgba(243,234,223,.07);
+  /* menu rechtsboven: lichte pil, volle cirkel voor de huidige tab */
+  --tab-glas:rgba(255,255,255,.15); --tab-actief:var(--ink); --tab-icoon:var(--muted); --tab-icoon-actief:var(--bg);
 
   /* ---------- Tekst ---------- */
   --font:"Bricolage Grotesque",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -44,9 +46,8 @@
   /* ---------- Vorm ---------- */
   --r-s:10px; --r-m:14px; --r-l:18px; --r-xl:24px; --r-rond:999px;
   --schaduw-lijst:0 14px 34px var(--schaduw); --schaduw-sleep:0 12px 30px var(--schaduw);
-  --schaduw-knop:0 2px 4px var(--schaduw-klein); --schaduw-tabs:0 10px 30px var(--tab-schaduw);
-  --glans:inset 0 1px 0 var(--tab-licht);
-  --waas-s:6px; --waas-m:10px; --waas-l:30px;
+  --schaduw-knop:0 2px 4px var(--schaduw-klein);
+  --waas-s:6px; --waas-m:10px;
 
   /* ---------- Maten ---------- */
   /* ---------- Ruimte ---------- */
@@ -66,9 +67,12 @@
   --icoonknop:36px; /* knop binnen een veld */
   --icoon-s:16px; --icoon-m:22px; --icoon-l:28px;
   --veegknop:72px;
-  --tabbalk-hoogte:64px; --tabbalk-breedte:400px; --tabbalk-afstand:var(--ruimte-3);
-  /* ruimte onder de inhoud, zodat niets achter de tabbalk verdwijnt */
-  --tabbalk-ruimte:calc(var(--tabbalk-afstand) + var(--tabbalk-hoogte) + var(--ruimte-6));
+  /* actieknop onderin het midden (+, Nieuw, potlood, vinkje) */
+  --actie-hoogte:64px; --actie-afstand:var(--ruimte-3);
+  /* ruimte onder de inhoud, zodat niets achter de actieknop verdwijnt */
+  --actie-ruimte:calc(var(--actie-afstand) + var(--actie-hoogte) + var(--ruimte-6));
+  /* menu rechtsboven: plek voor de puntjes links van de cirkel, en het aantal tabs */
+  --menu-puntjes:var(--ruimte-6); --tab-aantal:4;
 
   /* ---------- Beweging ---------- */
   --duur-snel:.15s; --duur:.2s; --duur-traag:.25s; --duur-lus:1.2s; /* lus: herhalende animatie (skelet) */
@@ -81,14 +85,14 @@
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
-/* De pagina zelf scrolt nooit; alleen #scroller scrolt. Zo staat de menubalk altijd onderaan
+/* De pagina zelf scrolt nooit; alleen #scroller scrolt. Zo staat de actieknop altijd onderaan
    en blijft hij altijd aanklikbaar, ook bij weinig inhoud of na doorscrollen op iOS. */
 html,body{overflow:hidden;overscroll-behavior:none}
 /* iOS rekent bij web-apps op het beginscherm soms de statusbalk niet mee in de schermhoogte,
    waardoor alles wat onderaan vastzit iets hoger komt te staan. Daarom is de pagina altijd
    schermhoog plus de statusbalk; omdat hij niet scrolt, heeft dat verder geen gevolgen. */
 html{height:calc(100% + env(safe-area-inset-top,0px))}
-#scroller{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-gutter:stable;padding-bottom:calc(var(--tabbalk-ruimte) + env(safe-area-inset-bottom,0px))}
+#scroller{position:fixed;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scrollbar-gutter:stable;padding-bottom:calc(var(--actie-ruimte) + env(safe-area-inset-bottom,0px))}
 body.toetsenbord #scroller{padding-bottom:calc(var(--kb,0px) + var(--ruimte-5))}
 body{
   height:100%;margin:0;background:var(--bg);color:var(--ink);
@@ -108,23 +112,22 @@ body.preview header.top{padding-top:calc(var(--ruimte-6) + var(--ruimte-1) + env
 .toprow{display:flex;align-items:center;justify-content:space-between;gap:var(--ruimte-3);min-height:var(--tik)}
 .toprow > div:first-child{flex:1;min-width:0}
 #title{overflow-wrap:normal}
+/* Acties van de pagina (+, Nieuw, potlood, vinkje): volle crème knop onderin het midden */
+#topextra{position:fixed;left:50%;bottom:calc(var(--actie-afstand) + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:var(--z-tabs)}
 #topextra:empty{display:none}
+#topextra > *{background:var(--primary);color:var(--primary-ink)}
+#topextra .round{width:var(--actie-hoogte);height:var(--actie-hoogte)}
+#topextra .btn{min-height:var(--actie-hoogte);border-radius:var(--r-rond);padding:0 var(--ruimte-6)}
 header.top h1{margin:0;font-size:var(--fs-titel);font-weight:var(--gewicht-zwaar);letter-spacing:-0.02em;line-height:1.05}
 #headerextra:empty{display:none}
 #headerextra .stores{margin-top:var(--ruimte-3)}
 #headerextra #add-form{margin:var(--ruimte-2) 0 0}
 #add-form[hidden]{display:none}
-.toevoeg-knop{color:var(--primary)}
 .toevoeg-knop svg{width:var(--icoon-m);height:var(--icoon-m);transition:transform var(--duur)}
-.toevoeg-knop.open{background:var(--primary);color:var(--primary-ink);border-color:var(--primary)}
 .toevoeg-knop.open svg{transform:rotate(45deg)}
 #lijst{padding-top:0}
 #headerextra .kopzoek{margin:var(--ruimte-3) 0 0;min-height:var(--tik)}
-#topextra .btn{min-height:var(--h-s);padding:0 var(--ruimte-4)}
-.bewerk-knop{color:var(--primary)}
 .bewerk-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
-.bewerk-knop.actief{background:var(--primary);color:var(--primary-ink);border-color:var(--primary)}
-.bewerk-knop.actief svg{width:var(--icoon-m);height:var(--icoon-m)}
 .titel-invoer{display:block;width:calc(100% + var(--ruimte-3) + 1px);margin-left:calc((var(--ruimte-3) + 1px) * -1);font:inherit;color:inherit;letter-spacing:inherit;line-height:1.1;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-1) var(--ruimte-3);min-height:var(--tik);resize:none;overflow:hidden;font-weight:var(--gewicht-zwaar)}
 .titel-invoer:focus{outline:2px solid var(--primary);outline-offset:0}
 .kaal-select{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);color:var(--ink);padding:var(--ruimte-3) calc(var(--ruimte-6) + var(--ruimte-3)) var(--ruimte-3) var(--ruimte-4);min-height:var(--h-m);-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 22px) 54%,calc(100% - 17px) 54%;background-size:5px 5px;background-repeat:no-repeat}
@@ -215,7 +218,7 @@ body.ac-open #lijst{filter:blur(var(--waas-s));opacity:.45;pointer-events:none}
 .samen-knoppen .btn{white-space:normal;text-align:center;padding:var(--ruimte-3) var(--ruimte-4)}
 h3.dagkop{align-items:center}
 h3.dagkop.leeg{opacity:.75}
-.round{width:var(--h-s);height:var(--h-s);border-radius:var(--r-rond);border:1px solid var(--line);background:var(--surface);display:grid;place-items:center}
+.round{width:var(--h-s);height:var(--h-s);border-radius:var(--r-rond);background:var(--tint);display:grid;place-items:center}
 .recipe{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);margin-bottom:var(--ruimte-2);overflow:hidden}
 /* Vegen in het weekmenu */
 .swipe{position:relative;margin-bottom:var(--ruimte-2);touch-action:pan-y;-webkit-user-select:none;user-select:none}
@@ -266,8 +269,8 @@ h3.dagkop.leeg{opacity:.75}
 /* Boodschappen */
 .stores{display:flex;gap:var(--ruimte-2);margin-top:var(--ruimte-1);overflow-x:auto;scrollbar-width:none;padding-bottom:var(--ruimte-0)}
 .stores::-webkit-scrollbar{display:none}
-.storetab{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);padding:var(--ruimte-2) var(--ruimte-3);border-radius:var(--r-m);border:2px solid var(--line);background:var(--surface);font-weight:var(--gewicht-vet);min-height:var(--tik)}
-.storetab .n{font-variant-numeric:tabular-nums;font-size:var(--fs-s);background:var(--bg);border-radius:var(--r-rond);padding:var(--ruimte-0) var(--ruimte-2);color:var(--muted)}
+.storetab{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);padding:var(--ruimte-2) var(--ruimte-3);border-radius:var(--r-m);border:2px solid transparent;background:var(--tint);font-weight:var(--gewicht-vet);min-height:var(--tik)}
+.storetab .n{font-variant-numeric:tabular-nums;font-size:var(--fs-s);background:var(--tint);border-radius:var(--r-rond);padding:var(--ruimte-0) var(--ruimte-2);color:var(--muted)}
 .storetab.active{border-color:var(--c);background:var(--c);color:var(--op-kleur)}
 .storetab.active .n{background:var(--op-kleur-zacht);color:var(--op-kleur)}
 .storetab.plus{flex:0 0 auto;color:var(--muted);font-size:var(--fs-xl);padding:0 var(--ruimte-4)}
@@ -330,7 +333,7 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .nav-row .lbltxt{font-weight:var(--gewicht-naam);font-size:var(--fs-l)}
 .nav-row .chev2{width:9px;height:9px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);opacity:.7}
 .foot{color:var(--muted);font-size:var(--fs-s);margin:var(--ruimte-3) var(--ruimte-4) 0}
-/* Onderbalk */
+/* Telling op het tasje in het menu */
 .badge{position:relative;display:inline-flex}
 .badge > span{position:absolute;top:calc(var(--ruimte-1) * -1);right:calc(var(--ruimte-2) * -1);background:var(--accent);color:var(--op-kleur);font-size:var(--fs-xs);font-weight:var(--gewicht-zwaar);border-radius:var(--r-rond);padding:var(--ruimte-0) var(--ruimte-1);font-variant-numeric:tabular-nums}
 /* Sheet */
@@ -380,7 +383,7 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .btn.ontkoppel{background:var(--ontkoppel);color:var(--op-kleur)}
 .bv-kaart .field{margin-bottom:var(--ruimte-1)}
 /* Melding */
-.toast{position:fixed;left:50%;bottom:calc(var(--tabbalk-afstand) + var(--tabbalk-hoogte) + var(--ruimte-3) + env(safe-area-inset-bottom,0px));transform:translate(-50%,var(--ruimte-5));opacity:0;pointer-events:none;z-index:var(--z-boven);background:var(--ink);color:var(--bg);border-radius:var(--r-m);padding:var(--ruimte-3) var(--ruimte-3);display:flex;align-items:center;gap:var(--ruimte-3);width:max-content;max-width:calc(100% - var(--rand) * 2);transition:opacity var(--duur),transform var(--duur);font-size:var(--fs-m)}
+.toast{position:fixed;left:50%;bottom:calc(var(--actie-afstand) + var(--actie-hoogte) + var(--ruimte-3) + env(safe-area-inset-bottom,0px));transform:translate(-50%,var(--ruimte-5));opacity:0;pointer-events:none;z-index:var(--z-boven);background:var(--ink);color:var(--bg);border-radius:var(--r-m);padding:var(--ruimte-3) var(--ruimte-3);display:flex;align-items:center;gap:var(--ruimte-3);width:max-content;max-width:calc(100% - var(--rand) * 2);transition:opacity var(--duur),transform var(--duur);font-size:var(--fs-m)}
 .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 .toast button{color:var(--bg);font-weight:var(--gewicht-zwaar);text-decoration:underline;white-space:nowrap}
 /* Laadstaat: grijze vlakken op de plek van de rijen, alleen bij de allereerste keer openen */
@@ -395,51 +398,48 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 /* Kleine correcties */
 #w-tabs{margin-bottom:var(--ruimte-3)}
 #terug[hidden]{display:none}
-/* ================= Tabbalk: zwevend glas, alleen iconen ================= */
-
-.tabs{position:fixed;left:0;right:0;bottom:calc(var(--tabbalk-afstand) + env(safe-area-inset-bottom,0px));z-index:var(--z-tabs);padding:0 var(--ruimte-5);background:none;border:0}
-.tabs .inner{
-  display:grid;grid-template-columns:repeat(4,1fr);margin:0 auto;max-width:var(--tabbalk-breedte);height:var(--tabbalk-hoogte);padding:var(--ruimte-1);gap:var(--ruimte-1);border-radius:var(--r-rond);
-  background:linear-gradient(165deg,var(--tab-glans),transparent 50%),var(--tab-glas);
-  -webkit-backdrop-filter:blur(var(--waas-l)) saturate(180%);backdrop-filter:blur(var(--waas-l)) saturate(180%);
-  border:1px solid var(--tab-rand);
-  box-shadow:var(--glans),var(--schaduw-tabs);
-}
-.tabs button{display:grid;place-items:center;padding:0;border-radius:var(--r-rond);font-size:var(--fs-xs);font-weight:var(--gewicht-vet);text-align:center;color:var(--muted);transition:background-color var(--duur-traag),color var(--duur-traag),transform var(--duur-snel) var(--veer-tab)}
-.tabs button svg{width:var(--icoon-l);height:var(--icoon-l)}
+/* ================= Menu rechtsboven, in de titelregel =================
+   Dicht: een lichte pil met links ⋮ en rechts een volle cirkel met het icoon van de huidige tab.
+   Open: de puntjes vervagen en dezelfde pil wordt smal en groeit naar beneden tot alle tabs erin passen. */
+.tabs{position:relative;flex:none;z-index:var(--z-tabs);width:calc(var(--h-s) + var(--menu-puntjes) + var(--ruimte-1) * 2);height:calc(var(--h-s) + var(--ruimte-1) * 2)}
+.tabs::before{content:"";position:absolute;top:0;right:0;width:100%;height:100%;border-radius:var(--r-rond);background:var(--tab-glas);transition:width var(--duur-traag) var(--veer),height var(--duur-traag) var(--veer)}
+.tabs:not(.ingeklapt)::before{width:calc(var(--h-s) + var(--ruimte-1) * 2);height:calc(var(--h-s) * var(--tab-aantal) + var(--ruimte-1) * (var(--tab-aantal) + 1))}
+.tabs .inner{position:absolute;top:var(--ruimte-1);right:var(--ruimte-1);display:flex;flex-direction:column;gap:var(--ruimte-1);width:var(--h-s)}
+.tabs.ingeklapt .inner{gap:0}
+.tabs button{flex:none;display:grid;place-items:center;width:var(--h-s);height:var(--h-s);overflow:hidden;padding:0;border-radius:var(--r-rond);color:var(--tab-icoon);transition:height var(--duur-traag) var(--veer),opacity var(--duur),background-color var(--duur),color var(--duur),transform var(--duur-snel) var(--veer-tab)}
+.tabs button > *{transition:transform var(--duur-traag) var(--veer)}
+.tabs button svg{width:var(--icoon-m);height:var(--icoon-m)}
 .tabs button:active{transform:scale(.9)}
-.tabs button[aria-current=page]{
-  color:var(--primary);
-  background:var(--tab-actief);
-  box-shadow:var(--glans);
-}
-
-@media (prefers-reduced-transparency: reduce){
-  .tabs .inner{background:var(--surface);-webkit-backdrop-filter:none;backdrop-filter:none}
-}
-@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .tabs .inner{background:var(--surface)}
-}
+.tabs button[aria-current=page]{color:var(--tab-icoon-actief);background:var(--tab-actief)}
+.tabs.ingeklapt button:not([aria-current=page]){height:0;opacity:0;pointer-events:none}
+.tabs.ingeklapt button:not([aria-current=page]) > *{transform:scale(.2)}
+/* Dicht, op een andere tab, en er staat iets op de boodschappenlijst: rood stipje op de cirkel */
+.tabs.ingeklapt .inner:has(button:not([aria-current=page]) #badge:not([hidden]))::after{content:"";position:absolute;top:0;right:0;width:var(--ruimte-3);height:var(--ruimte-3);border-radius:var(--r-rond);background:var(--accent);border:2px solid var(--bg)}
+/* ⋮ links in de pil; vervaagt als het menu open is */
+.menu-teken{position:absolute;top:0;bottom:0;left:0;width:calc(var(--ruimte-1) + var(--menu-puntjes));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--ruimte-0);pointer-events:none;transition:opacity var(--duur)}
+.menu-teken i{width:var(--ruimte-1);height:var(--ruimte-1);border-radius:var(--r-rond);background:var(--tab-icoon)}
+.tabs:not(.ingeklapt) .menu-teken{opacity:0}
 </style>
 </head>
 <body>
 <div id="scroller"><div class="wrap">
-  <header class="top"><button type="button" id="terug" class="back" data-act="inst-terug" hidden><svg data-icoon="pijl-links"></svg><span id="terug-tekst">Instellingen</span></button><div class="toprow"><div><h1 id="title">Boodschappen</h1><p id="subtitle">Even ophalen…</p></div><div id="topextra"></div></div><div id="headerextra"></div></header>
+  <header class="top"><button type="button" id="terug" class="back" data-act="inst-terug" hidden><svg data-icoon="pijl-links"></svg><span id="terug-tekst">Instellingen</span></button><div class="toprow"><div><h1 id="title">Boodschappen</h1><p id="subtitle">Even ophalen…</p></div><div id="topextra"></div>
+    <nav class="tabs ingeklapt" aria-label="Onderdelen">
+      <span class="menu-teken" aria-hidden="true"><i></i><i></i><i></i></span>
+      <div class="inner">
+        <button type="button" data-act="tab" data-tab="lijst" aria-label="Boodschappenlijst">
+          <span class="badge"><svg data-icoon="tas" aria-hidden="true"></svg><span id="badge" hidden></span></span></button>
+        <button type="button" data-act="tab" data-tab="week" aria-label="Weekmenu">
+          <svg data-icoon="kalender" aria-hidden="true"></svg></button>
+        <button type="button" data-act="tab" data-tab="recepten" aria-label="Recepten">
+          <svg data-icoon="kookpan" aria-hidden="true"></svg></button>
+        <button type="button" data-act="tab" data-tab="instellingen" aria-label="Instellingen">
+          <svg data-icoon="schuifjes" aria-hidden="true"></svg></button>
+      </div>
+    </nav>
+  </div><div id="headerextra"></div></header>
   <main id="main"></main>
 </div></div>
-
-<nav class="tabs" aria-label="Onderdelen">
-  <div class="inner">
-    <button type="button" data-act="tab" data-tab="lijst" aria-label="Boodschappenlijst">
-      <span class="badge"><svg data-icoon="tas" aria-hidden="true"></svg><span id="badge" hidden></span></span></button>
-    <button type="button" data-act="tab" data-tab="week" aria-label="Weekmenu">
-      <svg data-icoon="kalender" aria-hidden="true"></svg></button>
-    <button type="button" data-act="tab" data-tab="recepten" aria-label="Recepten">
-      <svg data-icoon="kookpan" aria-hidden="true"></svg></button>
-    <button type="button" data-act="tab" data-tab="instellingen" aria-label="Instellingen">
-      <svg data-icoon="schuifjes" aria-hidden="true"></svg></button>
-  </div>
-</nav>
 
 <div id="sheet-wrap" class="sheet-wrap" hidden>
   <div class="sheet-bg" data-act="sluit"></div>
@@ -634,7 +634,7 @@ const ICONEN = {
   'vakjes': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8" rx="2.4"/><rect x="13" y="3" width="8" height="8" rx="2.4"/><rect x="3" y="13" width="8" height="8" rx="2.4"/><rect x="13" y="13" width="8" height="8" rx="2.4"/></svg>'
 };
 const ico = (naam, attrs = '') => attrs ? ICONEN[naam].replace('<svg ', `<svg ${attrs} `) : ICONEN[naam];
-/* Iconen in de vaste HTML (tabbalk, terugknop) */
+/* Iconen in de vaste HTML (menu, terugknop) */
 document.querySelectorAll('svg[data-icoon]').forEach(el => { el.outerHTML = ico(el.dataset.icoon, el.hasAttribute('aria-hidden') ? 'aria-hidden="true"' : ''); });
 const DAGEN = ['zondag','maandag','dinsdag','woensdag','donderdag','vrijdag','zaterdag'];
 const MAANDEN = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
@@ -1229,13 +1229,14 @@ function tekenAc() {
   document.body.classList.add('ac-open');
   pasAcHoogteAan();
 }
-/* De keuzelijst past altijd boven het toetsenbord en de tabbalk, en scrolt binnen zichzelf */
+/* De keuzelijst past altijd boven het toetsenbord en de actieknop onderin, en scrolt binnen zichzelf */
 function pasAcHoogteAan() {
   const box = $('#ac');
   if (!box || box.hidden) return;
   const vv = window.visualViewport;
   const zicht = Math.min(window.innerHeight, vv ? vv.height + vv.offsetTop : window.innerHeight);
-  const onder = (vv && vv.height < window.innerHeight - 100) ? 12 : window.innerHeight - $('.tabs .inner').getBoundingClientRect().top + 20;
+  const knop = $('#topextra');
+  const onder = (vv && vv.height < window.innerHeight - 100) ? 12 : (knop.children.length ? window.innerHeight - knop.getBoundingClientRect().top : 0) + 20;
   box.style.maxHeight = Math.max(160, zicht - box.getBoundingClientRect().top - onder) + 'px';
 }
 if (window.visualViewport) { visualViewport.addEventListener('resize', pasAcHoogteAan); visualViewport.addEventListener('scroll', pasAcHoogteAan); }
@@ -1949,6 +1950,24 @@ document.addEventListener('click', e => {
   e.preventDefault();
   f(b, b.dataset.id);
 });
+
+/* ================= Menu rechtsboven =================
+   Staat standaard dicht. Een tik op de pil opent hem zonder van tab te wisselen.
+   Hij gaat weer dicht na het kiezen van een tab, na 3 seconden niets doen, bij scrollen,
+   of bij een tik op de puntjesplek. Bij het opstarten klapt hij één keer kort open. */
+const menu = $('.tabs');
+let menuTimer;
+const menuIsOpen = () => !menu.classList.contains('ingeklapt');
+function menuDicht() { clearTimeout(menuTimer); menu.classList.add('ingeklapt'); }
+function menuOpen(ms = 3000) { menu.classList.remove('ingeklapt'); clearTimeout(menuTimer); menuTimer = setTimeout(menuDicht, ms); }
+menu.addEventListener('click', e => {
+  if (menuIsOpen() && e.target.closest('button')) { setTimeout(menuDicht, 250); return; } // tab gekozen: na het wisselen dicht
+  e.preventDefault(); e.stopPropagation();                                                 // dicht: alleen openen; open: tik naast de tabs sluit
+  if (menuIsOpen()) menuDicht(); else menuOpen();
+}, true);
+menu.addEventListener('pointermove', () => { if (menuIsOpen()) menuOpen(); }, { passive: true });
+$('#scroller').addEventListener('scroll', () => { if (menuIsOpen()) menuDicht(); }, { passive: true });
+setTimeout(() => menuOpen(1400), 600);
 
 /* Formulieren zelf afhandelen: Enter of de verzendknop stuurt een eigen submit-event,
    zodat het ook werkt waar echte formulierverzending geblokkeerd is. */
