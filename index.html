@@ -286,7 +286,9 @@ h3.dagkop.leeg{opacity:.75}
 /* Vandaag: kop in de gewone tekstkleur met direct achter de datum een volle crème chip "Vandaag" */
 .dagkop.vandaag{color:var(--ink)}
 .dagkop.vandaag > span{display:inline-flex;align-items:center;gap:var(--ruimte-2)}
-.chip.vandaag-chip{background:var(--primary);color:var(--primary-ink)}
+.chip.vandaag-chip,.chip.dag-chip{background:var(--primary);color:var(--primary-ink)}
+/* Recepten: achter de naam een crème chip per dag waarop het recept deze week gepland staat ("di 10") */
+.naam-met-chips{display:flex;flex-wrap:wrap;align-items:center;gap:var(--ruimte-1) var(--ruimte-2);min-width:0}
 .dag-plus-rij{display:flex;align-items:center;justify-content:center;width:100%;min-height:var(--tik);padding:var(--ruimte-2) var(--ruimte-3);text-align:center}
 .dag-plus-rij .addbtn{width:var(--rondje);height:var(--rondje)}
 .dag-plus-rij .pmeta{margin:0;font-size:var(--fs-basis)}
@@ -314,6 +316,10 @@ h3.dagkop.leeg{opacity:.75}
 .stores .storetab{flex:none;min-height:var(--icoonknop);padding:0 var(--ruimte-3);gap:var(--ruimte-1);border:0;border-radius:var(--r-rond);background:transparent;color:var(--muted)}
 .stores .storetab .n{display:grid;place-items:center;min-width:var(--ruimte-5);height:var(--ruimte-5);padding:0 var(--ruimte-1);border-radius:var(--r-rond);background:var(--tint);color:inherit;font-size:var(--fs-xs);font-weight:var(--gewicht-naam)}
 .stores .storetab.active .n{background:var(--op-kleur-zacht);color:inherit}
+/* Teller: staat er iets op de lijst, dan een vol bolletje in de kleur van de winkel; bij 0 alleen een grijs cijfer zonder bolletje */
+.stores .storetab:not(.active) .n:not(.leeg){background:var(--c);color:var(--op-kleur)}
+.stores .storetab .n.leeg{background:transparent;color:var(--muted)}
+.stores .storetab.active .n.leeg{color:var(--op-kleur-zacht)}
 .stores .storetab.active{background:var(--c);color:var(--op-kleur)}
 h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);margin:var(--ruimte-5) var(--ruimte-1) var(--ruimte-1);display:flex;justify-content:space-between}
 .items{background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden}
@@ -398,15 +404,17 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .pick{display:grid;grid-template-columns:var(--rondje) 1fr;gap:var(--ruimte-3);align-items:center;width:100%;padding:var(--ruimte-3) var(--ruimte-3);border-top:var(--lijn) solid var(--scheiding);min-height:var(--h-m)}
 .pick:first-child{border-top:0}
 /* Favorieten: ster rechts in de zoekbalk */
-#add-form .zoekveld{position:relative;flex:1}
-#add-form .zoekveld .field{padding-right:calc(var(--icoonknop) + var(--ruimte-2) * 2)}
+/* Zoekveld met een knop rechts erin (ster bij Boodschappen, weekmenu-filter bij Recepten) */
+.zoekveld{position:relative;flex:1}
+.zoekveld .field{padding-right:calc(var(--icoonknop) + var(--ruimte-2) * 2)}
 #add-zoek::-webkit-search-cancel-button,#add-zoek::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
-.zoekster{position:absolute;right:var(--ruimte-1);top:50%;transform:translateY(-50%);width:var(--icoonknop);height:var(--icoonknop);display:grid;place-items:center;background:none;border:0;color:var(--primary)}
-.zoekster svg{width:var(--icoon-l);height:var(--icoon-l)}
-.zoekster .vol{display:none}
-.zoekster.aan .leeg{display:none}
-.zoekster.aan .vol{display:block}
+/* Filter in een zoekbalk (ster bij Boodschappen, weekmenu bij Recepten): gevuld icoon, uit = grijs,
+   aan = volle crème cirkel met donker icoon, zoals de huidige tab in het menu */
+.zoekster{position:absolute;right:var(--ruimte-1);top:50%;transform:translateY(-50%);width:var(--icoonknop);height:var(--icoonknop);display:grid;place-items:center;border-radius:var(--r-rond);background:none;border:0;color:var(--muted);transition:background-color var(--duur),color var(--duur)}
+.zoekster svg{width:var(--icoon-m);height:var(--icoon-m)}
+.zoekster.aan{background:var(--primary);color:var(--primary-ink)}
 .ac-leeg{margin:0;padding:var(--ruimte-4);color:var(--muted);font-size:var(--fs-m)}
+/* Klein icoon achter een naam: ster = favoriet */
 .ster{display:inline-grid;vertical-align:var(--lijn);margin-left:var(--ruimte-1);color:var(--primary)}
 .ster svg{width:var(--icoon-s);height:var(--icoon-s)}
 .schakel{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:0;border-radius:var(--r-m);padding:var(--ruimte-2) var(--ruimte-3);min-height:var(--h-m);margin-bottom:var(--ruimte-3);font-size:var(--fs-basis)}
@@ -664,13 +672,13 @@ const ICONEN = {
   'kookpan': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10.5" y="4" width="3" height="3" rx="1.2"/><rect x="4" y="7.2" width="16" height="2.6" rx="1.3"/><path d="M5 11h14v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><rect x="1.5" y="12" width="4" height="2.6" rx="1.3"/><rect x="18.5" y="12" width="4" height="2.6" rx="1.3"/></svg>',
   'schuifjes': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="6" width="18" height="2.6" rx="1.3"/><circle cx="15.5" cy="7.3" r="3.3"/><rect x="3" y="15.4" width="18" height="2.6" rx="1.3"/><circle cx="8.5" cy="16.7" r="3.3"/></svg>',
   'pijl-links': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>',
+  'kopie': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3h6a3 3 0 0 1 3 3v1h-5a3 3 0 0 0-3 3v5H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3z"/><rect x="9" y="9" width="12" height="12" rx="3"/></svg>',
   'pijl-rechts': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
   'ster': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.3 1.1 6.1L12 16.7l-5.4 2.9 1.1-6.1-4.5-4.3 6.1-.8z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>',
   'ontkoppel': '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2.5a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19zM7.4 10.7a1.3 1.3 0 0 0 0 2.6h9.2a1.3 1.3 0 0 0 0-2.6z"/></svg>',
   'min': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14"/></svg>',
   'prullenbak': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="2.6" rx="1.3"/><rect x="9" y="2.5" width="6" height="3" rx="1.2"/><path d="M6 9h12l-1 10.2a2 2 0 0 1-2 1.8H9a2 2 0 0 1-2-1.8z"/></svg>',
   'plus': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
-  'ster-leeg': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>',
   'ster-vol': '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>',
   'vinkje': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   'greep': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg>',
@@ -709,7 +717,7 @@ function zetWinkelkleurenOm() {
   if (patches.length) bewaar('winkels', patches);
 }
 
-const S = { data:null, tab:'lijst', winkel:null, instSub:null, week:0, open:new Set(), zoekR:'', zoekP:'', zoekI:'' };
+const S = { data:null, tab:'lijst', winkel:null, instSub:null, week:0, open:new Set(), zoekR:'', zoekP:'', zoekI:'', receptWeek:false };
 let bezig = 0, teller = 0;
 
 const $ = (s, el=document) => el.querySelector(s);
@@ -763,9 +771,9 @@ function opties(lijst, gekozen) {
 const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
 const vanIso = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
 const kort = d => d.getDate() + ' ' + MAANDEN[d.getMonth()];
-function weekDagen() {
+function weekDagen(week = S.week) {
   const d = new Date(); d.setHours(0, 0, 0, 0);
-  d.setDate(d.getDate() - ((d.getDay() + 6) % 7) + S.week * 7);
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7) + week * 7);
   return [...Array(7)].map((_, k) => { const x = new Date(d); x.setDate(d.getDate() + k); return x; });
 }
 function weeknr(d) {
@@ -979,7 +987,7 @@ function receptKaart(r, datum) {
   const ingr = (r.ingredienten || []).filter(i => prod(i.product));
   const n = ingr.filter(i => { const p = prod(i.product); return nodig(p) && voorLijst(p.lijstVoor).includes(r.naam); }).length;
   let h = `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" data-datum="${datum}" data-r="${esc(r.id)}" style="--n:3">
-    <div class="swipe-acties"><button type="button" class="swipe-wk" style="--c:var(--veeg-open)" data-act="recept-van-week" data-id="${esc(r.id)}" aria-label="Recept ${esc(r.naam)} bekijken">${ico('kookpan')}</button><button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="koppel" data-datum="${datum}" aria-label="Recepten van deze dag wijzigen">${PEN_ICON}</button><button type="button" class="swipe-wk" style="--c:var(--ontkoppel)" data-act="dag-ontkoppel" aria-label="${esc(r.naam)} van deze dag halen">${ONTKOPPEL_ICON}</button></div>
+    <div class="swipe-acties"><button type="button" class="swipe-wk" style="--c:var(--veeg-open)" data-act="dag-kopie" aria-label="${esc(r.naam)} naar een andere dag kopiëren">${ico('kopie')}</button><button type="button" class="swipe-wk" style="--c:var(--wijzig)" data-act="koppel" data-datum="${datum}" aria-label="Recepten van deze dag wijzigen">${PEN_ICON}</button><button type="button" class="swipe-wk" style="--c:var(--ontkoppel)" data-act="dag-ontkoppel" aria-label="${esc(r.naam)} van deze dag halen">${ONTKOPPEL_ICON}</button></div>
     <article class="recipe swipe-kaart">
     <button type="button" class="recipe-head" data-act="klap" data-key="${esc(key)}" aria-expanded="${open}">
       ${receptLead(r)}
@@ -1111,6 +1119,31 @@ document.addEventListener('click', e => {
   const sw = e.target.closest('.swipe.open');
   if (sw && !e.target.closest('.swipe-acties')) { e.preventDefault(); e.stopPropagation(); sluitVeeg(); }
 }, true);
+/** Recepten die op een dag gepland staan. */
+const receptenOp = datum => [...(((D().mealplan.find(m => m.id === datum)) || {}).recepten || [])];
+/** Kopiëren naar andere dagen: lijst met de dagen van deze en volgende week, zoals het koppelvenster.
+    Aangevinkt = het recept staat op die dag; elke tik slaat meteen op. Onder de dag staat wat er al gepland is. */
+function openKopie(rid) {
+  const r = recept(rid); if (!r) return;
+  const dagRij = d => {
+    const id = iso(d), op = receptenOp(id), aan = op.includes(rid);
+    const anders = op.filter(x => x !== rid).map(x => (recept(x) || {}).naam).filter(Boolean).join(', ');
+    return `<button type="button" class="pick${aan ? ' on' : ''}" data-dag="${id}" aria-pressed="${aan}">
+      <span class="tick"></span><span><span class="pname">${cap(DAGEN[d.getDay()])} ${kort(d)}</span>${anders ? `<span class="pmeta">${esc(anders)}</span>` : ''}</span></button>`;
+  };
+  const week = (w, kop) => { const ds = weekDagen(w); return `<section><h3 class="cat"><span>${kop || ds[0].getDate() + ' – ' + kort(ds[6])}</span></h3><div class="items">${ds.map(dagRij).join('')}</div></section>`; };
+  openSheet(`<h4>${esc(r.naam)} kopiëren</h4>
+    <div id="kopie">${week(S.week, S.week === 0 && 'Deze week')}${week(S.week + 1, S.week === 0 && 'Volgende week')}</div>`);
+  $('#kopie').onclick = e => {
+    const b = e.target.closest('.pick'); if (!b) return;
+    const aan = !b.classList.contains('on');
+    b.classList.toggle('on', aan); b.setAttribute('aria-pressed', aan);
+    const dag = b.dataset.dag, op = receptenOp(dag);
+    const lijst = aan ? (op.includes(rid) ? op : [...op, rid]) : op.filter(x => x !== rid);
+    if (lijst.length) bewaar('mealplan', [{ id: dag, datum: dag, recepten: lijst }]);
+    else verwijder('mealplan', [dag]);
+  };
+}
 function openKoppel(datum) {
   const d = vanIso(datum);
   const plan = D().mealplan.find(m => m.id === datum);
@@ -1161,8 +1194,7 @@ function openZoeken() {
     <form class="add" id="add-form">
       <span class="zoekveld"><input class="field" type="search" id="add-zoek" name="zoekterm" inputmode="search" autocomplete="off" autocapitalize="sentences" spellcheck="false" autocorrect="off" enterkeyhint="done" placeholder="Product zoeken of toevoegen" aria-label="Product toevoegen" aria-autocomplete="list" aria-controls="ac">
         <button type="button" class="zoekster" data-act="ac-ster" aria-pressed="false" aria-label="Alleen favorieten tonen">
-          ${ico('ster-leeg', 'class="leeg"')}
-          ${ico('ster-vol', 'class="vol"')}
+          ${ico('ster-vol')}
         </button></span>
     </form>
     <div class="ac-lijst" id="ac" role="listbox" hidden></div>`);
@@ -1190,9 +1222,9 @@ function tekenLijst() {
   const w = alles ? null : winkel(S.winkel);
   sub('');
   const totaal = D().producten.filter(nodig).length;
-  $('#stores').innerHTML = `<button type="button" class="storetab${alles ? ' active' : ''}" style="--c:var(--actief)" data-act="winkel" data-id="${ALLES}">Alles <span class="n">${totaal}</span></button>` + ws.map(s => {
+  $('#stores').innerHTML = `<button type="button" class="storetab${alles ? ' active' : ''}" style="--c:var(--actief)" data-act="winkel" data-id="${ALLES}">Alles <span class="n${totaal ? '' : ' leeg'}">${totaal}</span></button>` + ws.map(s => {
     const n = D().producten.filter(p => nodig(p) && winkelVan(p) === s.id).length;
-    return `<button type="button" class="storetab${s.id === S.winkel ? ' active' : ''}" style="--c:${kleurVan(s)}" data-act="winkel" data-id="${esc(s.id)}">${esc(s.naam)} <span class="n">${n}</span></button>`;
+    return `<button type="button" class="storetab${s.id === S.winkel ? ' active' : ''}" style="--c:${kleurVan(s)}" data-act="winkel" data-id="${esc(s.id)}">${esc(s.naam)} <span class="n${n ? '' : ' leeg'}">${n}</span></button>`;
   }).join('');
   toonGekozenWinkel();
 
@@ -1338,7 +1370,7 @@ function skeletRecepten() {
   if (bewerk || (S.receptOpen && recept(S.receptOpen))) {
     $('#terug').hidden = false;
     $('#terug').dataset.act = bewerk ? 'recept-annuleer' : 'recept-terug';
-    $('#terug-tekst').textContent = bewerk ? 'Annuleer' : S.receptTerug === 'week' ? 'Weekmenu' : 'Recepten';
+    $('#terug-tekst').textContent = bewerk ? 'Annuleer' : 'Recepten';
     // Bewerken: veeg een product of stap naar links (potlood). In de bewerkmodus is de actieknop onderin het vinkje (opslaan).
     $('#topextra').innerHTML = bewerk ? `<button type="button" class="round bewerk-knop" data-act="recept-opslaan" aria-label="Opslaan">${ico('vinkje')}</button>` : '';
     if (bewerk) {
@@ -1352,7 +1384,9 @@ function skeletRecepten() {
   }
   S.receptOpen = null;
   // Nieuw staat naast de zoekbalk, dus geen actieknop onderin
-  $('#headerextra').innerHTML = `<div class="add"><input type="search" class="field kopzoek" id="zoek-r" placeholder="Zoek op recept of product" value="${esc(S.zoekR)}" autocomplete="off" aria-label="Recepten zoeken"><button type="button" class="btn" data-act="recept-nieuw">Nieuw</button></div>`;
+  // In de zoekbalk rechts het weekmenu-icoon: alleen recepten die deze week gepland staan (zoals de ster bij Boodschappen)
+  $('#headerextra').innerHTML = `<div class="add"><span class="zoekveld"><input type="search" class="field kopzoek" id="zoek-r" placeholder="Zoek recept of product" value="${esc(S.zoekR)}" autocomplete="off" aria-label="Recepten zoeken">
+    <button type="button" class="zoekster${S.receptWeek ? ' aan' : ''}" data-act="recept-weekfilter" aria-pressed="${S.receptWeek}" aria-label="Alleen recepten van deze week">${ico('kalender')}</button></span><button type="button" class="btn" data-act="recept-nieuw">Nieuw</button></div>`;
   return '<div id="recepten"></div>';
 }
 /* ---------- Recept bewerken op de pagina zelf ---------- */
@@ -1421,7 +1455,7 @@ function startBewerk(id) {
 function stopBewerk(naarLijst) {
   S.nieuwVoorDag = null;
   S.receptBewerk = null; S.rbNieuw = []; S.rbGewijzigd = false;
-  if (naarLijst) { S.receptOpen = null; S.receptTerug = null; }
+  if (naarLijst) S.receptOpen = null;
   wissel('recepten');
 }
 function tekenRbAc() {
@@ -1465,14 +1499,19 @@ function tekenRecepten() {
   sub('');
   if (S.receptOpen) return tekenReceptDetail();
   const q = S.zoekR.trim().toLowerCase();
-  const rs = [...alle].sort(opNaam).filter(r => !q || r.naam.toLowerCase().includes(q) ||
-    (r.ingredienten || []).some(i => { const p = prod(i.product); return p && p.naam.toLowerCase().includes(q); }));
+  // Per recept de dagen waarop het deze week gepland staat (voor de chips en het weekfilter)
+  const opDagen = new Map();
+  weekDagen(0).forEach(d => receptenOp(iso(d)).forEach(id => opDagen.set(id, [...(opDagen.get(id) || []), d])));
+  const dezeWeek = new Set(opDagen.keys());
+  const dagChips = r => (opDagen.get(r.id) || []).map(d => `<span class="chip dag-chip" aria-label="${DAGEN[d.getDay()]} ${kort(d)}">${DAGEN[d.getDay()].slice(0, 2)} ${d.getDate()}</span>`).join('');
+  const rs = [...alle].sort(opNaam).filter(r => (!S.receptWeek || dezeWeek.has(r.id)) && (!q || r.naam.toLowerCase().includes(q) ||
+    (r.ingredienten || []).some(i => { const p = prod(i.product); return p && p.naam.toLowerCase().includes(q); })));
   $('#recepten').innerHTML = !alle.length
     ? '<div class="empty"><strong>Het receptenboek is nog leeg</strong>Voeg een recept toe met de producten die erin gaan en een korte uitleg.<br><button type="button" class="btn" data-act="recept-nieuw">Eerste recept maken</button></div>'
-    : !rs.length ? `<div class="empty">Geen recept gevonden met “${esc(S.zoekR.trim())}”.</div>`
+    : !rs.length ? (S.receptWeek && !q ? '<div class="empty">Deze week staat nog niets gepland.</div>' : `<div class="empty">Geen recept gevonden met “${esc(S.zoekR.trim())}”${S.receptWeek ? ' in deze week' : ''}.</div>`)
     : perReceptCat(rs).map(g => `<h3 class="cat"><span>${esc(g.naam)}</span></h3><div class="items">${g.rs.map(r => veegRij('r:' + r.id,
           `<button type="button" class="check metchip" data-act="recept-pagina" data-id="${esc(r.id)}">${receptLead(r)}
-            <span><span class="pname">${esc(r.naam)}</span></span><span class="chevr"></span></button>`,
+            <span class="naam-met-chips"><span class="pname">${esc(r.naam)}</span>${dagChips(r)}</span><span class="chevr"></span></button>`,
           [{ act: 'recept-weg', id: r.id, label: 'Verwijder', icon: PRUL_ICON, weg: true, aria: r.naam + ' verwijderen' }])).join('')}</div>`).join('');
 }
 /* ---------- Slepen: volgorde van rijen aanpassen ---------- */
@@ -1819,12 +1858,10 @@ const ACTIES = {
     if (S.receptBewerk) { syncBewerk(); if (S.rbGewijzigd && !(await bevestig('Je wijzigingen aan het recept weggooien?', 'Weggooien'))) return; S.receptBewerk = null; }
     if (b.dataset.tab === 'instellingen') S.instSub = null;
     if (b.dataset.tab === 'recepten') S.receptOpen = null;
-    S.receptTerug = null;
     wissel(b.dataset.tab);
   },
-  'recept-pagina': (b, id) => { sluitVeeg(); S.receptOpen = id; S.receptTerug = null; wissel('recepten'); },
-  'recept-terug': () => { const t = S.receptTerug; S.receptOpen = null; S.receptTerug = null; wissel(t === 'week' ? 'week' : 'recepten'); },
-  'recept-van-week': (b, id) => { sluitVeeg(); S.receptOpen = id; S.receptTerug = 'week'; wissel('recepten'); },
+  'recept-pagina': (b, id) => { sluitVeeg(); S.receptOpen = id; wissel('recepten'); },
+  'recept-terug': () => { S.receptOpen = null; wissel('recepten'); },
   'inst-ga': b => naarInst(b.dataset.sub),
   'inst-terug': () => naarInst(null),
   sluit: () => sluitSheet(),
@@ -1843,6 +1880,7 @@ const ACTIES = {
     melding(`${r ? r.naam : 'Recept'} van ${DAGEN[d.getDay()]} gehaald.`, 'Ongedaan maken', () => bewaar('mealplan', [{ id: datum, datum, recepten: vorige }]));
   },
   koppel: b => { sluitVeeg(); openKoppel(b.dataset.datum); },
+  'dag-kopie': b => { const sw = b.closest('.swipe'); if (!sw) return; sluitVeeg(); openKopie(sw.dataset.r); },
   'naar-recepten': () => { sluitSheet(); wissel('recepten'); },
   ing: b => {
     const p = prod(b.dataset.p), r = recept(b.dataset.r);
@@ -1912,6 +1950,11 @@ const ACTIES = {
   },
 
   'recept-nieuw': () => startBewerk(null),
+  'recept-weekfilter': b => {
+    S.receptWeek = !S.receptWeek;
+    b.classList.toggle('aan', S.receptWeek); b.setAttribute('aria-pressed', S.receptWeek);
+    tekenRecepten();
+  },
   // Nieuw recept vanuit het weekmenu: na opslaan staat het meteen op die dag
   'recept-nieuw-dag': b => { sluitSheet(); startBewerk(null); S.nieuwVoorDag = b.dataset.datum; },
   'recept-bewerkmodus': () => { sluitVeeg(); startBewerk(S.receptOpen); },
