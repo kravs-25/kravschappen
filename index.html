@@ -19,7 +19,7 @@
 <style>
 :root{
   /* ---------- Kleur (alleen donker: bruin en beige) ---------- */
-  --bg:#1E1611; --surface:#2A201A; --ink:#F3EADF; --muted:#B3A08E; --line:#3A2E25;
+  --bg:#1E1611; --surface:#2A201A; --ink:#F3EADF; --muted:#B3A08E; --line:#3A2E25; --scheiding:color-mix(in srgb,var(--line) 55%,var(--surface)); /* zachte lijn tussen rijen */
   --merk:#5B3B26; --actief:#6B4A33; --op-kleur:#FBF6EE; --op-kleur-zacht:rgba(251,246,238,.2);
   --primary:#E8D6C2; --primary-ink:#2A1D14; --primary-soft:#3A2C22;
   --accent:#C2594A; --done:#7E6C5E;
@@ -44,10 +44,10 @@
   --gewicht-naam:500; --gewicht-vet:700; --gewicht-zwaar:800;
 
   /* ---------- Vorm ---------- */
-  --r-s:10px; --r-m:14px; --r-l:18px; --r-xl:24px; --r-rond:999px;
+  --r-s:10px; --r-m:14px; --r-l:18px; --r-xl:24px; --r-rond:999px; --r-blok:var(--r-xl); /* hoeken van blokken met rijen */
   --schaduw-lijst:0 14px 34px var(--schaduw); --schaduw-sleep:0 12px 30px var(--schaduw);
   --schaduw-knop:0 2px 4px var(--schaduw-klein);
-  --waas-s:6px; --waas-m:10px;
+  --waas-m:10px;
 
   /* ---------- Maten ---------- */
   /* ---------- Ruimte ---------- */
@@ -68,7 +68,7 @@
   --icoon-s:16px; --icoon-m:22px; --icoon-l:28px;
   --veegknop:72px;
   /* actieknop onderin het midden (+, Nieuw, potlood, vinkje) */
-  --actie-hoogte:64px; --actie-afstand:var(--ruimte-3);
+  --actie-hoogte:var(--menu-knop); --actie-afstand:var(--ruimte-3); /* even groot als de menuknop */
   /* ruimte onder de inhoud, zodat niets achter de actieknop verdwijnt */
   --actie-ruimte:calc(var(--actie-afstand) + var(--actie-hoogte) + var(--ruimte-6));
   /* menu rechtsboven: plek voor de puntjes links van de cirkel, en het aantal tabs */
@@ -79,7 +79,7 @@
   --veer:cubic-bezier(.2,.9,.3,1); --veer-tab:cubic-bezier(.3,1.4,.5,1);
 
   /* ---------- Lagen ---------- */
-  --z-binnen:1; --z-kop:5; --z-keuzelijst:7; --z-tabs:8; --z-label:9; --z-venster:20; --z-boven:30; --z-bevestig:40; --z-code:50;
+  --z-binnen:1; --z-kop:5; --z-keuzelijst:7; --z-tabs:8; --z-actie:9; --z-label:10; --z-venster:20; --z-boven:30; --z-bevestig:40; --z-code:50;
 
   color-scheme:dark;
 }
@@ -114,18 +114,15 @@ body.preview header.top{padding-top:calc(var(--ruimte-6) + var(--ruimte-1) + env
 .toprow > div:first-child{flex:1;min-width:0}
 #title{overflow-wrap:normal}
 /* Acties van de pagina (+, Nieuw, potlood, vinkje): volle crème knop onderin het midden */
-#topextra{position:fixed;left:50%;bottom:calc(var(--actie-afstand) + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:var(--z-tabs)}
+#topextra{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--actie-afstand) + env(safe-area-inset-bottom,0px));z-index:var(--z-actie)}
 #topextra:empty{display:none}
 #topextra > *{background:var(--primary);color:var(--primary-ink)}
 #topextra .round{width:var(--actie-hoogte);height:var(--actie-hoogte)}
-#topextra .btn{min-height:var(--actie-hoogte);border-radius:var(--r-rond);padding:0 var(--ruimte-6)}
+#topextra .btn{min-height:var(--actie-hoogte);border-radius:var(--r-rond);padding:0 var(--ruimte-4)}
 header.top h1{margin:0;font-size:var(--fs-titel);font-weight:var(--gewicht-zwaar);letter-spacing:-0.02em;line-height:1.05}
 #headerextra:empty{display:none}
 #headerextra .stores{margin-top:var(--ruimte-3)}
-#headerextra #add-form{margin:var(--ruimte-2) 0 0}
-#add-form[hidden]{display:none}
-.toevoeg-knop svg{width:var(--icoon-m);height:var(--icoon-m);transition:transform var(--duur)}
-.toevoeg-knop.open svg{transform:rotate(45deg)}
+.toevoeg-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
 #lijst{padding-top:0}
 #headerextra .kopzoek{margin:var(--ruimte-3) 0 0;min-height:var(--tik)}
 .bewerk-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
@@ -141,7 +138,7 @@ header.top h1{margin:0;font-size:var(--fs-titel);font-weight:var(--gewicht-zwaar
 .stap-invoer{display:block;width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);line-height:1.45;color:var(--ink);resize:none;overflow:hidden;padding:var(--ruimte-0) 0;margin:0;outline:none}
 .stap-invoer::placeholder{color:var(--muted)}
 .staprij:focus-within{background:color-mix(in srgb,var(--primary) 6%,transparent)}
-.rb-stap-plus{display:block;width:100%;text-align:left;border-top:1px solid var(--line)}
+.rb-stap-plus{display:block;width:100%;text-align:left;border-top:1px solid var(--scheiding)}
 .rb-stap-plus .pmeta{font-size:var(--fs-basis);margin:0}
 .check.bewerkrij{grid-template-columns:var(--rondje) 1fr 104px;min-height:var(--h-m)}
 .minrond{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);background:var(--ontkoppel);color:var(--op-kleur);display:grid;place-items:center}
@@ -151,7 +148,7 @@ header.top h1{margin:0;font-size:var(--fs-titel);font-weight:var(--gewicht-zwaar
 .rb-toevoeg input{width:100%;border:0;background:transparent;font:inherit;font-size:var(--fs-basis);color:var(--ink);padding:var(--ruimte-2) 0;outline:none}
 .rb-toevoeg input::placeholder{color:var(--muted)}
 .rb-wrap{position:relative}
-.kaal-select:focus{outline:2px solid var(--primary);outline-offset:-2px;border-radius:var(--r-l)}
+.kaal-select:focus{outline:2px solid var(--primary);outline-offset:-2px;border-radius:var(--r-blok)}
 .check.detailrij{grid-template-columns:1fr auto auto;min-height:var(--h-m)}
 .rz-rij{width:100%;text-align:left}
 .rz-rij .chevr{justify-self:end;margin-right:var(--ruimte-1)}
@@ -163,27 +160,35 @@ header.top p{margin:var(--ruimte-1) 0 0;color:var(--muted);font-size:var(--fs-m)
 /* Algemene velden en knoppen */
 .field{display:block;width:100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--tik);-webkit-appearance:none;appearance:none}
 .field::placeholder{color:var(--muted)}
+/* Zoekvelden in menustijl: een ronde pil in de menukleur, zonder rand */
+input[type=search].field{border:0;border-radius:var(--r-rond);background:var(--menu-vlak);padding:0 var(--ruimte-4)}
 select.field{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 54%,calc(100% - 15px) 54%;background-size:5px 5px;background-repeat:no-repeat;padding-right:calc(var(--ruimte-6) + var(--ruimte-2))}
 textarea.field{resize:vertical;min-height:var(--h-tekstvak)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--ruimte-1);background:var(--primary);color:var(--primary-ink);border-radius:var(--r-m);padding:0 var(--ruimte-4);font-weight:var(--gewicht-vet);min-height:var(--tik);white-space:nowrap;text-align:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--ruimte-1);background:var(--primary);color:var(--primary-ink);border-radius:var(--r-rond);padding:0 var(--ruimte-4);font-weight:var(--gewicht-vet);min-height:var(--tik);white-space:nowrap;text-align:center}
 .btn.soft{background:var(--primary-soft);color:var(--ink)}
 .btn.danger{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
 .btn.wide{width:100%}
 .add{display:flex;gap:var(--ruimte-2);margin:var(--ruimte-3) 0 var(--ruimte-1)}
 .add .field{flex:1}
 #add-form{position:relative}
-.ac-lijst{position:absolute;left:0;right:0;top:calc(100% + var(--ruimte-1));z-index:var(--z-keuzelijst);max-height:calc(100vh - 290px - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);touch-action:pan-y;box-shadow:var(--schaduw-lijst)}
-.ac-item{display:grid;grid-template-columns:auto 1fr auto;gap:var(--ruimte-3);align-items:center;width:100%;padding:0 var(--ruimte-3) 0 0;min-height:var(--h-m);border-top:1px solid var(--line)}
+/* Zoeken bij Boodschappen: een venster zoals de andere (vervaagde pagina, kaart van onderen), altijd even hoog.
+   Bovenin de zoekbalk; de keuzelijst eronder scrolt binnen zichzelf. Het zoekveld krijgt geen focus, dus eerst scrollen. */
+.sheet.zoeken{display:flex;flex-direction:column;height:min(90vh,calc(100% - var(--ruimte-5)));overflow:hidden}
+.sheet.zoeken #sheet-inhoud{flex:1;min-height:0;display:flex;flex-direction:column}
+.sheet.zoeken #add-form{margin:0}
+#ac{position:static;flex:0 1 auto;min-height:0;max-height:none;margin-top:var(--ruimte-3);box-shadow:none}
+.ac-lijst{position:absolute;left:0;right:0;top:calc(100% + var(--ruimte-1));z-index:var(--z-keuzelijst);max-height:calc(100vh - 290px - env(safe-area-inset-bottom,0px));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--surface);border:0;border-radius:var(--r-blok);touch-action:pan-y;box-shadow:var(--schaduw-lijst)}
+.ac-item{display:grid;grid-template-columns:auto 1fr auto;gap:var(--ruimte-3);align-items:center;width:100%;padding:0 var(--ruimte-3) 0 0;min-height:var(--h-m);border-top:1px solid var(--scheiding)}
 .ac-item:first-child{border-top:0}
-.wis-knop{display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);width:100%;margin-top:var(--ruimte-2);min-height:var(--h-m);border-radius:var(--r-l);background:var(--surface);border:1px solid var(--line);color:var(--ontkoppel);font-weight:var(--gewicht-vet);text-align:center}
+.wis-knop{display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);width:100%;margin-top:var(--ruimte-2);min-height:var(--h-m);border-radius:var(--r-rond);background:var(--surface);border:0;color:var(--ontkoppel);font-weight:var(--gewicht-vet);text-align:center}
 .wis-knop svg{width:var(--icoon-s);height:var(--icoon-s)}
 .wis-knop:active{background:color-mix(in srgb,var(--ontkoppel) 10%,var(--surface))}
-.ac-kop{position:sticky;top:0;z-index:var(--z-binnen);display:flex;justify-content:space-between;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-1);background:var(--surface);font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);border-top:1px solid var(--line)}
+.ac-kop{position:sticky;top:0;z-index:var(--z-binnen);display:flex;justify-content:space-between;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-1);background:var(--surface);font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);border-top:1px solid var(--scheiding)}
 .ac-kop:first-child{border-top:0}
 .ac-kop + .ac-item{border-top:0}
 #ac .swipe{margin:0}
 #ac .swipe > .ac-item{border-top:0;background:var(--surface)}
-#ac .swipe + .swipe{border-top:1px solid var(--line)}
+#ac .swipe + .swipe{border-top:1px solid var(--scheiding)}
 #ac .swipe-weg{border-radius:0}
 .ac-plus{align-self:stretch;display:grid;place-items:center;padding:0 0 0 var(--ruimte-3)}
 .ac-naam{align-self:stretch;display:flex;align-items:center;min-width:0;padding:var(--ruimte-3) 0}
@@ -191,11 +196,10 @@ textarea.field{resize:vertical;min-height:var(--h-tekstvak)}
 .ac-item > .chip,.ac-item > .status{justify-self:end}
 /* Rest van de pagina vervaagt zolang de keuzelijst open is */
 #stores,#lijst{transition:filter var(--duur),opacity var(--duur)}
-body.ac-open #lijst{filter:blur(var(--waas-s));opacity:.45;pointer-events:none}
 .ac-item .pname b{font-weight:var(--gewicht-zwaar)}
 .ac-item .status{font-size:var(--fs-s);color:var(--muted);white-space:nowrap}
 .ac-nieuw{color:var(--primary);font-weight:var(--gewicht-vet)}
-.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r-l);padding:var(--ruimte-5) var(--ruimte-4);color:var(--muted);margin-top:var(--ruimte-4)}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r-blok);padding:var(--ruimte-5) var(--ruimte-4);color:var(--muted);margin-top:var(--ruimte-4)}
 .empty strong{display:block;color:var(--ink);font-size:var(--fs-l);margin-bottom:var(--ruimte-1)}
 .empty .btn{margin-top:var(--ruimte-3)}
 /* Vinkje */
@@ -220,7 +224,7 @@ body.ac-open #lijst{filter:blur(var(--waas-s));opacity:.45;pointer-events:none}
 h3.dagkop{align-items:center}
 h3.dagkop.leeg{opacity:.75}
 .round{width:var(--h-s);height:var(--h-s);border-radius:var(--r-rond);background:var(--tint);display:grid;place-items:center}
-.recipe{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);margin-bottom:var(--ruimte-2);overflow:hidden}
+.recipe{background:var(--surface);border:0;border-radius:var(--r-blok);margin-bottom:var(--ruimte-2);overflow:hidden}
 /* Vegen in het weekmenu */
 .swipe{position:relative;margin-bottom:var(--ruimte-2);touch-action:pan-y;-webkit-user-select:none;user-select:none}
 .swipe .swipe-kaart{position:relative;margin:0;transition:transform var(--duur-traag) var(--veer)}
@@ -230,34 +234,36 @@ h3.dagkop.leeg{opacity:.75}
 .swipe.open .swipe-acties,.swipe.bezig .swipe-acties{visibility:visible}
 /* Veegknoppen tonen alleen een icoon; de tekst (font-size 0) is er alleen voor de schermlezer */
 .swipe-weg,.swipe-wk{width:var(--veegknop);height:100%;color:var(--op-kleur);font-size:0;font-weight:var(--gewicht-vet);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.swipe-weg{border-radius:var(--r-l);background:var(--accent)}
+.swipe-weg{border-radius:var(--r-blok);background:var(--accent)}
 .swipe-wk{background:var(--c)}
 .swipe-weg svg,.swipe-wk svg{width:var(--icoon-l);height:var(--icoon-l)}
 .items .swipe{margin:0}
-.items .swipe + .swipe{border-top:1px solid var(--line)}
+.items .swipe + .swipe{border-top:1px solid var(--scheiding)}
 .items .swipe-weg{border-radius:0}
 .items .item{background:var(--surface)}
 .swipe > .item{border-top:0}
 /* Recepten van één dag samen in één blok, net als de boodschappenlijst */
-.dag-groep{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden;margin-bottom:0}
+.dag-groep{background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden;margin-bottom:0}
 .dag-groep .swipe{margin:0}
-.dag-groep .swipe + .swipe{border-top:1px solid var(--line)}
+.dag-groep .swipe + .swipe{border-top:1px solid var(--scheiding)}
 .dag-groep .recipe{border:0;border-radius:0;margin:0}
 .dag-groep .swipe-weg{border-radius:0}
 .recipe-head{display:grid;grid-template-columns:var(--rondje) 1fr auto;align-items:center;gap:var(--ruimte-3);width:100%;padding:var(--ruimte-3) var(--ruimte-4) var(--ruimte-3) var(--ruimte-3);min-height:var(--rij)}
-.weekbalk{display:grid;grid-template-columns:var(--h-m) 1fr var(--h-m);gap:var(--ruimte-2);margin-top:var(--ruimte-3);padding-bottom:var(--ruimte-0)}
-.weekpijl{flex:none;padding:0;justify-content:center}
+/* Weekbalk in menustijl: één compacte pil, pijltjes als ronde segmenten, de periode in het midden; de huidige week is gevuld */
+.weekbalk{display:flex;width:fit-content;max-width:100%;gap:0;margin-top:var(--ruimte-3);padding:var(--ruimte-1);border-radius:var(--r-rond);background:var(--menu-vlak)}
+.weekbalk .storetab{flex:none;min-height:var(--icoonknop);border:0;border-radius:var(--r-rond);background:transparent;color:var(--muted)}
+.weekbalk .weekpijl{width:var(--icoonknop);padding:0}
 .weekpijl svg{width:var(--icoon-m);height:var(--icoon-m)}
-.weeklabel{padding:var(--ruimte-1) var(--ruimte-3)}
-.weeklabel.active{--c:var(--actief)}
+.weekbalk .weeklabel{padding:0 var(--ruimte-4);color:var(--ink)}
+.weekbalk .weeklabel.active{background:var(--actief);color:var(--op-kleur)}
 .dagkop.vandaag{color:var(--primary)}
 .dag-plus-rij{display:flex;align-items:center;justify-content:center;width:100%;min-height:var(--tik);padding:var(--ruimte-2) var(--ruimte-3);text-align:center}
 .dag-plus-rij .addbtn{width:var(--rondje);height:var(--rondje)}
 .dag-plus-rij .pmeta{margin:0;font-size:var(--fs-basis)}
-.dag-groep .swipe + .dag-plus-rij{border-top:1px solid var(--line)}
+.dag-groep .swipe + .dag-plus-rij{border-top:1px solid var(--scheiding)}
 .dag-plus-rij:active{background:var(--primary-soft)}
-.recipe .ings{padding:0;margin:0;border-top:1px solid var(--line);background:color-mix(in srgb,var(--bg) 55%,var(--surface))}
-.ings li + li .ing,.ings li + li.leeg-ing{border-top:1px solid var(--line)}
+.recipe .ings{padding:0;margin:0;border-top:1px solid var(--scheiding);background:color-mix(in srgb,var(--bg) 55%,var(--surface))}
+.ings li + li .ing,.ings li + li.leeg-ing{border-top:1px solid var(--scheiding)}
 .chev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:calc(var(--ruimte-1) * -1) var(--ruimte-1) 0 0;transition:transform var(--duur-snel)}
 [aria-expanded=true] .chev{transform:rotate(-135deg);margin-top:var(--ruimte-1)}
 .ings{list-style:none;margin:0;padding:0 var(--ruimte-2) var(--ruimte-2)}
@@ -268,33 +274,38 @@ h3.dagkop.leeg{opacity:.75}
 .iamt{color:var(--muted);font-size:var(--fs-m);white-space:nowrap}
 .uitleg{color:var(--muted);font-size:var(--fs-m);margin:0 var(--ruimte-4) var(--ruimte-3);white-space:pre-wrap;overflow-wrap:anywhere}
 /* Boodschappen */
-.stores{display:flex;gap:var(--ruimte-2);margin-top:var(--ruimte-1);overflow-x:auto;scrollbar-width:none;padding-bottom:var(--ruimte-0)}
+.stores{display:flex;width:fit-content;max-width:100%;gap:0;margin-top:var(--ruimte-1);padding:var(--ruimte-1);overflow-x:auto;scrollbar-width:none;border-radius:var(--r-rond);background:var(--menu-vlak)}
 .stores::-webkit-scrollbar{display:none}
 .storetab{flex:1 0 auto;display:flex;align-items:center;justify-content:center;gap:var(--ruimte-2);padding:var(--ruimte-2) var(--ruimte-3);border-radius:var(--r-m);border:2px solid transparent;background:var(--tint);font-weight:var(--gewicht-vet);min-height:var(--tik)}
 .storetab .n{font-variant-numeric:tabular-nums;font-size:var(--fs-s);background:var(--tint);border-radius:var(--r-rond);padding:var(--ruimte-0) var(--ruimte-2);color:var(--muted)}
 .storetab.active{border-color:var(--c);background:var(--c);color:var(--op-kleur)}
 .storetab.active .n{background:var(--op-kleur-zacht);color:var(--op-kleur)}
-.storetab.plus{flex:0 0 auto;color:var(--muted);font-size:var(--fs-xl);padding:0 var(--ruimte-4)}
+/* Winkelkeuze in menustijl: één compacte pil met segmenten; de gekozen winkel is een volle pil in zijn eigen kleur */
+.stores .storetab{flex:none;min-height:var(--icoonknop);padding:0 var(--ruimte-3);gap:var(--ruimte-1);border:0;border-radius:var(--r-rond);background:transparent;color:var(--muted)}
+.stores .storetab .n{display:grid;place-items:center;min-width:var(--ruimte-5);height:var(--ruimte-5);padding:0 var(--ruimte-1);border-radius:var(--r-rond);background:var(--tint);color:inherit;font-size:var(--fs-xs);font-weight:var(--gewicht-naam)}
+.stores .storetab.active .n{background:var(--op-kleur-zacht);color:inherit}
+.stores .storetab.active{background:var(--c);color:var(--op-kleur)}
 h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);margin:var(--ruimte-5) var(--ruimte-1) var(--ruimte-1);display:flex;justify-content:space-between}
-.items{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden}
-.item{display:grid;grid-template-columns:1fr;align-items:stretch;border-top:1px solid var(--line)}
+.items{background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden}
+.item{display:grid;grid-template-columns:1fr;align-items:stretch;border-top:1px solid var(--scheiding)}
 .item:first-child{border-top:0}
 .check{display:grid;grid-template-columns:var(--rondje) 1fr;gap:var(--ruimte-3);align-items:center;padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--rij)}
 .vinkknop{width:var(--tik);height:var(--tik);margin:calc((var(--rondje) - var(--tik)) / 2);display:grid;place-items:center;border-radius:var(--r-rond)}
 .vinkknop:active .tick{transform:scale(.88)}
 /* Aantal aanpassen */
 .stepper{display:grid;grid-template-columns:var(--rij) 1fr var(--rij);gap:var(--ruimte-2);align-items:center;margin:0 0 var(--ruimte-3)}
-.step{height:var(--rij);border-radius:var(--r-l);background:var(--primary-soft);color:var(--primary);display:grid;place-items:center}
+.step{height:var(--rij);border-radius:var(--r-rond);background:var(--primary-soft);color:var(--primary);display:grid;place-items:center}
 .step svg{width:var(--icoon-l);height:var(--icoon-l)}
 .step:active{transform:scale(.94)}
 .stepval{text-align:center;font-size:var(--fs-xl);font-weight:var(--gewicht-vet);min-height:var(--rij)}
-.snelkeuze{display:flex;flex-wrap:wrap;gap:var(--ruimte-2)}
+/* Snelkeuze in menustijl: één pil met segmenten, de gekozen waarde is gevuld */
+.snelkeuze{display:flex;width:fit-content;max-width:100%;gap:0;padding:var(--ruimte-1);overflow-x:auto;scrollbar-width:none;border-radius:var(--r-rond);background:var(--menu-vlak)}
 .sheet h3.cat{margin:var(--ruimte-1) var(--ruimte-1) var(--ruimte-2)}
 .sheet h3.cat ~ h3.cat{margin-top:var(--ruimte-5)}
 .item-winkels{margin:0}
 .sheet-wrap .sheet-bg{-webkit-backdrop-filter:blur(var(--waas-m));backdrop-filter:blur(var(--waas-m));background:var(--overlay)}
-.snelkeuze button{padding:var(--ruimte-2) var(--ruimte-4);border-radius:var(--r-rond);background:var(--surface);border:1px solid var(--line);font-weight:var(--gewicht-vet);min-height:var(--h-s)}
-.snelkeuze button.gekozen{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.snelkeuze button{flex:none;padding:0 var(--ruimte-3);border-radius:var(--r-rond);background:transparent;border:0;color:var(--muted);font-weight:var(--gewicht-vet);min-height:var(--icoonknop)}
+.snelkeuze button.gekozen{background:var(--primary);color:var(--primary-ink)}
 .check.metchip{grid-template-columns:var(--rondje) 1fr auto}
 .chip{display:inline-flex;align-items:center;font-size:var(--fs-xs);font-weight:var(--gewicht-vet);line-height:1;color:color-mix(in srgb,var(--c) var(--chip-tint),var(--chip-meng));background:color-mix(in srgb,var(--c) var(--chip-vlak),transparent);border-radius:var(--r-rond);padding:var(--ruimte-1) var(--ruimte-2);white-space:nowrap}
 .check .tick{border-color:var(--muted)}
@@ -307,8 +318,8 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 /* Recepten en producten */
 /* Winkels */
 .note{color:var(--muted);font-size:var(--fs-m);margin:var(--ruimte-3) 0 var(--ruimte-2)}
-.order{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden}
-.order li{display:grid;grid-template-columns:calc(var(--rondje) + var(--ruimte-2)) 1fr var(--tik);align-items:center;gap:var(--ruimte-1);padding:var(--ruimte-1) var(--ruimte-2) var(--ruimte-1) var(--ruimte-3);border-top:1px solid var(--line);min-height:var(--h-m)}
+.order{list-style:none;margin:0;padding:0;background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden}
+.order li{display:grid;grid-template-columns:calc(var(--rondje) + var(--ruimte-2)) 1fr var(--tik);align-items:center;gap:var(--ruimte-1);padding:var(--ruimte-1) var(--ruimte-2) var(--ruimte-1) var(--ruimte-3);border-top:1px solid var(--scheiding);min-height:var(--h-m)}
 .order li:first-child{border-top:0}
 .check.greeprij{grid-template-columns:1fr var(--tik);padding:0 var(--ruimte-2) 0 0}
 .greeprij-hoofd{display:flex;align-items:center;gap:var(--ruimte-3);padding:var(--ruimte-3) var(--ruimte-3);min-height:var(--h-m);text-align:left;width:100%}
@@ -316,7 +327,7 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .greep{display:grid;place-items:center;width:var(--tik);height:var(--tik);margin-right:calc(var(--ruimte-1) * -1);color:var(--muted);touch-action:none;cursor:grab}
 .greep svg{width:var(--icoon-m);height:var(--icoon-m)}
 .sleept{position:fixed;z-index:var(--z-boven);margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);box-shadow:var(--schaduw-sleep);transform:scale(1.02);pointer-events:none}
-.plek{background:var(--primary-soft);border-top:1px solid var(--line);min-height:var(--h-m)}
+.plek{background:var(--primary-soft);border-top:1px solid var(--scheiding);min-height:var(--h-m)}
 .plek + *{border-top:0 !important}
 .pos{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);display:grid;place-items:center;font-weight:var(--gewicht-zwaar);font-size:var(--fs-s);color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);font-variant-numeric:tabular-nums}
 .lead{width:var(--rondje);height:var(--rondje);border-radius:var(--r-rond);display:grid;place-items:center;font-weight:var(--gewicht-zwaar);font-size:var(--fs-s);color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
@@ -325,9 +336,9 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 /* Instellingen */
 .back{display:inline-flex;align-items:center;gap:var(--ruimte-0);color:var(--primary);font-weight:var(--gewicht-vet);font-size:var(--fs-basis);padding:var(--ruimte-1) 0 var(--ruimte-1);margin-left:calc(var(--ruimte-1) * -1)}
 .back svg{width:var(--icoon-m);height:var(--icoon-m)}
-.group{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden;margin-top:var(--ruimte-3)}
+.group{background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden;margin-top:var(--ruimte-3)}
 .nav-row{display:grid;grid-template-columns:var(--ico) 1fr auto var(--ruimte-3);align-items:center;gap:var(--ruimte-3);width:100%;padding:0 var(--ruimte-4) 0 var(--ruimte-3);min-height:var(--rij);position:relative}
-.nav-row + .nav-row::before{content:"";position:absolute;top:0;left:calc(var(--ruimte-3) + var(--ico) + var(--ruimte-3));right:0;border-top:1px solid var(--line)}
+.nav-row + .nav-row::before{content:"";position:absolute;top:0;left:calc(var(--ruimte-3) + var(--ico) + var(--ruimte-3));right:0;border-top:1px solid var(--scheiding)}
 .nav-row:active{background:var(--primary-soft)}
 .ico{width:var(--ico);height:var(--ico);border-radius:var(--r-rond);display:grid;place-items:center;background:color-mix(in srgb,var(--c) 14%,transparent);color:var(--c)}
 .ico svg{width:var(--icoon-s);height:var(--icoon-s)}
@@ -351,13 +362,13 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .lbl>span{display:block;font-size:var(--fs-s);font-weight:var(--gewicht-vet);color:var(--muted);margin:0 var(--ruimte-1) var(--ruimte-1)}
 .acts{display:flex;gap:var(--ruimte-2);flex-wrap:wrap;margin-top:var(--ruimte-4)}
 .acts .btn{flex:1 1 auto}
-.pick{display:grid;grid-template-columns:var(--rondje) 1fr;gap:var(--ruimte-3);align-items:center;width:100%;padding:var(--ruimte-3) var(--ruimte-3);border-top:1px solid var(--line);min-height:var(--h-m)}
+.pick{display:grid;grid-template-columns:var(--rondje) 1fr;gap:var(--ruimte-3);align-items:center;width:100%;padding:var(--ruimte-3) var(--ruimte-3);border-top:1px solid var(--scheiding);min-height:var(--h-m)}
 .pick:first-child{border-top:0}
 /* Favorieten: ster rechts in de zoekbalk */
 #add-form .zoekveld{position:relative;flex:1}
 #add-form .zoekveld .field{padding-right:calc(var(--icoonknop) + var(--ruimte-2) * 2)}
 #add-zoek::-webkit-search-cancel-button,#add-zoek::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
-.zoekster{position:absolute;right:var(--ruimte-2);top:50%;transform:translateY(-50%);width:var(--icoonknop);height:var(--icoonknop);display:grid;place-items:center;background:none;border:0;color:var(--primary)}
+.zoekster{position:absolute;right:var(--ruimte-1);top:50%;transform:translateY(-50%);width:var(--icoonknop);height:var(--icoonknop);display:grid;place-items:center;background:none;border:0;color:var(--primary)}
 .zoekster svg{width:var(--icoon-l);height:var(--icoon-l)}
 .zoekster .vol{display:none}
 .zoekster.aan .leeg{display:none}
@@ -365,7 +376,7 @@ h3.cat{font-size:var(--fs-m);font-weight:var(--gewicht-vet);color:var(--muted);m
 .ac-leeg{margin:0;padding:var(--ruimte-4);color:var(--muted);font-size:var(--fs-m)}
 .ster{display:inline-grid;vertical-align:1px;margin-left:var(--ruimte-1);color:var(--primary)}
 .ster svg{width:var(--icoon-s);height:var(--icoon-s)}
-.schakel{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-m);padding:var(--ruimte-2) var(--ruimte-3);min-height:var(--h-m);margin-bottom:var(--ruimte-3);font-size:var(--fs-basis)}
+.schakel{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:0;border-radius:var(--r-m);padding:var(--ruimte-2) var(--ruimte-3);min-height:var(--h-m);margin-bottom:var(--ruimte-3);font-size:var(--fs-basis)}
 .schakel input{appearance:none;-webkit-appearance:none;width:51px;height:31px;border-radius:var(--r-rond);background:var(--line);position:relative;transition:background var(--duur);margin:0;cursor:pointer}
 .schakel input::after{content:"";position:absolute;top:var(--ruimte-0);left:var(--ruimte-0);width:27px;height:27px;border-radius:var(--r-rond);background:var(--op-kleur);box-shadow:var(--schaduw-knop);transition:transform var(--duur)}
 .schakel input:checked{background:var(--primary)}
@@ -900,7 +911,10 @@ function tekenWeek() {
   sub('');
   const lab = $('#weeklabel');
   if (lab) {
-    lab.textContent = `Week ${weeknr(dagen[0])}`;
+    // Periode van maandag tot en met zondag: "9 – 15 nov", of "28 okt – 3 nov" over twee maanden
+    const [van, tot] = [dagen[0], dagen[6]];
+    lab.textContent = (van.getMonth() === tot.getMonth() ? van.getDate() : kort(van)) + ' – ' + kort(tot);
+    lab.title = `Week ${weeknr(van)}`;
     lab.classList.toggle('active', S.week === 0);
     lab.setAttribute('aria-label', S.week === 0 ? 'Deze week' : 'Terug naar deze week');
   }
@@ -1087,25 +1101,28 @@ function openKoppel(datum) {
 
 /* ---------- Boodschappenlijst ---------- */
 function skeletLijst() {
-  $('#topextra').innerHTML = `<button type="button" class="round toevoeg-knop" data-act="toevoeg-open" aria-label="Product toevoegen" aria-expanded="false">
-    ${ico('plus')}</button>`;
-  $('#headerextra').innerHTML = `<div class="stores" id="stores"></div>
-    <form class="add" id="add-form" hidden>
+  // De + onderin opent het zoekvenster
+  $('#topextra').innerHTML = `<button type="button" class="round toevoeg-knop" data-act="toevoeg-open" aria-label="Zoeken of toevoegen">${ico('plus')}</button>`;
+  $('#headerextra').innerHTML = '<div class="stores" id="stores"></div>';
+  return '<div id="lijst"></div>';
+}
+const paneelOpen = () => !$('#sheet-wrap').hidden && !!$('#add-zoek');
+/* Zoeken als venster, net als de andere vensters. Geen focus op het zoekveld: op de telefoon komt dan
+   niet meteen het toetsenbord, zodat je eerst kunt scrollen. */
+function openZoeken() {
+  S.acFav = false;
+  const w = S.winkel === ALLES ? null : winkel(S.winkel);
+  openSheet(`<h4>Toevoegen${w ? ' bij ' + esc(w.naam) : ''}</h4>
+    <form class="add" id="add-form">
       <span class="zoekveld"><input class="field" type="search" id="add-zoek" name="zoekterm" inputmode="search" autocomplete="off" autocapitalize="sentences" spellcheck="false" autocorrect="off" enterkeyhint="done" placeholder="Product zoeken of toevoegen" aria-label="Product toevoegen" aria-autocomplete="list" aria-controls="ac">
         <button type="button" class="zoekster" data-act="ac-ster" aria-pressed="false" aria-label="Alleen favorieten tonen">
           ${ico('ster-leeg', 'class="leeg"')}
           ${ico('ster-vol', 'class="vol"')}
         </button></span>
-      <div class="ac-lijst" id="ac" role="listbox" hidden></div>
-    </form>`;
-  return '<div id="lijst"></div>';
-}
-function toevoegBalk(open) {
-  const f = $('#add-form'), k = $('.toevoeg-knop');
-  if (!f) return;
-  f.hidden = !open;
-  if (k) { k.setAttribute('aria-expanded', open); k.classList.toggle('open', open); }
-  if (open) $('#add-zoek').focus(); else { $('#add-zoek').value = ''; S.acFav = false; const st = $('.zoekster'); if (st) { st.classList.remove('aan'); st.setAttribute('aria-pressed', 'false'); } sluitAc(); }
+    </form>
+    <div class="ac-lijst" id="ac" role="listbox" hidden></div>`);
+  $('.sheet').classList.add('zoeken');
+  tekenAc();
 }
 const ALLES = '*';
 function catBlokken(open, winkelId) {
@@ -1132,14 +1149,13 @@ function tekenLijst() {
     const n = D().producten.filter(p => nodig(p) && winkelVan(p) === s.id).length;
     return `<button type="button" class="storetab${s.id === S.winkel ? ' active' : ''}" style="--c:${kleurVan(s)}" data-act="winkel" data-id="${esc(s.id)}">${esc(s.naam)} <span class="n">${n}</span></button>`;
   }).join('');
-  $('#add-zoek').placeholder = alles ? 'Iets toevoegen' : 'Iets toevoegen bij ' + w.naam;
 
   const items = D().producten.filter(p => p.opLijst && (alles || winkelVan(p) === S.winkel));
   const open = items.filter(p => !p.afgevinkt), klaar = items.filter(p => p.afgevinkt).sort(opNaam);
   const waar = alles ? '' : ' bij ' + esc(w.naam);
   let h = '';
   if (!items.length) {
-    h = `<div class="empty"><strong>Niets te halen${waar}</strong>Tik op + rechtsboven of zet producten op de lijst vanuit het weekmenu.</div>`;
+    h = `<div class="empty"><strong>Niets te halen${waar}</strong>Tik op + onderin of zet producten op de lijst vanuit het weekmenu.</div>`;
   } else if (!open.length) {
     h = `<div class="empty"><strong>Alles is gekocht</strong>Klaar${waar}.</div>`;
   }
@@ -1175,7 +1191,7 @@ function voegToeAanLijst() {
   if (!naam) return;
   inp.value = '';
   sluitAc();
-  inp.focus();
+  if (S.zoekFocus) inp.focus();
   // Enter na een paar letters kiest het eerste product dat ermee begint; voor een nieuw product tik je op de onderste regel
   const p = prodOpNaam(naam) || D().producten.filter(x => x.naam.toLowerCase().startsWith(naam.toLowerCase())).sort(opNaam)[0];
   if (p) {
@@ -1197,7 +1213,7 @@ function tekenAc() {
   const inp = $('#add-zoek'), box = $('#ac');
   if (!inp || !box) return;
   const q = inp.value.trim().toLowerCase();
-  if (document.activeElement !== inp) { sluitAc(); return; }
+  if (!paneelOpen()) { sluitAc(); return; }
   // Zonder zoekterm: alle producten op alfabet; met zoekterm: de beste zes
   const hits = !q ? [...D().producten].sort(opNaam) : D().producten
     .filter(p => p.naam.toLowerCase().includes(q))
@@ -1227,20 +1243,7 @@ function tekenAc() {
       <span class="status">nieuw product</span></div>` + h;
   box.innerHTML = h;
   box.hidden = false;
-  document.body.classList.add('ac-open');
-  pasAcHoogteAan();
 }
-/* De keuzelijst past altijd boven het toetsenbord en de actieknop onderin, en scrolt binnen zichzelf */
-function pasAcHoogteAan() {
-  const box = $('#ac');
-  if (!box || box.hidden) return;
-  const vv = window.visualViewport;
-  const zicht = Math.min(window.innerHeight, vv ? vv.height + vv.offsetTop : window.innerHeight);
-  const knop = $('#topextra');
-  const onder = (vv && vv.height < window.innerHeight - 100) ? 12 : (knop.children.length ? window.innerHeight - knop.getBoundingClientRect().top : 0) + 20;
-  box.style.maxHeight = Math.max(160, zicht - box.getBoundingClientRect().top - onder) + 'px';
-}
-if (window.visualViewport) { visualViewport.addEventListener('resize', pasAcHoogteAan); visualViewport.addEventListener('scroll', pasAcHoogteAan); }
 /* Toetsenbord op iOS: de pagina zelf scrolt niet (zie #scroller), dus iOS schuift velden niet vanzelf in beeld.
    Daarom meten we de hoogte van het toetsenbord: vensters komen erboven te staan,
    en een veld in de pagina wordt in beeld gescrold. */
@@ -1262,18 +1265,14 @@ function houdInBeeld() {
 }
 if (window.visualViewport) { visualViewport.addEventListener('resize', pasToetsenbordAan); visualViewport.addEventListener('scroll', pasToetsenbordAan); }
 document.addEventListener('focusin', () => setTimeout(houdInBeeld, 350));
-window.addEventListener('resize', pasAcHoogteAan);
-function sluitAc() { const box = $('#ac'); if (box) { box.hidden = true; box.innerHTML = ''; } document.body.classList.remove('ac-open'); }
+function sluitAc() { const box = $('#ac'); if (box) { box.hidden = true; box.innerHTML = ''; } }
 document.addEventListener('change', e => { if (S.receptBewerk && e.target.id === 'rb-cat') S.rbGewijzigd = true; });
 document.addEventListener('focusout', e => {
   if (e.target.id === 'rb-zoek') setTimeout(() => { if (document.activeElement !== $('#rb-zoek')) { const box = $('#rb-ac'); if (box) { box.hidden = true; box.innerHTML = ''; } } }, 200);
-  if (e.target.id === 'add-zoek') setTimeout(() => { if (document.activeElement !== $('#add-zoek')) sluitAc(); }, 200);
-  if (e.target.id === 'add-zoek') setTimeout(() => {
-    const f = $('#add-form');
-    if (f && !f.hidden && !f.contains(document.activeElement)) toevoegBalk(false);
-  }, 250);
 });
 document.addEventListener('focusin', e => { if (e.target.id === 'add-zoek') tekenAc(); });
+// Had het zoekveld focus toen je tikte? Alleen dan blijft het toetsenbord open na toevoegen; anders kun je gewoon blijven scrollen
+document.addEventListener('pointerdown', () => { S.zoekFocus = document.activeElement === $('#add-zoek'); }, true);
 document.addEventListener('mousedown', e => { if (e.target.closest('.ac-item, .zoekster, #ac .swipe-acties')) e.preventDefault(); });
 
 /* ---------- Recepten ---------- */
@@ -1702,6 +1701,7 @@ function openSheet(html) {
   const inh = $('#sheet-inhoud');
   inh.onclick = null; inh.onchange = null;
   inh.innerHTML = html;
+  $('.sheet').classList.remove('zoeken');
   $('#sheet-wrap').hidden = false;
   document.body.style.overflow = 'hidden';
   const s = $('.sheet'); s.scrollTop = 0; s.focus();
@@ -1779,11 +1779,11 @@ const ACTIES = {
       <div class="acts"><button class="btn wide">Toevoegen</button></div></form>`);
     $('#' + inputId).focus();
   },
-  'toevoeg-open': () => { const f = $('#add-form'); toevoegBalk(f && f.hidden); },
+  'toevoeg-open': () => openZoeken(),
   'ac-ster': b => {
     S.acFav = !S.acFav;
     b.classList.toggle('aan', S.acFav); b.setAttribute('aria-pressed', S.acFav);
-    $('#add-zoek').focus(); tekenAc();
+    if (S.zoekFocus) $('#add-zoek').focus(); tekenAc();
     const box = $('#ac'); if (box) box.scrollTop = 0;
   },
   'ac-plus': (b, id) => {
@@ -1793,7 +1793,7 @@ const ACTIES = {
       bewaar('producten', [{ id: p.id, opLijst: true, afgevinkt: false, lijstHoeveelheid: '',
         lijstWinkel: S.winkel === ALLES || p.winkel === S.winkel ? '' : S.winkel }]);
     }
-    $('#add-zoek').focus();
+    if (S.zoekFocus) $('#add-zoek').focus();
     tekenAc();
   },
   'ac-kies': b => {
@@ -1885,7 +1885,7 @@ const ACTIES = {
     const nu = !p.favoriet;
     bewaar('producten', [{ id, favoriet: nu }]);
     melding(nu ? `${p.naam} staat bij je favorieten.` : `${p.naam} is geen favoriet meer.`);
-    if (inLijst) { $('#add-zoek').focus(); tekenAc(); }
+    if (inLijst) { if (S.zoekFocus) $('#add-zoek').focus(); tekenAc(); }
   },
   'product-weg': async (b, id) => {
     sluitVeeg();
