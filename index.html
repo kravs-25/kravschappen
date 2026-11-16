@@ -1182,6 +1182,8 @@ function skeletLijst() {
   // De + onderin opent het zoekvenster
   $('#topextra').innerHTML = `<button type="button" class="round toevoeg-knop" data-act="toevoeg-open" aria-label="Zoeken of toevoegen">${ico('plus')}</button>`;
   $('#headerextra').innerHTML = '<div class="stores" id="stores"></div>';
+  // Net naar Boodschappen gewisseld: de gekozen winkel in beeld schuiven (zie tekenLijst)
+  S.winkelTonen = true;
   return '<div id="lijst"></div>';
 }
 const paneelOpen = () => !$('#sheet-wrap').hidden && !!$('#add-zoek');
@@ -1222,11 +1224,15 @@ function tekenLijst() {
   const w = alles ? null : winkel(S.winkel);
   sub('');
   const totaal = D().producten.filter(nodig).length;
-  $('#stores').innerHTML = `<button type="button" class="storetab${alles ? ' active' : ''}" style="--c:var(--actief)" data-act="winkel" data-id="${ALLES}">Alles <span class="n${totaal ? '' : ' leeg'}">${totaal}</span></button>` + ws.map(s => {
+  const pil = $('#stores'), x = pil.scrollLeft;
+  pil.innerHTML = `<button type="button" class="storetab${alles ? ' active' : ''}" style="--c:var(--actief)" data-act="winkel" data-id="${ALLES}">Alles <span class="n${totaal ? '' : ' leeg'}">${totaal}</span></button>` + ws.map(s => {
     const n = D().producten.filter(p => nodig(p) && winkelVan(p) === s.id).length;
     return `<button type="button" class="storetab${s.id === S.winkel ? ' active' : ''}" style="--c:${kleurVan(s)}" data-act="winkel" data-id="${esc(s.id)}">${esc(s.naam)} <span class="n${n ? '' : ' leeg'}">${n}</span></button>`;
   }).join('');
-  toonGekozenWinkel();
+  // Bij het verversen (elke 5 seconden) blijft de pil staan waar je hem zelf neerzette;
+  // alleen bij het openen van Boodschappen of het kiezen van een winkel schuift hij naar de gekozen winkel
+  pil.scrollLeft = x;
+  if (S.winkelTonen) { S.winkelTonen = false; toonGekozenWinkel(); }
 
   const items = D().producten.filter(p => p.opLijst && (alles || winkelVan(p) === S.winkel));
   const open = items.filter(p => !p.afgevinkt), klaar = items.filter(p => p.afgevinkt).sort(opNaam);
@@ -1893,7 +1899,7 @@ const ACTIES = {
     openSamen(p, eigen || label, amt, !!eigen);
   },
 
-  winkel: (b, id) => { S.winkel = id; tekenLijst(); },
+  winkel: (b, id) => { S.winkel = id; S.winkelTonen = true; tekenLijst(); },
   'nieuw-venster': () => {
     const soort = { winkels: ['Nieuwe winkel', 'winkel-form', 'winkel-invoer', 'Winkel', 'Bijvoorbeeld Lidl'],
       cats: ['Nieuwe productcategorie', 'cat-form', 'cat-invoer', 'Productcategorie', 'Bijvoorbeeld Chips en zoutjes'],
