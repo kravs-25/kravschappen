@@ -2091,7 +2091,7 @@ document.addEventListener('click', e => {
 /* ================= Menu rechtsboven =================
    Staat standaard dicht. Een tik op de pil opent hem zonder van tab te wisselen.
    Hij gaat weer dicht na het kiezen van een tab, na 3 seconden niets doen, bij scrollen,
-   of bij een tik op de puntjesplek. Bij het opstarten klapt hij één keer kort open. */
+   of bij een tik op de puntjesplek. */
 const menu = $('.tabs');
 let menuTimer;
 const menuIsOpen = () => !menu.classList.contains('ingeklapt');
@@ -2104,7 +2104,6 @@ menu.addEventListener('click', e => {
 }, true);
 menu.addEventListener('pointermove', () => { if (menuIsOpen()) menuOpen(); }, { passive: true });
 $('#scroller').addEventListener('scroll', () => { if (menuIsOpen()) menuDicht(); }, { passive: true });
-setTimeout(() => menuOpen(1400), 600);
 
 /* Formulieren zelf afhandelen: Enter of de verzendknop stuurt een eigen submit-event,
    zodat het ook werkt waar echte formulierverzending geblokkeerd is. */
