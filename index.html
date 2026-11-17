@@ -81,6 +81,7 @@
   --veegknop:72px;
   /* actieknop onderin het midden (+, Nieuw, potlood, vinkje) */
   --actie-hoogte:var(--menu-knop); --actie-afstand:var(--ruimte-3); /* even groot als de menuknop */
+  --toevoeg-hoogte:var(--h-m); /* de + bij Boodschappen is een maat groter dan de andere actieknoppen */
   /* ruimte onder de inhoud, zodat niets achter de actieknop verdwijnt */
   --actie-ruimte:calc(var(--actie-afstand) + var(--actie-hoogte) + var(--ruimte-6));
   /* menu rechtsboven: plek voor de puntjes links van de cirkel, en het aantal tabs */
@@ -138,7 +139,10 @@ body.preview .tabs{top:calc(var(--ruimte-6) + var(--ruimte-1) + env(safe-area-in
 header.top h1{margin:0;font-size:var(--fs-titel);font-weight:var(--gewicht-zwaar);letter-spacing:var(--spatie-titel);line-height:1.05}
 #headerextra:empty{display:none}
 #headerextra .stores{margin-top:var(--ruimte-3)}
-.toevoeg-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
+#topextra .toevoeg-knop{width:var(--toevoeg-hoogte);height:var(--toevoeg-hoogte)}
+.toevoeg-knop svg{width:var(--icoon-l);height:var(--icoon-l)}
+/* Staat de grotere + onderin, dan schuift de melding mee omhoog */
+body:has(#topextra .toevoeg-knop) .toast{bottom:calc(var(--actie-afstand) + var(--toevoeg-hoogte) + var(--ruimte-3) + env(safe-area-inset-bottom,0px))}
 .bewerk-knop svg{width:var(--icoon-m);height:var(--icoon-m)}
 #lijst{padding-top:0}
 #headerextra .kopzoek{margin:var(--ruimte-3) 0 0;min-height:var(--tik)}
