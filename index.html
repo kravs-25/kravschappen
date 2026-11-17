@@ -26,7 +26,7 @@
   /* ontkoppelen (iets van een lijst, dag of recept halen); zelfde rood als verwijderen, ander icoon */
   --ontkoppel:var(--accent);
   /* veegknoppen: bruin in twee tinten, zodat knoppen naast elkaar te onderscheiden zijn */
-  --veeg-open:var(--merk); --wijzig:#8C6E55; --veeg-favoriet:var(--merk);
+  --veeg-open:var(--merk); --wijzig:#8C6E55; --veeg-favoriet:var(--merk); --veeg-kies:var(--merk);
   /* winkelkleuren; een winkel bewaart de naam van het token ('winkel-1'), niet de kleur */
   --winkel-1:#B06A48; --winkel-2:#8A8550; --winkel-3:#8B78B8; --winkel-4:#5A9585; --winkel-5:#B56A82; --winkel-6:#7D8A97; --winkel-7:#A8873F;
   --winkel-8:#9A4A5A; /* wijnrood: bewust donkerder en paarser dan --accent (verwijderen) */
@@ -269,6 +269,19 @@ h3.dagkop.leeg{opacity:.75}
 .items .swipe-weg{border-radius:0}
 .items .item{background:var(--surface)}
 .swipe > .item{border-top:0}
+/* Kiesmodus (Boodschappen, via de kies-knop onder het vegen): geen rondje; een gekozen rij wordt crème met een vinkje rechts */
+.kies-rij{display:block;width:100%;text-align:left;transition:background var(--duur-snel),color var(--duur-snel)}
+.kies-rij .check{grid-template-columns:1fr auto;padding-left:var(--ruimte-4)}
+.kies-rij .check.metchip{grid-template-columns:1fr auto auto}
+.kies-rij .kies-vink{display:grid;place-items:center;width:var(--vinkje);height:var(--vinkje);opacity:0;transform:scale(.6);transition:opacity var(--duur-snel),transform var(--duur) var(--veer-tab)}
+.kies-rij .kies-vink svg{width:var(--icoon-m);height:var(--icoon-m)}
+.items .kies-rij.gekozen{background:var(--primary);color:var(--primary-ink)}
+.kies-rij.gekozen .pmeta{color:color-mix(in srgb,var(--primary-ink) 65%,var(--primary))}
+.kies-rij.gekozen .chip{--chip-meng:var(--primary-ink)}
+.kies-rij.gekozen .kies-vink{opacity:1;transform:none}
+.items .kies-rij.gekozen + .kies-rij.gekozen{border-top-color:color-mix(in srgb,var(--primary-ink) 12%,var(--primary))}
+#topextra .kies-acties{display:flex;gap:var(--ruimte-2);background:none}
+#topextra .kies-acties .btn.soft{background:var(--primary-soft);color:var(--ink)}
 /* Recepten van één dag samen in één blok, net als de boodschappenlijst */
 .dag-groep{background:var(--surface);border:0;border-radius:var(--r-blok);overflow:hidden;margin-bottom:0}
 .dag-groep .swipe{margin:0}
@@ -680,6 +693,7 @@ const ICONEN = {
   'prullenbak': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="16" height="2.6" rx="1.3"/><rect x="9" y="2.5" width="6" height="3" rx="1.2"/><path d="M6 9h12l-1 10.2a2 2 0 0 1-2 1.8H9a2 2 0 0 1-2-1.8z"/></svg>',
   'plus': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
   'ster-vol': '<svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z"/></svg>',
+  'kiezen': '<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2.5a9.5 9.5 0 1 1 0 19 9.5 9.5 0 0 1 0-19zM8.52 11.48l2.08 2.08 4.88-4.88a1.3 1.3 0 0 1 1.84 1.84l-5.8 5.8a1.3 1.3 0 0 1-1.84 0l-3-3a1.3 1.3 0 0 1 1.84-1.84z"/></svg>',
   'vinkje': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   'greep': '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="6" width="16" height="2.4" rx="1.2"/><rect x="4" y="10.8" width="16" height="2.4" rx="1.2"/><rect x="4" y="15.6" width="16" height="2.4" rx="1.2"/></svg>',
   'potlood': '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.2 4.3a2.5 2.5 0 0 1 3.5 0l1 1a2.5 2.5 0 0 1 0 3.5L9.4 19.1 4 20l.9-5.4z"/></svg>',
@@ -1178,9 +1192,10 @@ function openKoppel(datum) {
 }
 
 /* ---------- Boodschappenlijst ---------- */
+const TOEVOEG_KNOP = `<button type="button" class="round toevoeg-knop" data-act="toevoeg-open" aria-label="Zoeken of toevoegen">${ico('plus')}</button>`;
 function skeletLijst() {
   // De + onderin opent het zoekvenster
-  $('#topextra').innerHTML = `<button type="button" class="round toevoeg-knop" data-act="toevoeg-open" aria-label="Zoeken of toevoegen">${ico('plus')}</button>`;
+  $('#topextra').innerHTML = TOEVOEG_KNOP;
   $('#headerextra').innerHTML = '<div class="stores" id="stores"></div>';
   // Net naar Boodschappen gewisseld: de gekozen winkel in beeld schuiven (zie tekenLijst)
   S.winkelTonen = true;
@@ -1234,6 +1249,7 @@ function tekenLijst() {
   pil.scrollLeft = x;
   if (S.winkelTonen) { S.winkelTonen = false; toonGekozenWinkel(); }
 
+  tekenKiesKop();
   const items = D().producten.filter(p => p.opLijst && (alles || winkelVan(p) === S.winkel));
   const open = items.filter(p => !p.afgevinkt), klaar = items.filter(p => p.afgevinkt).sort(opNaam);
   const waar = alles ? '' : ' bij ' + esc(w.naam);
@@ -1247,9 +1263,58 @@ function tekenLijst() {
   if (klaar.length) {
     h += `<section class="basket"><h3 class="cat"><span>Gekocht</span></h3>
       <div class="items">${klaar.map(itemRij).join('')}</div>
-      <button type="button" class="wis-knop" data-act="mandje-leeg">${ONTKOPPEL_ICON}Leeg maken</button></section>`;
+      ${S.kies ? '' : `<button type="button" class="wis-knop" data-act="mandje-leeg">${ONTKOPPEL_ICON}Leeg maken</button>`}</section>`;
   }
   $('#lijst').innerHTML = h;
+}
+/* ================= Kiesmodus bij Boodschappen =================
+   Veeg een item naar links en tik op het kies-rondje: de kiesmodus gaat aan met dat item gekozen.
+   Tikken op een rij kiest hem of zet hem weer uit.
+   Onderin staan Annuleer en Verplaats; de titel telt hoeveel er gekozen zijn. */
+function startKiezen(id) {
+  sluitVeeg();
+  S.kies = new Set([id]);
+  teken();
+}
+function stopKiezen() {
+  if (!S.kies) return;
+  S.kies = null;
+  $('#title').textContent = VIEWS.lijst.titel;
+  $('#topextra').innerHTML = TOEVOEG_KNOP;
+  pasTitelAan();
+  teken();
+}
+function tekenKiesKop() {
+  if (!S.kies) return;
+  // Items die intussen van de lijst zijn (bijvoorbeeld op een andere telefoon), vallen uit de keuze
+  S.kies.forEach(id => { const p = prod(id); if (!p || !p.opLijst) S.kies.delete(id); });
+  const n = S.kies.size;
+  $('#title').textContent = n ? n + ' gekozen' : 'Kies items';
+  pasTitelAan();
+  $('#topextra').innerHTML = `<div class="kies-acties">
+    <button type="button" class="btn soft" data-act="kies-stop">Annuleer</button>
+    <button type="button" class="btn" data-act="kies-verplaats"${n ? '' : ' disabled'}>Verplaats</button></div>`;
+}
+function openVerplaats() {
+  const gekozen = [...S.kies].map(prod).filter(Boolean);
+  if (!gekozen.length) return;
+  const huidig = new Set(gekozen.map(winkelVan));
+  const nu = huidig.size === 1 ? [...huidig][0] : null;
+  openSheet(`<h4>${aantal(gekozen.length, 'item', 'items')} verplaatsen naar</h4>
+    <div class="stores item-winkels">${winkels().map(w => `<button type="button" class="storetab${w.id === nu ? ' active' : ''}" style="--c:${kleurVan(w)}" data-winkel="${esc(w.id)}">${esc(w.naam)}</button>`).join('')}</div>`);
+  $('#sheet-inhoud').onclick = e => {
+    const wk = e.target.closest('[data-winkel]'); if (!wk) return;
+    const doel = wk.dataset.winkel;
+    sluitSheet();
+    if (doel === nu) return;
+    const terug = gekozen.map(p => ({ id: p.id, lijstWinkel: p.lijstWinkel }));
+    S.kies = null;
+    $('#title').textContent = VIEWS.lijst.titel;
+    $('#topextra').innerHTML = TOEVOEG_KNOP;
+    pasTitelAan();
+    bewaar('producten', gekozen.map(p => ({ id: p.id, lijstWinkel: doel === p.winkel ? '' : doel })));
+    melding(`${aantal(gekozen.length, 'item', 'items')} naar ${winkel(doel).naam} verplaatst.`, 'Ongedaan maken', () => bewaar('producten', terug));
+  };
 }
 /** De winkelpil scrolt opzij: staat de gekozen winkel buiten beeld, schuif hem dan naar het midden. De volgorde blijft gelijk. */
 function toonGekozenWinkel() {
@@ -1262,6 +1327,16 @@ function toonGekozenWinkel() {
 function itemRij(p) {
   const meta = [p.lijstHoeveelheid, p.lijstVoor ? 'voor ' + voorTekst(p.lijstVoor) : ''].filter(Boolean).join(', ');
   const chip = S.winkel === ALLES ? winkelChip(winkel(winkelVan(p))) : '';
+  // Kiesmodus: de hele rij is een knop; gekozen = crème met een vinkje rechts
+  if (S.kies) {
+    const aan = S.kies.has(p.id);
+    return `<button type="button" class="item kies-rij${aan ? ' gekozen' : ''}" data-act="kies" data-id="${esc(p.id)}" aria-pressed="${aan}">
+      <div class="check${chip ? ' metchip' : ''}">
+        <span><span class="pname">${esc(p.naam)}</span>${meta ? `<span class="pmeta">${esc(meta)}</span>` : ''}</span>${chip}
+        <span class="kies-vink" aria-hidden="true">${ico('vinkje')}</span>
+      </div>
+    </button>`;
+  }
   // Alleen het rondje vinkt af; de rest van de rij is voor lezen en vegen
   const rij = `<div class="item${p.afgevinkt ? ' done' : ' swipe-kaart'}">
     <div class="check${chip ? ' metchip' : ''}">
@@ -1271,8 +1346,9 @@ function itemRij(p) {
   </div>`;
   if (p.afgevinkt) return rij;
   const key = 'p:' + p.id;
-  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--n:2">
+  return `<div class="swipe${S.swipeOpen === key ? ' open' : ''}" data-key="${esc(key)}" style="--n:3">
     <div class="swipe-acties">
+      <button type="button" class="swipe-wk" data-act="kies-start" data-id="${esc(p.id)}" style="--c:var(--veeg-kies)" aria-label="${esc(p.naam)} kiezen om te verplaatsen">${ico('kiezen')}</button>
       <button type="button" class="swipe-wk" data-act="item-bewerk" data-id="${esc(p.id)}" style="--c:var(--wijzig)" aria-label="${esc(p.naam)} aanpassen">${PEN_ICON}</button>
       <button type="button" class="swipe-wk" style="--c:var(--ontkoppel)" data-act="lijst-weg" data-id="${esc(p.id)}" data-vol aria-label="${esc(p.naam)} van de lijst halen">${ONTKOPPEL_ICON}</button>
     </div>${rij}</div>`;
@@ -1859,7 +1935,7 @@ $('#toast-btn').onclick = () => { const a = toastActie; toastActie = null; $('#t
 const ACTIES = {
   tab: async b => {
     // vangnet: nooit vast blijven zitten in een half afgemaakte veeg- of sleepbeweging
-    S.slepen = false; S.uitgesteld = false; veeg = null; sleep = null; klikOnderdrukken = false;
+    S.slepen = false; S.uitgesteld = false; veeg = null; sleep = null; klikOnderdrukken = false; S.kies = null;
     if (!S.data) return;
     if (S.receptBewerk) { syncBewerk(); if (S.rbGewijzigd && !(await bevestig('Je wijzigingen aan het recept weggooien?', 'Weggooien'))) return; S.receptBewerk = null; }
     if (b.dataset.tab === 'instellingen') S.instSub = null;
@@ -1939,6 +2015,14 @@ const ACTIES = {
     bewaar('producten', [{ id, afgevinkt: !p.afgevinkt }]);
   },
   'item-bewerk': (b, id) => { sluitVeeg(); openItem(id); },
+  kies: (b, id) => {
+    if (!S.kies) return;
+    if (S.kies.has(id)) S.kies.delete(id); else S.kies.add(id);
+    tekenLijst();
+  },
+  'kies-start': (b, id) => startKiezen(id),
+  'kies-stop': () => stopKiezen(),
+  'kies-verplaats': () => openVerplaats(),
   'lijst-weg': async (b, id) => {
     S.swipeOpen = null;
     const p = prod(id); if (!p) return;
@@ -2191,7 +2275,11 @@ document.addEventListener('input', e => {
   if (e.target.id === 'zoek-p') { S.zoekP = e.target.value; tekenProducten(); }
   if (e.target.id === 'zoek-i') { S.zoekI = e.target.value; tekenInst(); }
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#sheet-wrap').hidden) sluitSheet(); });
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!$('#sheet-wrap').hidden) sluitSheet();
+  else if (S.kies && $('#bevestig').hidden) stopKiezen();
+});
 
 laad();
 </script>
