@@ -304,7 +304,7 @@ h3.dagkop.leeg{opacity:.75}
 .dagkop.vandaag{color:var(--ink)}
 .dagkop.vandaag > span{display:inline-flex;align-items:center;gap:var(--ruimte-2)}
 .chip.vandaag-chip,.chip.dag-chip{background:var(--primary);color:var(--primary-ink)}
-/* Recepten: achter de naam een crème chip per dag waarop het recept deze week gepland staat ("di 10") */
+/* Recepten: achter de naam een crème chip per dag waarop het recept vanaf vandaag gepland staat ("di 10") */
 .naam-met-chips{display:flex;flex-wrap:wrap;align-items:center;gap:var(--ruimte-1) var(--ruimte-2);min-width:0}
 .dag-plus-rij{display:flex;align-items:center;justify-content:center;width:100%;min-height:var(--tik);padding:var(--ruimte-2) var(--ruimte-3);text-align:center}
 .dag-plus-rij .addbtn{width:var(--rondje);height:var(--rondje)}
@@ -1470,9 +1470,9 @@ function skeletRecepten() {
   }
   S.receptOpen = null;
   // Nieuw staat naast de zoekbalk, dus geen actieknop onderin
-  // In de zoekbalk rechts het weekmenu-icoon: alleen recepten die deze week gepland staan (zoals de ster bij Boodschappen)
+  // In de zoekbalk rechts het weekmenu-icoon: alleen recepten die vanaf vandaag gepland staan (zoals de ster bij Boodschappen)
   $('#headerextra').innerHTML = `<div class="add"><span class="zoekveld"><input type="search" class="field kopzoek" id="zoek-r" placeholder="Zoek recept of product" value="${esc(S.zoekR)}" autocomplete="off" aria-label="Recepten zoeken">
-    <button type="button" class="zoekster${S.receptWeek ? ' aan' : ''}" data-act="recept-weekfilter" aria-pressed="${S.receptWeek}" aria-label="Alleen recepten van deze week">${ico('kalender')}</button></span><button type="button" class="btn" data-act="recept-nieuw">Nieuw</button></div>`;
+    <button type="button" class="zoekster${S.receptWeek ? ' aan' : ''}" data-act="recept-weekfilter" aria-pressed="${S.receptWeek}" aria-label="Alleen recepten die vanaf vandaag gepland staan">${ico('kalender')}</button></span><button type="button" class="btn" data-act="recept-nieuw">Nieuw</button></div>`;
   return '<div id="recepten"></div>';
 }
 /* ---------- Recept bewerken op de pagina zelf ---------- */
@@ -1585,16 +1585,17 @@ function tekenRecepten() {
   sub('');
   if (S.receptOpen) return tekenReceptDetail();
   const q = S.zoekR.trim().toLowerCase();
-  // Per recept de dagen waarop het deze week gepland staat (voor de chips en het weekfilter)
-  const opDagen = new Map();
-  weekDagen(0).forEach(d => receptenOp(iso(d)).forEach(id => opDagen.set(id, [...(opDagen.get(id) || []), d])));
-  const dezeWeek = new Set(opDagen.keys());
+  // Per recept de dagen waarop het vanaf vandaag gepland staat (voor de chips en het planningsfilter)
+  const opDagen = new Map(), vandaag = iso(new Date());
+  D().mealplan.filter(m => m.id >= vandaag && (m.recepten || []).length).sort((a, b) => a.id < b.id ? -1 : 1)
+    .forEach(m => { const d = vanIso(m.id); m.recepten.forEach(id => opDagen.set(id, [...(opDagen.get(id) || []), d])); });
+  const gepland = new Set(opDagen.keys());
   const dagChips = r => (opDagen.get(r.id) || []).map(d => `<span class="chip dag-chip" aria-label="${DAGEN[d.getDay()]} ${kort(d)}">${DAGEN[d.getDay()].slice(0, 2)} ${d.getDate()}</span>`).join('');
-  const rs = [...alle].sort(opNaam).filter(r => (!S.receptWeek || dezeWeek.has(r.id)) && (!q || r.naam.toLowerCase().includes(q) ||
+  const rs = [...alle].sort(opNaam).filter(r => (!S.receptWeek || gepland.has(r.id)) && (!q || r.naam.toLowerCase().includes(q) ||
     (r.ingredienten || []).some(i => { const p = prod(i.product); return p && p.naam.toLowerCase().includes(q); })));
   $('#recepten').innerHTML = !alle.length
     ? '<div class="empty"><strong>Het receptenboek is nog leeg</strong>Voeg een recept toe met de producten die erin gaan en een korte uitleg.<br><button type="button" class="btn" data-act="recept-nieuw">Eerste recept maken</button></div>'
-    : !rs.length ? (S.receptWeek && !q ? '<div class="empty">Deze week staat nog niets gepland.</div>' : `<div class="empty">Geen recept gevonden met “${esc(S.zoekR.trim())}”${S.receptWeek ? ' in deze week' : ''}.</div>`)
+    : !rs.length ? (S.receptWeek && !q ? '<div class="empty">Vanaf vandaag staat nog niets gepland.</div>' : `<div class="empty">Geen recept gevonden met “${esc(S.zoekR.trim())}”${S.receptWeek ? ' in de planning' : ''}.</div>`)
     : perReceptCat(rs).map(g => `<h3 class="cat"><span>${esc(g.naam)}</span></h3><div class="items">${g.rs.map(r => veegRij('r:' + r.id,
           `<button type="button" class="check metchip" data-act="recept-pagina" data-id="${esc(r.id)}">${receptLead(r)}
             <span class="naam-met-chips"><span class="pname">${esc(r.naam)}</span>${dagChips(r)}</span><span class="chevr"></span></button>`,
